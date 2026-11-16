@@ -13,6 +13,10 @@ const { createPowerShell } = require('./powershell');
 const { createTaskRoutes } = require('./routes/tasks');
 const { createServiceRoutes } = require('./routes/services');
 const { createProcessRoutes } = require('./routes/processes');
+const { createCli } = require('./cli');
+const { createRegistry } = require('./providers/registry');
+const { createDockerProvider } = require('./providers/docker');
+const { createProviderRoutes } = require('./routes/providers');
 
 function main() {
   let config;
@@ -43,16 +47,29 @@ function main() {
     ps,
     protectedPids: () => new Set([process.pid, ...terminals.protectedPids()]),
   });
+  // ADR 0012: provedores opcionais detectados em tempo de execução (RN-11).
+  const cli = createCli();
+  const registry = createRegistry({ providers: [createDockerProvider({ cli })] });
+  const providerRoutes = createProviderRoutes({ registry });
   const server = createServer({
     config,
     auth,
     audit,
     isAdmin: admin,
-    routes: [...terminalRoutes.routes, ...taskRoutes.routes, ...serviceRoutes.routes, ...processRoutes.routes],
+    routes: [
+      ...terminalRoutes.routes,
+      ...taskRoutes.routes,
+      ...serviceRoutes.routes,
+      ...processRoutes.routes,
+      ...providerRoutes.routes,
+    ],
     websockets: [...terminalRoutes.websockets],
   });
 
+  registry.start();
+
   const stop = () => {
+    registry.stop();
     terminals.shutdown();
     audit.record({ action: 'parada', result: 'ok' });
     process.exit(0);
