@@ -45,29 +45,17 @@ O navegador conversa com o painel por HTTP (API JSON) e WebSocket (terminais). O
 | `src/ps-scripts.js` | Scripts PowerShell estáticos (tarefas, serviços, processos) |
 | `src/routes/tasks.js` | Tarefas agendadas |
 | `src/routes/services.js` · `processes.js` | Serviços, processos e portas |
-| `src/routes/providers.js` | Status e recursos dos provedores |
-| `src/providers/` | Contrato (`base.js`), detecção (`registry.js`) e provedores: docker, compose, pm2, kubernetes, podman, wsl |
+| `src/routes/providers.js` | Status e recursos dos provedores (`/api/providers`, `/api/p/:id/...`) |
+| `src/cli.js` | Executor de CLIs externas (`execFile`, tempo limite, erros padronizados) |
+| `src/providers/` | Contrato (`base.js`), detecção (`registry.js`) e provedores: docker (pronto); compose, pm2, kubernetes, podman e wsl (planejados). Veja [provedores](provedores.md) |
 | `public/` | Interface (HTML, CSS e JS puros) |
 | `scripts/` | Geração de token e instalação da tarefa elevada |
 
 ## Contrato dos provedores
 
-```js
-// src/providers/base.js (resumo)
-{
-  id: 'pm2',
-  nome: 'pm2',
-  async detect() { return { disponivel: true, versao: '5.x' } },
-  async list() { /* recursos normalizados */ },
-  actions: {
-    restart: { destrutiva: false, run: async (id) => {} },
-    delete:  { destrutiva: true,  run: async (id) => {} },
-  },
-  async logs(id, opcoes) { /* texto */ },
-}
-```
+Cada provedor cumpre o contrato de `src/providers/base.js` (`id`, `nome`, `detect()`, `list()`, `actions`, `logs()`, `validateId()`). A descrição completa, as regras e o passo a passo para criar um novo provedor estão em [provedores](provedores.md).
 
-O `registry.js` guarda o resultado da detecção, repete-o periodicamente e expõe `GET /api/providers`. Chamadas a provedores têm tempo limite e erros isolados ([RN-14](../requisitos/regras-de-negocio.md#rn-14)).
+O `registry.js` guarda o resultado da detecção, repete-o a cada 5 minutos e expõe `GET /api/providers`. Chamadas a provedores têm tempo limite e erros isolados ([RN-14](../requisitos/regras-de-negocio.md#rn-14)).
 
 ## Fluxo de uma ação que altera estado
 

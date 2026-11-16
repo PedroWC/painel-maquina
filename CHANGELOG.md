@@ -22,4 +22,7 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 - Serviços do Windows: listar e filtrar, iniciar, parar, reiniciar, alterar a inicialização, criar, editar e excluir; 25 serviços críticos protegidos, confirmação pelo nome para excluir e para operações que derrubariam o `sshd` (RF-11 a RF-14, RN-05, RN-09).
 - Processos e portas: listar por uso de memória e por porta em escuta com o processo dono, e encerrar processos; o processo do painel, os shells dos terminais e os processos de sistema (PID 0 a 4) são protegidos (RF-17, RF-25, RN-04).
 - Auditoria das tentativas recusadas por proteção ou limite (RN-03, RN-06).
+- Framework de provedores opcionais (ADR 0012): contrato comum, detecção em tempo de execução com repetição periódica, abas geradas dinamicamente, tempo limite e isolamento de falhas, allowlist de operações e confirmação pelo nome quando exigida (RF-23, RN-11 a RN-14, RNF-10).
+- Provedor Docker: containers (iniciar, parar, reiniciar, remover e logs) e imagens (remover), com mensagem amigável quando o motor está parado (RF-15, RF-16).
+- Aba Provedores com o status de cada tecnologia e botão para detectar novamente.
 - Estrutura do projeto: `package.json` (Node 24), ESLint, executor de testes nativo com cobertura, `config.example.json` e integração contínua (lint, testes, auditoria, varredura de segredos e validação do título do PR).

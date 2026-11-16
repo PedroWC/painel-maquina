@@ -83,4 +83,5 @@ Leia o [CHANGELOG](../../CHANGELOG.md) antes: mudanças incompatíveis trazem in
 | Terminais não abrem | Falha na dependência nativa | Rode `npm ci` com a versão de Node do `.nvmrc` |
 | Aba de uma ferramenta não aparece | Ferramenta não instalada ou fora do `PATH` do processo | Instale e use "Detectar novamente" em Provedores |
 | Mensagem `AttachConsole failed` no console ao encerrar um terminal | Ruído do `node-pty` ao fechar o ConPTY; os processos da sessão são finalizados normalmente | Pode ser ignorada |
+| Aba Docker mostra "o motor não está respondendo" | O Docker está instalado, mas o Docker Desktop (motor) não está em execução | Inicie o Docker Desktop e clique em Atualizar |
 | "Acesso negado" em tarefas ou serviços | Painel sem privilégio de administrador | Instale pela tarefa elevada |

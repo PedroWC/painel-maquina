@@ -24,15 +24,15 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RF-12 | UC-08 | US-08 | `tests/integration/services.test.js`, `tests/integration/services.windows.test.js` | implementado |
 | RF-13 | UC-08 | US-08 | `tests/integration/services.test.js`, `tests/integration/services.windows.test.js` | implementado |
 | RF-14 | UC-09 | US-09 | `tests/integration/services.test.js`, `tests/integration/services.windows.test.js` | implementado |
-| RF-15 | UC-10 | US-10 | `tests/unit/providers/docker.test.js` | planejado |
-| RF-16 | UC-10 | US-10 | `tests/unit/providers/docker.test.js` | planejado |
+| RF-15 | UC-10 | US-10 | `tests/unit/providers/docker.test.js`, `tests/integration/providers.test.js`, `tests/integration/docker.windows.test.js` | implementado |
+| RF-16 | UC-10 | US-10 | `tests/unit/providers/docker.test.js`, `tests/integration/providers.test.js`, `tests/integration/docker.windows.test.js` | implementado |
 | RF-17 | UC-11 | US-11 | `tests/integration/processes.test.js`, `tests/integration/processes.windows.test.js` | implementado |
 | RF-18 | UC-12 | US-12 | `tests/unit/providers/compose.test.js` | planejado |
 | RF-19 | UC-12 | US-12 | `tests/unit/providers/pm2.test.js` | planejado |
 | RF-20 | UC-12 | US-12 | `tests/unit/providers/kubernetes.test.js` | planejado |
 | RF-21 | UC-12 | US-12 | `tests/unit/providers/podman.test.js` | planejado |
 | RF-22 | UC-12 | US-12 | `tests/unit/providers/wsl.test.js` | planejado |
-| RF-23 | UC-13 | US-13 | `tests/unit/providers/registry.test.js` | planejado |
+| RF-23 | UC-13 | US-13 | `tests/unit/providers/registry.test.js`, `tests/integration/providers.test.js` | implementado |
 | RF-24 | todos | US-14 | `tests/unit/audit.test.js`, `tests/integration/auth.test.js` | parcial |
 | RF-25 | UC-05, UC-08, UC-11 | US-15 | `tests/unit/protections.test.js`, `tests/integration/tasks.test.js`, `tests/integration/services.test.js`, `tests/integration/processes.test.js`, `tests/integration/tasks.test.js` | implementado |
 | RF-26 | todos | US-16 | `tests/e2e/smoke.md` (roteiro manual) | planejado |
@@ -52,10 +52,10 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RN-08 | `tests/integration/tasks.test.js`, `tests/integration/tasks.windows.test.js` | implementado |
 | RN-09 | `tests/unit/protections.test.js`, `tests/integration/services.test.js` | implementado |
 | RN-10 | `tests/unit/config.test.js` | implementado |
-| RN-11 | `tests/unit/providers/registry.test.js` | planejado |
-| RN-12 | `tests/unit/providers/base.test.js` | planejado |
-| RN-13 | `tests/unit/providers/kubernetes.test.js` | planejado |
-| RN-14 | `tests/unit/providers/registry.test.js` | planejado |
+| RN-11 | `tests/unit/providers/registry.test.js`, `tests/integration/providers.test.js` | implementado |
+| RN-12 | `tests/unit/providers/base.test.js`, `tests/unit/cli.test.js`, `tests/integration/providers.test.js` | implementado |
+| RN-13 | `tests/integration/providers.test.js` | parcial |
+| RN-14 | `tests/unit/providers/registry.test.js`, `tests/integration/providers.test.js` | implementado |
 | RN-15 | `tests/unit/terminals.test.js`, `tests/integration/terminals.test.js` | implementado |
 | RN-16 | `tests/unit/auth.test.js`, `tests/unit/config.test.js` | implementado |
 | RN-17 | `tests/unit/validate.test.js`, `tests/unit/powershell.test.js`, `tests/integration/tasks.test.js` | parcial |
@@ -73,5 +73,5 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RNF-07 | Implementado: `tests/unit/audit.test.js` (ausência de segredos nos registros) |
 | RNF-08 | Implementado: `tests/unit/config.test.js` |
 | RNF-09 | gitleaks no CI e `tests/unit/config.test.js` |
-| RNF-10 | `tests/unit/providers/registry.test.js` |
+| RNF-10 | Implementado: `tests/unit/providers/base.test.js` e `tests/unit/providers/registry.test.js` |
 | RNF-11 | Revisão manual de contraste e teclado no roteiro de smoke |
