@@ -44,6 +44,12 @@ button.perigo { border-color: var(--bad); color: var(--bad); }
 .term-container { height: calc(100vh - 260px); min-height: 280px; }
 .term-aviso { margin-bottom: 6px; padding: 4px 8px; border: 1px solid var(--warn); border-radius: 6px; color: var(--warn); }
 .subtitulo { margin: 20px 0 8px; font-size: 15px; }
+.dica-aba { color: var(--muted); margin: 0 0 12px; }
+.banner { margin-bottom: 12px; padding: 6px 10px; border: 1px solid var(--accent); border-radius: 6px; background: #1d2a3a; }
+.erro-aba { padding: 10px 12px; border: 1px solid var(--bad); border-radius: 8px; color: var(--bad); }
+.dialogo-form.largo { width: min(900px, calc(100vw - 32px)); }
+dialog:has(.largo) { width: min(900px, calc(100vw - 32px)); }
+.visualizador { margin: 0; padding: 10px; max-height: 60vh; overflow: auto; background: #000; border: 1px solid var(--line); border-radius: 6px; font: 12px/1.4 Consolas, monospace; white-space: pre-wrap; word-break: break-word; }
 .titulo-aba { margin: 0 0 12px; font-size: 18px; }
 .tabela-rolavel { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
 table { width: 100%; border-collapse: collapse; background: var(--panel); }

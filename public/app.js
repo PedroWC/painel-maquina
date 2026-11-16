@@ -10,6 +10,7 @@
   const campoToken = document.getElementById('token');
   const msgLogin = document.getElementById('msg-login');
   const abas = {};
+  const aoAutenticar = [];
   let abaAtual = null;
 
   async function api(caminho, opcoes = {}) {
@@ -36,6 +37,11 @@
     abas[nome] = aba;
   }
 
+  function removerAba(nome) {
+    if (abaAtual === nome) abrirAba('terminais');
+    delete abas[nome];
+  }
+
   function abrirAba(nome) {
     if (!abas[nome]) return;
     if (abaAtual && abas[abaAtual] && abas[abaAtual].esconder) abas[abaAtual].esconder();
@@ -59,17 +65,19 @@
     campoToken.focus();
   }
 
-  function mostrarApp(info) {
+  async function mostrarApp(info) {
     telaLogin.hidden = true;
     telaApp.hidden = false;
     document.getElementById('selo-admin').hidden = !info.admin;
     document.getElementById('aviso-exposto').hidden = !info.exposed;
-    abrirAba(abaAtual || 'terminais');
+    // Ganchos de após o login (por exemplo, montar as abas dos provedores detectados).
+    for (const gancho of aoAutenticar) await gancho();
+    abrirAba(abas[abaAtual] ? abaAtual : 'terminais');
   }
 
   async function iniciar() {
     const { status, dados } = await api('/api/me');
-    if (status === 200) mostrarApp(dados);
+    if (status === 200) await mostrarApp(dados);
     else mostrarLogin();
   }
 
@@ -98,5 +106,13 @@
     if (botao) abrirAba(botao.dataset.aba);
   });
 
-  window.Painel = { api, aviso, registrarAba, abrirAba, iniciar };
+  window.Painel = {
+    api,
+    aviso,
+    registrarAba,
+    removerAba,
+    abrirAba,
+    iniciar,
+    aoAutenticar: (gancho) => aoAutenticar.push(gancho),
+  };
 })();

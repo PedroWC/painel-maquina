@@ -26,6 +26,7 @@
         <button type="button" class="aba" data-aba="tarefas">Tarefas</button>
         <button type="button" class="aba" data-aba="servicos">Serviços</button>
         <button type="button" class="aba" data-aba="processos">Processos</button>
+        <button type="button" class="aba" data-aba="provedores">Provedores</button>
       </nav>
       <span id="selo-admin" class="selo" hidden>administrador</span>
       <span id="aviso-exposto" class="selo aviso" hidden>exposto fora do loopback</span>
@@ -87,6 +88,15 @@
         <h2 class="subtitulo">Processos (por uso de memória)</h2>
         <div id="processos-lista"></div>
       </section>
+
+      <section id="aba-provedores" class="painel-aba" hidden>
+        <h1 class="titulo-aba">Provedores</h1>
+        <p class="dica-aba">Tecnologias opcionais detectadas nesta máquina. Cada uma ganha uma aba própria quando está instalada.</p>
+        <div class="barra">
+          <button id="provedores-detectar" type="button" class="primario-inline">Detectar novamente</button>
+        </div>
+        <div id="provedores-tabela"></div>
+      </section>
     </main>
   </section>
 
@@ -101,6 +111,7 @@
   <script src="/tarefas.js"></script>
   <script src="/servicos.js"></script>
   <script src="/processos.js"></script>
+  <script src="/provedores.js"></script>
   <script src="/iniciar.js"></script>
 </body>
 </html>

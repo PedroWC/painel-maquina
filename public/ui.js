@@ -177,5 +177,29 @@
     });
   }
 
-  window.UI = { criar, botao, tabela, selo, acoes, formulario, confirmar, confirmarNome };
+  // Mostra um texto longo (por exemplo, logs) com botão para atualizar. obter: async () => texto.
+  function visualizador({ titulo, obter }) {
+    return new Promise((resolve) => {
+      const area = criar('pre', { classe: 'visualizador', tabindex: '0', texto: 'Carregando…' });
+      const carregar = async () => {
+        try {
+          area.textContent = (await obter()) || '(sem saída)';
+        } catch (erro) {
+          area.textContent = erro.message || 'Não foi possível carregar.';
+        }
+        area.scrollTop = area.scrollHeight;
+      };
+      const atualizar = criar('button', { type: 'button', texto: 'Atualizar' });
+      atualizar.addEventListener('click', carregar);
+      const form = criar('form', { method: 'dialog', classe: 'dialogo-form largo' }, [
+        criar('h2', { texto: titulo }),
+        area,
+        criar('div', { classe: 'dialogo-fim' }, [atualizar, criar('button', { type: 'submit', texto: 'Fechar' })]),
+      ]);
+      abrir(form, () => resolve());
+      carregar();
+    });
+  }
+
+  window.UI = { criar, botao, tabela, selo, acoes, formulario, confirmar, confirmarNome, visualizador };
 })();
