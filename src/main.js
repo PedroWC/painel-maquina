@@ -20,6 +20,8 @@ const { createDockerProvider } = require('./providers/docker');
 const { createPm2Provider, createPm2Locator } = require('./providers/pm2');
 const { createKubernetesProvider } = require('./providers/kubernetes');
 const { createWslProvider } = require('./providers/wsl');
+const { createPodmanProvider } = require('./providers/podman');
+const { createComposeProvider } = require('./providers/compose');
 const { createProviderRoutes } = require('./routes/providers');
 
 function main() {
@@ -61,6 +63,7 @@ function main() {
   const registry = createRegistry({
     providers: [
       createDockerProvider({ cli }),
+      createComposeProvider({ cli }),
       createPm2Provider({
         cli,
         locate: createPm2Locator({ cli, configured: config.pm2Entry }),
@@ -68,6 +71,7 @@ function main() {
       }),
       createKubernetesProvider({ cli }),
       createWslProvider({ cli }),
+      createPodmanProvider({ cli }),
     ],
   });
   const providerRoutes = createProviderRoutes({ registry });
