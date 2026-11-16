@@ -379,3 +379,29 @@ test('RF-21: o Podman funciona de ponta a ponta pelas rotas, com a CLI simulada,
     await srv.close();
   }
 });
+
+test('RF-18: o Compose funciona pelas rotas e o servidor impõe a allowlist e o id seguro', async () => {
+  const { createComposeProvider } = require('../../src/providers/compose');
+  const cli = createFakeCli((exe, args) => {
+    if (args[1] === 'version') return { stdout: '2.29.1\n' };
+    if (args[1] === 'ls') return { stdout: JSON.stringify([{ Name: 'loja', Status: 'running(1)', ConfigFiles: 'C:/apps/loja/compose.yml' }]) };
+    if (args.includes('ps')) return { stdout: JSON.stringify([{ Service: 'web', State: 'running', Status: 'Up', Image: 'nginx' }]) };
+    if (args.includes('logs')) return { stdout: 'log do projeto\n' };
+    return { stdout: '' };
+  });
+  const { srv, get, send } = await setup([createComposeProvider({ cli })]);
+  try {
+    assert.deepEqual((await get('/api/providers')).json.providers.map((p) => [p.id, p.versao]), [['compose', '2.29.1']]);
+    const items = (await get('/api/p/compose/items')).json;
+    assert.deepEqual(items.sections[0].rows[0].actions, ['up', 'restart', 'stop']);
+    assert.equal(items.sections[1].rows[0].id, 'loja/web');
+    assert.equal((await get('/api/p/compose/logs?id=loja/web')).json.text, 'log do projeto\n');
+    assert.equal((await send('POST', '/api/p/compose/action', { op: 'restart', id: 'loja' })).status, 200);
+    assert.deepEqual(cli.calls.at(-1).args, ['compose', '-p', 'loja', 'restart']);
+    for (const body of [{ op: 'down', id: 'loja' }, { op: 'stop', id: '--all' }, { op: 'stop', id: 'loja/web' }, { op: 'up', id: '-p' }]) {
+      assert.equal((await send('POST', '/api/p/compose/action', body)).status, 400, JSON.stringify(body));
+    }
+  } finally {
+    await srv.close();
+  }
+});
