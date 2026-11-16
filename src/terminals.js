@@ -1,6 +1,6 @@
 'use strict';
 
-// Gerenciador de sessões de terminal (RF-03 a RF-06, RN-07, RN-15).
+// Gerenciador de sessões de terminal (RF-03 a RF-06, RN-07, RN-15, RN-18).
 // O PTY é injetável: nos testes entra uma simulação; em produção, node-pty (ConPTY).
 
 const crypto = require('node:crypto');
@@ -8,6 +8,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { HttpError, badRequest, DISTRO_NAME } = require('./validate');
+const { lowPrivilegeLaunch } = require('./de-elevate');
 
 const SCROLLBACK_CHARS = 200 * 1024; // RN-15: cerca de 200 KB de histórico
 const MIN_SIZE = 1;
@@ -42,6 +43,7 @@ function createTerminalManager({
   maxTerminals = 20,
   shells = defaultShells(),
   isAdmin = false,
+  launchLowPrivilege = lowPrivilegeLaunch,
   homeDir = os.homedir(),
   exists = (file) => fs.existsSync(file),
   isDirectory = (dir) => {
@@ -94,7 +96,7 @@ function createTerminalManager({
   }
 
   // RF-03: cria a sessão. RN-15: respeita o limite de sessões simultâneas.
-  function create({ shell = 'powershell', cwd, name, cols, rows, distro } = {}) {
+  function create({ shell = 'powershell', cwd, name, cols, rows, distro, admin } = {}) {
     const def = shells[shell];
     if (!def || !exists(def.file)) throw badRequest(`Shell indisponível: ${shell}.`);
     // RF-22: terminal em uma distribuição específica do WSL (wsl.exe -d <distro>); nome validado.
@@ -102,6 +104,11 @@ function createTerminalManager({
     if (hasDistro && shell !== 'wsl') throw badRequest('A distribuição só vale para o shell WSL.');
     if (hasDistro && !DISTRO_NAME.test(distro)) throw badRequest('distribuição inválida.');
     const args = hasDistro ? [...def.args, '-d', distro] : def.args;
+    // RN-18: o operador escolhe abrir com ou sem administrador; o padrão é o privilégio do painel.
+    // Pedir administrador com um painel sem elevação seria uma promessa que não dá para cumprir.
+    if (admin !== undefined && typeof admin !== 'boolean') throw badRequest('admin deve ser verdadeiro ou falso.');
+    const wantsAdmin = admin === undefined ? isAdmin : admin;
+    if (wantsAdmin && !isAdmin) throw badRequest('O painel não está em execução como administrador; abra o terminal sem administrador.');
     if (sessions.size >= maxTerminals) {
       throw new HttpError(409, `Limite de ${maxTerminals} sessões atingido. Encerre alguma antes de abrir outra.`);
     }
@@ -109,12 +116,14 @@ function createTerminalManager({
     const usable = typeof cwd === 'string' && cwd !== '' && isDirectory(cwd);
     const dir = usable ? cwd : homeDir;
     const id = crypto.randomBytes(6).toString('hex');
-    const pty = spawnPty(def.file, args, {
+    // Painel elevado + pedido sem administrador: o shell nasce de um token restrito (ADR 0014).
+    const lowered = isAdmin && !wantsAdmin ? launchLowPrivilege({ file: def.file, args, cwd: dir, env }) : null;
+    const pty = spawnPty(lowered ? lowered.file : def.file, lowered ? lowered.args : args, {
       name: 'xterm-256color',
       cols: clampSize(cols, 120),
       rows: clampSize(rows, 30),
       cwd: dir,
-      env,
+      env: lowered ? lowered.env : env,
     });
 
     const session = {
@@ -124,7 +133,7 @@ function createTerminalManager({
       distro: hasDistro ? distro : null,
       cwd: dir,
       pid: pty.pid,
-      admin: isAdmin, // RN-07: herda o privilégio do painel
+      admin: wantsAdmin, // RN-07 e RN-18: privilégio escolhido ao criar, sempre exibido
       created: now(),
       exited: false,
       exitCode: null,
@@ -208,7 +217,7 @@ function createTerminalManager({
     for (const id of [...sessions.keys()]) remove(id);
   }
 
-  return { availableShells, create, list, attach, write, resize, rename, remove, protectedPids, shutdown };
+  return { isAdmin, availableShells, create, list, attach, write, resize, rename, remove, protectedPids, shutdown };
 }
 
 module.exports = { createTerminalManager, defaultShells, SCROLLBACK_CHARS };

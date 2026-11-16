@@ -33,9 +33,9 @@ Excluir, remover, parar ou encerrar exige confirmação explícita do operador. 
 Toda ação que altera estado (incluindo logins e logouts, criação e encerramento de terminais) gera um registro com data e hora, origem, ação, alvo e resultado. Registros nunca contêm token, cookie, hash ou o conteúdo digitado em terminais. Relacionado: RF-24, RNF-07.
 
 <a id="rn-07"></a>
-## RN-07 · Terminais herdam o privilégio do painel
+## RN-07 · O privilégio do terminal é sempre visível
 
-Cada sessão de terminal roda com o mesmo privilégio do painel e exibe essa informação (por exemplo, "admin") de forma visível na interface. Relacionado: RF-03, RF-04.
+Cada sessão de terminal exibe de forma visível na interface se foi aberta **com** administrador ("admin") ou **sem** ("sem admin"). O privilégio é escolhido ao criar a sessão ([RN-18](#rn-18)) e nunca excede o do painel. Relacionado: RF-03, RF-04.
 
 <a id="rn-08"></a>
 ## RN-08 · Tarefas do Windows ocultas por padrão
@@ -86,3 +86,8 @@ O token de acesso é gerado aleatoriamente, exibido **uma única vez** na geraç
 ## RN-17 · Validação de entradas
 
 Todo valor recebido do cliente (nomes, caminhos, argumentos, identificadores) é validado por tipo, tamanho e conjunto de caracteres antes de chegar ao sistema. Operações fora da allowlist são recusadas com erro 400. Relacionado: RNF-01.
+
+<a id="rn-18"></a>
+## RN-18 · Terminal com ou sem administrador
+
+Ao abrir um terminal, o operador escolhe se ele tem permissão de administrador. O padrão é o privilégio do painel (administrador, quando o painel está elevado). Abrir **sem** administrador usa um token restrito do próprio painel: os grupos de administrador ficam como "somente negar" e os privilégios são removidos ([ADR 0014](../arquitetura/adr/0014-terminal-sem-administrador-por-token-restrito.md)). Se o painel não está elevado, pedir administrador é recusado (400). A escolha é auditada ([RN-06](#rn-06)). Relacionado: RF-03, RN-07.

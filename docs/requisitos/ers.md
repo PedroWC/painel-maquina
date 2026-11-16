@@ -47,7 +47,7 @@ Documentos relacionados: [regras de negócio](regras-de-negocio.md), [rastreabil
 
 | ID | Requisito | Prioridade | Casos de uso |
 |---|---|---|---|
-| RF-03 | Criar sessão de terminal escolhendo shell (PowerShell, cmd, Git Bash, WSL), pasta inicial e nome | M | UC-03 |
+| RF-03 | Criar sessão de terminal escolhendo shell (PowerShell, cmd, Git Bash, WSL), pasta inicial, nome e se terá permissão de administrador ([RN-18](regras-de-negocio.md#rn-18)) | M | UC-03 |
 | RF-04 | Listar sessões de terminal com nome, shell, estado, PID e privilégio | M | UC-04 |
 | RF-05 | Reanexar-se a uma sessão existente recebendo o histórico recente (scrollback), mesmo após fechar a aba | M | UC-04 |
 | RF-06 | Renomear e encerrar sessões de terminal | M | UC-04 |

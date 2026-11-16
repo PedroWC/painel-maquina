@@ -12,7 +12,7 @@ function createTerminalRoutes({ manager }) {
     {
       method: 'GET',
       pattern: /^\/api\/terminals$/,
-      handler: () => ({ shells: manager.availableShells(), terminals: manager.list() }),
+      handler: () => ({ shells: manager.availableShells(), terminals: manager.list(), panelAdmin: manager.isAdmin }),
     },
     {
       method: 'POST',
@@ -24,7 +24,7 @@ function createTerminalRoutes({ manager }) {
         const distro = optionalStr(body.distro, { field: 'distribuição', max: 64 });
         const cols = body.cols === undefined ? undefined : int(body.cols, { field: 'cols', min: 1, max: 500 });
         const rows = body.rows === undefined ? undefined : int(body.rows, { field: 'rows', min: 1, max: 500 });
-        const created = manager.create({ shell, cwd, name, cols, rows, distro });
+        const created = manager.create({ shell, cwd, name, cols, rows, distro, admin: body.admin });
         audit.record({
           ip,
           action: 'terminal.criar',

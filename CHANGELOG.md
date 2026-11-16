@@ -6,6 +6,10 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 
 ## [Não lançado]
 
+### Adicionado
+- Terminal com ou sem administrador: caixa "Administrador" ao abrir a sessão (marcada por padrão); sem ela, o shell abre com token restrito, a sessão aparece como "sem admin" e a escolha é auditada (RF-03, RN-07, RN-18, ADR 0014).
+- A API de terminais aceita `admin` e informa `panelAdmin`.
+
 ## [0.1.0] - 2026-11-16
 
 Primeira versão. O painel gerencia terminais, tarefas agendadas, serviços, processos e portas de uma máquina Windows e, quando instaladas, tecnologias opcionais (Docker, Docker Compose, Podman, pm2, Kubernetes e WSL). Como o projeto está antes da `1.0.0`, mudanças incompatíveis futuras incrementam o `MINOR` ([versionamento](docs/processo/versionamento.md)).

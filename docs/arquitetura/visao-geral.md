@@ -43,6 +43,7 @@ O navegador conversa com o painel por HTTP (API JSON) e WebSocket (terminais). O
 | `src/protections.js` | Recursos protegidos: tarefa e processo do painel, serviços críticos |
 | `src/terminals.js` | Gerenciador de sessões de terminal (node-pty injetável), histórico, limite e PIDs protegidos |
 | `src/routes/terminals.js` | Rotas HTTP e WebSocket dos terminais |
+| `src/de-elevate.js` | Lançador de shell sem administrador (token restrito, [ADR 0014](adr/0014-terminal-sem-administrador-por-token-restrito.md)) |
 | `src/ps-scripts.js` | Scripts PowerShell estáticos (tarefas, serviços, processos) |
 | `src/routes/tasks.js` | Tarefas agendadas |
 | `src/routes/services.js` · `processes.js` | Serviços, processos e portas |

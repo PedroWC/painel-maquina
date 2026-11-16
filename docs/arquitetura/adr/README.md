@@ -19,6 +19,7 @@ Para criar um novo, copie o modelo abaixo e use o próximo número livre.
 | [0011](0011-frontend-vanilla-sem-build.md) | Frontend em JavaScript puro, sem etapa de build | aceito |
 | [0012](0012-provedores-opcionais-com-deteccao.md) | Provedores opcionais com detecção em tempo de execução | aceito |
 | [0013](0013-vigia-periodico-para-manter-o-painel-ativo.md) | Vigia periódico para manter o painel ativo | aceito (complementa o 0007) |
+| [0014](0014-terminal-sem-administrador-por-token-restrito.md) | Terminal sem administrador por token restrito | aceito (complementa o 0007) |
 
 ## Modelo
 

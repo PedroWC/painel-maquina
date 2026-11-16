@@ -20,10 +20,11 @@ Executado antes de cada release, em uma máquina Windows real, com o painel inst
 - [ ] "Sair" volta ao login e o botão Voltar do navegador não reabre o painel
 - [ ] O painel não responde por outro endereço da rede (`http://<ip-da-máquina>:8780` recusa a conexão)
 
-## 3. Terminais (RF-03 a RF-06, RN-07, RN-15)
+## 3. Terminais (RF-03 a RF-06, RN-07, RN-15, RN-18)
 
 - [ ] Abrir PowerShell, cmd e (se instalados) Git Bash e WSL
-- [ ] `whoami /groups` mostra "High Mandatory Level" e a sessão exibe **admin**
+- [ ] Com "Administrador" marcado: `whoami /groups` mostra "High Mandatory Level" e a sessão exibe **admin**
+- [ ] Com "Administrador" desmarcado: a sessão exibe **sem admin**, `net session` falha com acesso negado e `whoami /groups` mostra o grupo Administradores como "usado apenas para negar" (o nível de integridade continua alto, ADR 0014)
 - [ ] Fechar a aba do navegador com `ping -t 127.0.0.1` rodando, reabrir e reanexar: o histórico aparece e o ping continua
 - [ ] Redimensionar a janela ajusta o terminal; `Ctrl+C` interrompe o ping
 - [ ] Renomear e encerrar (com confirmação) removem a sessão; o ping some do Gerenciador de Tarefas
