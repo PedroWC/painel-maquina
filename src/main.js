@@ -9,6 +9,8 @@ const { createServer } = require('./server');
 const { detectAdmin } = require('./system');
 const { createTerminalManager } = require('./terminals');
 const { createTerminalRoutes } = require('./routes/terminals');
+const { createPowerShell } = require('./powershell');
+const { createTaskRoutes } = require('./routes/tasks');
 
 function main() {
   let config;
@@ -31,12 +33,14 @@ function main() {
   const admin = detectAdmin();
   const terminals = createTerminalManager({ maxTerminals: config.maxTerminals, isAdmin: admin });
   const terminalRoutes = createTerminalRoutes({ manager: terminals });
+  const ps = createPowerShell();
+  const taskRoutes = createTaskRoutes({ ps });
   const server = createServer({
     config,
     auth,
     audit,
     isAdmin: admin,
-    routes: [...terminalRoutes.routes],
+    routes: [...terminalRoutes.routes, ...taskRoutes.routes],
     websockets: [...terminalRoutes.websockets],
   });
 
