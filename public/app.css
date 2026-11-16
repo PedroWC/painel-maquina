@@ -43,6 +43,7 @@ button.perigo { border-color: var(--bad); color: var(--bad); }
 .term-area { background: #000; border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
 .term-container { height: calc(100vh - 260px); min-height: 280px; }
 .term-aviso { margin-bottom: 6px; padding: 4px 8px; border: 1px solid var(--warn); border-radius: 6px; color: var(--warn); }
+.subtitulo { margin: 20px 0 8px; font-size: 15px; }
 .titulo-aba { margin: 0 0 12px; font-size: 18px; }
 .tabela-rolavel { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
 table { width: 100%; border-collapse: collapse; background: var(--panel); }

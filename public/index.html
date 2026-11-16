@@ -25,6 +25,7 @@
         <button type="button" class="aba" data-aba="terminais">Terminais</button>
         <button type="button" class="aba" data-aba="tarefas">Tarefas</button>
         <button type="button" class="aba" data-aba="servicos">Serviços</button>
+        <button type="button" class="aba" data-aba="processos">Processos</button>
       </nav>
       <span id="selo-admin" class="selo" hidden>administrador</span>
       <span id="aviso-exposto" class="selo aviso" hidden>exposto fora do loopback</span>
@@ -74,6 +75,18 @@
         </div>
         <div id="servicos-tabela"></div>
       </section>
+
+      <section id="aba-processos" class="painel-aba" hidden>
+        <h1 class="titulo-aba">Processos e portas</h1>
+        <div class="barra">
+          <input id="processos-filtro" type="search" placeholder="Filtrar por nome, PID ou porta" aria-label="Filtrar processos e portas">
+          <button id="processos-atualizar" type="button">Atualizar</button>
+        </div>
+        <h2 class="subtitulo">Portas em escuta</h2>
+        <div id="processos-portas"></div>
+        <h2 class="subtitulo">Processos (por uso de memória)</h2>
+        <div id="processos-lista"></div>
+      </section>
     </main>
   </section>
 
@@ -87,6 +100,7 @@
   <script src="/terminais.js"></script>
   <script src="/tarefas.js"></script>
   <script src="/servicos.js"></script>
+  <script src="/processos.js"></script>
   <script src="/iniciar.js"></script>
 </body>
 </html>
