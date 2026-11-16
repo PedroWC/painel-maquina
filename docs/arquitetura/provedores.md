@@ -126,6 +126,15 @@ Docker e Podman têm CLIs compatíveis, então a lógica comum está em `src/pro
 - **Nunca força nada:** remover e parar não usam `-f`/`--force`; se o container estiver em uso, a mensagem do próprio motor aparece.
 - Um terceiro motor compatível (por exemplo, nerdctl) entra com um arquivo de configuração desse tipo.
 
+## Cuidados específicos do Docker Compose
+
+- **Plugin v2:** usa `docker compose` (não o antigo `docker-compose`). Docker presente sem o plugin conta como provedor indisponível, sem erro.
+- **O cliente só informa nomes:** o id é `projeto` ou `projeto/servico`, validados (minúsculas, números, hífen e sublinhado). Os arquivos do projeto vêm da própria listagem do Compose (`compose ls`) e só são usados se forem caminhos absolutos; um arquivo que pareça opção (por exemplo, `-x.yml`) é recusado.
+- **`up` nunca constrói:** usa `up -d --no-build`, então esta interface não executa builds (apenas inicia o que existe ou baixa imagens prontas), com limite de tempo maior (120 s).
+- **Sem `down`:** nada aqui remove containers, redes ou volumes; parar usa `stop` e reiniciar usa `restart`, sempre do projeto inteiro (serviços individuais só têm listagem e logs).
+- **Formatos do `ps`:** aceita tanto a lista JSON das versões antigas quanto o objeto por linha das novas.
+- **Motor parado:** vira a mesma mensagem amigável do Docker; um projeto que some no meio da consulta não derruba a listagem.
+
 ## Cuidados específicos do WSL
 
 - **Saída em UTF-16:** o `wsl.exe` escreve em UTF-16LE e traduz a saída. O executor de CLIs aceita `encoding: 'auto'` (bytes decodificados como UTF-16LE se houver bytes nulos, senão UTF-8) e o provedor o usa em toda chamada, inclusive nas mensagens de erro.
