@@ -4,7 +4,6 @@
 // cria, edita e exclui tarefas agendadas.
 
 (function () {
-  const PROTEGIDA = 'painelmaquina'; // RN-03 (o servidor também bloqueia)
   const filtro = document.getElementById('tarefas-filtro');
   const todas = document.getElementById('tarefas-todas');
   const atualizar = document.getElementById('tarefas-atualizar');
@@ -33,7 +32,7 @@
   ];
 
   const data = (iso) => (iso ? new Date(iso).toLocaleString('pt-BR') : '—');
-  const protegida = (t) => t.name.toLowerCase() === PROTEGIDA;
+  const protegida = (t) => t.protected === true; // RN-03: marca vinda do servidor
 
   function triggerDoFormulario(v) {
     const gatilho = { type: v.trigger };

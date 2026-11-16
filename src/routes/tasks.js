@@ -3,11 +3,12 @@
 // Rotas de tarefas agendadas (RF-07 a RF-10, RF-25, RN-03, RN-05, RN-08).
 
 const { HttpError, badRequest, str, optionalStr, oneOf } = require('../validate');
-const { assertTaskAllowed } = require('../protections');
+const { assertTaskAllowed, isSelfTask } = require('../protections');
 const { TASK_LIST, TASK_ACTION, TASK_SAVE } = require('../ps-scripts');
 
-const NAME = /^[^\\/<>:"|?*]+$/;
-const PATH = /^\\([^\\/<>:"|?*]+\\)*$/;
+// Sem curingas (* ? [ ]): os cmdlets de tarefa interpretam esses caracteres como padrão.
+const NAME = /^[^\\/<>:"|?*[\]]+$/;
+const PATH = /^\\([^\\/<>:"|?*[\]]+\\)*$/;
 const TIME = /^([01]\d|2[0-3]):[0-5]\d$/;
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const OPS = ['run', 'stop', 'enable', 'disable', 'delete'];
@@ -73,7 +74,8 @@ function createTaskRoutes({ ps }) {
       handler: async ({ url }) => {
         const all = url.searchParams.get('all') === '1';
         const tasks = await ps.runJson(TASK_LIST, { all });
-        return { tasks: Array.isArray(tasks) ? tasks : [] };
+        // RN-03: a interface desabilita as ações da tarefa do painel com base nesta marca.
+        return { tasks: (Array.isArray(tasks) ? tasks : []).map((t) => ({ ...t, protected: isSelfTask(t.name) })) };
       },
     },
     {

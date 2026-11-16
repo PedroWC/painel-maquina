@@ -37,8 +37,32 @@ test('RF-07: lista as tarefas devolvidas pelo sistema', async () => {
   try {
     const res = await request({ port: srv.port, path: '/api/tasks', headers: auth });
     assert.equal(res.status, 200);
-    assert.deepEqual(res.json.tasks, items);
+    assert.deepEqual(res.json.tasks, [{ ...items[0], protected: false }]);
     assert.equal(ps.calls[0].script, TASK_LIST);
+  } finally {
+    await srv.close();
+  }
+});
+
+test('RN-03: a tarefa do painel vem marcada como protegida na listagem', async () => {
+  const { srv, auth } = await setup({ listResult: [{ name: 'PainelMaquina' }, { name: 'Outra' }] });
+  try {
+    const res = await request({ port: srv.port, path: '/api/tasks', headers: auth });
+    assert.deepEqual(res.json.tasks.map((t) => t.protected), [true, false]);
+  } finally {
+    await srv.close();
+  }
+});
+
+test('RN-17: nomes com curingas (* ? [ ]) são recusados para não atingir várias tarefas', async () => {
+  const { srv, ps, send } = await setup();
+  try {
+    for (const name of ['*', '?', 'a*', '[abc]', 'Tarefa[1]']) {
+      assert.equal((await send('POST', '/api/tasks/action', { name, op: 'run' })).status, 400, name);
+      const path = '\\' + name + '\\';
+      assert.equal((await send('POST', '/api/tasks/action', { name: 'ok', path, op: 'run' })).status, 400, `caminho ${name}`);
+    }
+    assert.equal(ps.calls.length, 0);
   } finally {
     await srv.close();
   }
