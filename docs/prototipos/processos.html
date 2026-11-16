@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protótipo — Processos e portas</title>
+  <link rel="stylesheet" href="wireframe.css">
+</head>
+<body>
+  <header>
+    <strong>Painel da Máquina</strong>
+    <nav>
+      <a href="terminais.html">Terminais</a>
+      <a href="tarefas.html">Tarefas</a>
+      <a href="servicos.html">Serviços</a>
+      <a href="docker.html">Docker</a>
+      <a class="on" href="processos.html">Processos</a>
+      <a href="provedores.html">Provedores</a>
+    </nav>
+    <span class="badge admin">administrador</span>
+    <button>Sair</button>
+  </header>
+  <main>
+    <h1>Processos e portas</h1>
+    <div class="bar">
+      <input aria-label="Filtrar" placeholder="Filtrar por nome, PID ou porta" size="30">
+      <button>Atualizar</button>
+    </div>
+    <h2 style="font-size:15px">Portas em escuta</h2>
+    <table>
+      <thead><tr><th>Porta</th><th>Endereço</th><th>Processo</th><th>PID</th></tr></thead>
+      <tbody>
+        <tr><td>8080</td><td>0.0.0.0</td><td>node</td><td>4120</td></tr>
+        <tr><td>8780</td><td>127.0.0.1</td><td>node <span class="badge">painel</span></td><td>2210</td></tr>
+      </tbody>
+    </table>
+    <h2 style="font-size:15px;margin-top:20px">Processos (por memória)</h2>
+    <table>
+      <thead><tr><th>Nome</th><th>PID</th><th>Memória</th><th>CPU (s)</th><th>Ações</th></tr></thead>
+      <tbody>
+        <tr><td>chrome</td><td>9004</td><td>812 MB</td><td>301</td><td class="acoes"><button class="danger">Encerrar</button></td></tr>
+        <tr><td>node <span class="badge">painel</span></td><td>2210</td><td>96 MB</td><td>12</td><td class="acoes"><button class="danger" disabled>Encerrar</button></td></tr>
+      </tbody>
+    </table>
+    <p class="nota">Protótipo estático · RF-17, RF-25 · UC-11 · RN-04. O processo do painel não pode ser encerrado.</p>
+  </main>
+</body>
+</html>

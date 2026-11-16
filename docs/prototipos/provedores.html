@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protótipo — Provedores</title>
+  <link rel="stylesheet" href="wireframe.css">
+</head>
+<body>
+  <header>
+    <strong>Painel da Máquina</strong>
+    <nav>
+      <a href="terminais.html">Terminais</a>
+      <a href="tarefas.html">Tarefas</a>
+      <a href="servicos.html">Serviços</a>
+      <a href="docker.html">Docker</a>
+      <a href="processos.html">Processos</a>
+      <a class="on" href="provedores.html">Provedores</a>
+      <a href="#">pm2</a>
+      <a href="#">Kubernetes</a>
+    </nav>
+    <span class="badge admin">administrador</span>
+    <button>Sair</button>
+  </header>
+  <main>
+    <h1>Provedores</h1>
+    <div class="bar"><button class="primary">Detectar novamente</button></div>
+    <table>
+      <thead><tr><th>Tecnologia</th><th>Status</th><th>Versão</th></tr></thead>
+      <tbody>
+        <tr><td>Docker</td><td><span class="st ok">Disponível</span></td><td>29.x</td></tr>
+        <tr><td>WSL</td><td><span class="st ok">Disponível</span></td><td>2.x</td></tr>
+        <tr><td>pm2</td><td><span class="st ok">Disponível</span></td><td>5.x</td></tr>
+        <tr><td>Kubernetes (kubectl)</td><td><span class="st ok">Disponível</span></td><td>1.x</td></tr>
+        <tr><td>Docker Compose</td><td><span class="st off">Não encontrado</span></td><td>—</td></tr>
+        <tr><td>Podman</td><td><span class="st off">Não encontrado</span></td><td>—</td></tr>
+      </tbody>
+    </table>
+
+    <h1 style="margin-top:28px">Exemplo de aba de provedor: Kubernetes</h1>
+    <div class="ctx">Contexto: <strong>desenvolvimento</strong> · Namespace: <strong>padrao</strong> (RN-13)</div>
+    <table>
+      <thead><tr><th>Recurso</th><th>Nome</th><th>Estado</th><th>Ações</th></tr></thead>
+      <tbody>
+        <tr><td>Deployment</td><td>meu-app</td><td><span class="st ok">3/3</span></td>
+          <td class="acoes"><button>Reiniciar rollout</button> <button>Escalar</button> <button>Logs</button> <button class="danger">Excluir</button></td></tr>
+        <tr><td>Pod</td><td>meu-app-7c9d-abcde</td><td><span class="st ok">Running</span></td>
+          <td class="acoes"><button>Logs</button> <button class="danger">Excluir</button></td></tr>
+      </tbody>
+    </table>
+    <p class="nota">Protótipo estático · RF-18 a RF-23 · UC-12, UC-13 · RN-11 a RN-14. Provedores ausentes não geram aba. Ações destrutivas no Kubernetes exigem digitar o nome do recurso.</p>
+  </main>
+</body>
+</html>

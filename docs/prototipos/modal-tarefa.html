@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protótipo — Nova tarefa e confirmação</title>
+  <link rel="stylesheet" href="wireframe.css">
+</head>
+<body>
+  <main>
+    <div class="modal">
+      <h1>Nova tarefa</h1>
+      <label for="nome">Nome</label>
+      <input id="nome" value="MinhaTarefa">
+      <label for="cmd">Comando</label>
+      <input id="cmd" value="C:\scripts\rotina.cmd">
+      <label for="args">Argumentos (opcional)</label>
+      <input id="args" placeholder="--modo rapido">
+      <label for="pasta">Pasta de trabalho (opcional)</label>
+      <input id="pasta" placeholder="C:\scripts">
+      <label for="gatilho">Gatilho</label>
+      <select id="gatilho"><option>Diário</option><option>Semanal</option><option>Ao fazer logon</option><option>Na inicialização</option><option>Uma vez</option><option>Manual (sem gatilho)</option></select>
+      <label for="hora">Horário</label>
+      <input id="hora" type="time" value="03:00">
+      <label for="conta">Executar como</label>
+      <select id="conta"><option>Sistema (SYSTEM)</option><option>Meu usuário</option></select>
+      <div class="fim"><button>Cancelar</button><button class="primary">Criar</button></div>
+    </div>
+
+    <div class="modal">
+      <h1>Excluir tarefa</h1>
+      <p>Esta ação não pode ser desfeita. Digite <strong>MinhaTarefa</strong> para confirmar.</p>
+      <input aria-label="Confirmar nome" placeholder="MinhaTarefa">
+      <div class="fim"><button>Cancelar</button><button class="danger" disabled>Excluir</button></div>
+    </div>
+    <p class="nota" style="text-align:center">Protótipo estático · RF-10, RF-27 · UC-06, UC-07 · RN-05, RN-17</p>
+  </main>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protótipo — Docker</title>
+  <link rel="stylesheet" href="wireframe.css">
+</head>
+<body>
+  <header>
+    <strong>Painel da Máquina</strong>
+    <nav>
+      <a href="terminais.html">Terminais</a>
+      <a href="tarefas.html">Tarefas</a>
+      <a href="servicos.html">Serviços</a>
+      <a class="on" href="docker.html">Docker</a>
+      <a href="processos.html">Processos</a>
+      <a href="provedores.html">Provedores</a>
+    </nav>
+    <span class="badge admin">administrador</span>
+    <button>Sair</button>
+  </header>
+  <main>
+    <h1>Docker</h1>
+    <h2 style="font-size:15px">Containers</h2>
+    <table>
+      <thead><tr><th>Nome</th><th>Imagem</th><th>Estado</th><th>Portas</th><th>Ações</th></tr></thead>
+      <tbody>
+        <tr><td>web</td><td>nginx:stable</td><td><span class="st ok">Em execução</span></td><td>8080→80</td>
+          <td class="acoes"><button>Parar</button> <button>Reiniciar</button> <button>Logs</button> <button class="danger">Remover</button></td></tr>
+        <tr><td>banco</td><td>postgres:16</td><td><span class="st off">Parado</span></td><td>—</td>
+          <td class="acoes"><button>Iniciar</button> <button>Logs</button> <button class="danger">Remover</button></td></tr>
+      </tbody>
+    </table>
+    <h2 style="font-size:15px;margin-top:20px">Imagens</h2>
+    <table>
+      <thead><tr><th>Repositório</th><th>Tag</th><th>Tamanho</th><th>Ações</th></tr></thead>
+      <tbody>
+        <tr><td>nginx</td><td>stable</td><td>190 MB</td><td class="acoes"><button class="danger">Remover</button></td></tr>
+        <tr><td>postgres</td><td>16</td><td>430 MB</td><td class="acoes"><button class="danger">Remover</button></td></tr>
+      </tbody>
+    </table>
+    <p class="nota">Protótipo estático · RF-15, RF-16 · UC-10 · RN-11, RN-12. Se o Docker não estiver instalado, esta aba não aparece; se estiver parado, mostra aviso amigável.</p>
+  </main>
+</body>
+</html>

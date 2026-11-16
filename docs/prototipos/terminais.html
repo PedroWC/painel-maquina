@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protótipo — Terminais</title>
+  <link rel="stylesheet" href="wireframe.css">
+</head>
+<body>
+  <header>
+    <strong>Painel da Máquina</strong>
+    <nav>
+      <a class="on" href="terminais.html">Terminais</a>
+      <a href="tarefas.html">Tarefas</a>
+      <a href="servicos.html">Serviços</a>
+      <a href="docker.html">Docker</a>
+      <a href="processos.html">Processos</a>
+      <a href="provedores.html">Provedores</a>
+    </nav>
+    <span class="badge admin">administrador</span>
+    <button>Sair</button>
+  </header>
+  <main>
+    <h1>Terminais</h1>
+    <div class="bar">
+      <select aria-label="Shell"><option>PowerShell</option><option>cmd</option><option>Git Bash</option><option>WSL</option></select>
+      <input aria-label="Pasta inicial" placeholder="Pasta inicial (opcional)" size="28">
+      <input aria-label="Nome da sessão" placeholder="Nome (opcional)" size="18">
+      <button class="primary">Nova sessão</button>
+    </div>
+    <div class="tabs">
+      <span class="on">manutenção · PowerShell · admin <button class="danger">Encerrar</button></span>
+      <span>build · cmd · admin <button class="danger">Encerrar</button></span>
+      <span>logs · Git Bash · admin (finalizada, código 0) <button>Remover</button></span>
+    </div>
+    <div class="term">PS C:\projetos\meu-app&gt; npm test<br>✔ 42 testes passaram<br>PS C:\projetos\meu-app&gt; <span>█</span></div>
+    <p class="nota">Protótipo estático · RF-03 a RF-06 · UC-03, UC-04 · RN-07, RN-15. A sessão continua viva ao fechar a aba.</p>
+  </main>
+</body>
+</html>

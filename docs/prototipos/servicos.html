@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protótipo — Serviços</title>
+  <link rel="stylesheet" href="wireframe.css">
+</head>
+<body>
+  <header>
+    <strong>Painel da Máquina</strong>
+    <nav>
+      <a href="terminais.html">Terminais</a>
+      <a href="tarefas.html">Tarefas</a>
+      <a class="on" href="servicos.html">Serviços</a>
+      <a href="docker.html">Docker</a>
+      <a href="processos.html">Processos</a>
+      <a href="provedores.html">Provedores</a>
+    </nav>
+    <span class="badge admin">administrador</span>
+    <button>Sair</button>
+  </header>
+  <main>
+    <h1>Serviços do Windows</h1>
+    <div class="bar">
+      <input aria-label="Filtrar" placeholder="Filtrar por nome" size="26">
+      <select aria-label="Estado"><option>Todos os estados</option><option>Em execução</option><option>Parado</option></select>
+      <button>Atualizar</button>
+      <button class="primary">Novo serviço</button>
+    </div>
+    <table>
+      <thead><tr><th>Nome</th><th>Estado</th><th>Inicialização</th><th>Conta</th><th>Caminho</th><th>Ações</th></tr></thead>
+      <tbody>
+        <tr><td>meu-servico</td><td><span class="st ok">Em execução</span></td>
+          <td><select aria-label="Inicialização"><option>Automático</option><option>Manual</option><option>Desativado</option></select></td><td>LocalSystem</td><td>C:\apps\meu-servico.exe</td>
+          <td class="acoes"><button>Parar</button> <button>Reiniciar</button> <button>Editar</button> <button class="danger">Excluir</button></td></tr>
+        <tr><td>outro-servico</td><td><span class="st off">Parado</span></td>
+          <td><select aria-label="Inicialização"><option>Manual</option></select></td><td>LocalService</td><td>C:\apps\outro.exe</td>
+          <td class="acoes"><button>Iniciar</button> <button disabled>Reiniciar</button> <button>Editar</button> <button class="danger">Excluir</button></td></tr>
+        <tr><td>EventLog <span class="badge">crítico</span></td><td><span class="st ok">Em execução</span></td>
+          <td>Automático</td><td>LocalService</td><td>svchost.exe</td>
+          <td class="acoes"><button disabled>Parar</button> <button disabled>Reiniciar</button> <button disabled>Editar</button> <button class="danger" disabled>Excluir</button></td></tr>
+      </tbody>
+    </table>
+    <p class="nota">Protótipo estático · RF-11 a RF-14, RF-25 · UC-08, UC-09 · RN-05, RN-09.</p>
+  </main>
+</body>
+</html>
