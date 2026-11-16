@@ -20,10 +20,10 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RF-08 | UC-05 | US-05 | `tests/integration/tasks.test.js`, `tests/integration/tasks.windows.test.js` | implementado |
 | RF-09 | UC-05 | US-05 | `tests/integration/tasks.test.js`, `tests/integration/tasks.windows.test.js` | implementado |
 | RF-10 | UC-06, UC-07 | US-06, US-07 | `tests/integration/tasks.test.js`, `tests/integration/tasks.windows.test.js` | implementado |
-| RF-11 | UC-08 | US-08 | `tests/integration/services.test.js` | planejado |
-| RF-12 | UC-08 | US-08 | `tests/integration/services.test.js` | planejado |
-| RF-13 | UC-08 | US-08 | `tests/integration/services.test.js` | planejado |
-| RF-14 | UC-09 | US-09 | `tests/integration/services.test.js` | planejado |
+| RF-11 | UC-08 | US-08 | `tests/integration/services.test.js`, `tests/integration/services.windows.test.js` | implementado |
+| RF-12 | UC-08 | US-08 | `tests/integration/services.test.js`, `tests/integration/services.windows.test.js` | implementado |
+| RF-13 | UC-08 | US-08 | `tests/integration/services.test.js`, `tests/integration/services.windows.test.js` | implementado |
+| RF-14 | UC-09 | US-09 | `tests/integration/services.test.js`, `tests/integration/services.windows.test.js` | implementado |
 | RF-15 | UC-10 | US-10 | `tests/unit/providers/docker.test.js` | planejado |
 | RF-16 | UC-10 | US-10 | `tests/unit/providers/docker.test.js` | planejado |
 | RF-17 | UC-11 | US-11 | `tests/integration/processes.test.js` | planejado |
@@ -46,11 +46,11 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RN-02 | `tests/unit/auth.test.js`, `tests/unit/security.test.js` | implementado |
 | RN-03 | `tests/unit/protections.test.js`, `tests/integration/tasks.test.js` | implementado |
 | RN-04 | `tests/unit/protections.test.js` | parcial |
-| RN-05 | `tests/integration/tasks.test.js` (tarefas); roteiro manual `tests/e2e/smoke.md` para os demais | parcial |
+| RN-05 | `tests/unit/protections.test.js`, `tests/integration/tasks.test.js`, `tests/integration/services.test.js` (tarefas); roteiro manual `tests/e2e/smoke.md` para os demais | parcial |
 | RN-06 | `tests/unit/audit.test.js`, `tests/integration/auth.test.js` | parcial |
 | RN-07 | `tests/unit/terminals.test.js`, `tests/integration/terminals.test.js` | implementado |
 | RN-08 | `tests/integration/tasks.test.js`, `tests/integration/tasks.windows.test.js` | implementado |
-| RN-09 | `tests/unit/protections.test.js` | parcial |
+| RN-09 | `tests/unit/protections.test.js`, `tests/integration/services.test.js` | implementado |
 | RN-10 | `tests/unit/config.test.js` | implementado |
 | RN-11 | `tests/unit/providers/registry.test.js` | planejado |
 | RN-12 | `tests/unit/providers/base.test.js` | planejado |

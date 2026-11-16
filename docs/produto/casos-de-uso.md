@@ -87,7 +87,7 @@ flowchart LR
 
 - **Requisitos:** RF-11, RF-12, RF-13, RF-25 · **Regras:** RN-09, RN-05
 - **Fluxo principal:** 1) O operador abre a aba Serviços. 2) Filtra por nome ou estado. 3) Escolhe iniciar, parar, reiniciar ou mudar o tipo de inicialização. 4) O sistema aplica e atualiza o estado.
-- **Alternativo (confirmação reforçada):** parar o `sshd` exige confirmação por ser o canal de acesso remoto.
+- **Alternativo (confirmação reforçada):** parar, reiniciar ou desativar o `sshd` exige digitar o nome do serviço, por ser o canal de acesso remoto; o servidor impõe a regra e a interface apenas abre o diálogo quando solicitada.
 - **Exceção:** serviços críticos do Windows não aceitam parar nem desativar ([RN-09](../requisitos/regras-de-negocio.md#rn-09)).
 
 <a id="uc-09"></a>
