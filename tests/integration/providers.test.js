@@ -354,3 +354,28 @@ test('UC-10: com o motor parado a API devolve 503 amigável e a aba continua uti
     await srv.close();
   }
 });
+
+test('RF-21: o Podman funciona de ponta a ponta pelas rotas, com a CLI simulada, e coexiste com o Docker', async () => {
+  const { createPodmanProvider } = require('../../src/providers/podman');
+  const podmanCli = createFakeCli((exe, args) => {
+    if (args[0] === '--version') return { stdout: 'podman version 5.2.0\n' };
+    if (args[0] === 'info') return { stdout: '5.2.0\n' };
+    if (args[0] === 'ps') return { stdout: JSON.stringify([{ Id: 'a'.repeat(64), Names: ['web'], Image: 'nginx', State: 'running', Status: 'Up', Ports: [] }]) };
+    if (args[0] === 'images') return { stdout: '[]' };
+    return { stdout: '' };
+  });
+  const dockerCli = createFakeCli(() => { throw new HttpError(404, 'docker não está instalado'); });
+  const { srv, get, send } = await setup([createDockerProvider({ cli: dockerCli }), createPodmanProvider({ cli: podmanCli })]);
+  try {
+    const providers = (await get('/api/providers')).json.providers;
+    assert.deepEqual(providers.map((p) => [p.id, p.disponivel]), [['docker', false], ['podman', true]]);
+    assert.equal((await get('/api/p/docker/items')).status, 404, 'o Docker ausente não existe');
+    const items = (await get('/api/p/podman/items')).json;
+    assert.equal(items.sections[0].rows[0].id, 'aaaaaaaaaaaa');
+    assert.equal((await send('POST', '/api/p/podman/action', { op: 'stop', id: 'aaaaaaaaaaaa' })).status, 200);
+    assert.deepEqual(podmanCli.calls.at(-1).args, ['stop', 'aaaaaaaaaaaa']);
+    assert.equal((await send('POST', '/api/p/podman/action', { op: 'stop', id: '--all' })).status, 400);
+  } finally {
+    await srv.close();
+  }
+});

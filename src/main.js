@@ -20,6 +20,7 @@ const { createDockerProvider } = require('./providers/docker');
 const { createPm2Provider, createPm2Locator } = require('./providers/pm2');
 const { createKubernetesProvider } = require('./providers/kubernetes');
 const { createWslProvider } = require('./providers/wsl');
+const { createPodmanProvider } = require('./providers/podman');
 const { createProviderRoutes } = require('./routes/providers');
 
 function main() {
@@ -68,6 +69,7 @@ function main() {
       }),
       createKubernetesProvider({ cli }),
       createWslProvider({ cli }),
+      createPodmanProvider({ cli }),
     ],
   });
   const providerRoutes = createProviderRoutes({ registry });
