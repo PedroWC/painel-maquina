@@ -257,3 +257,47 @@ test('RN-17: a distribuição só vale para o WSL e precisa ser um nome seguro',
   }
   assert.equal(fake.spawned.length, 0, 'nada foi iniciado');
 });
+
+test('RN-18: o padrão é o privilégio do painel e pedir administrador executa o shell direto', () => {
+  const lowered = [];
+  const { manager, fake } = makeManager({ isAdmin: true, launchLowPrivilege: (o) => { lowered.push(o); return null; } });
+  assert.equal(manager.create({ shell: 'cmd' }).admin, true);
+  assert.equal(manager.create({ shell: 'cmd', admin: true }).admin, true);
+  assert.equal(lowered.length, 0);
+  assert.equal(fake.spawned[0].file.toLowerCase().endsWith('cmd.exe'), true);
+});
+
+test('RN-18: com painel elevado, admin falso abre o shell pelo lançador sem privilégio e exibe sem admin', () => {
+  const calls = [];
+  const { manager, fake } = makeManager({
+    isAdmin: true,
+    launchLowPrivilege: (o) => {
+      calls.push(o);
+      return { file: 'lancador.exe', args: ['-x'], env: { PP_PARAMS: 'p' } };
+    },
+  });
+  const created = manager.create({ shell: 'wsl', distro: 'Ubuntu', cwd: 'C:\\existe', admin: false });
+  assert.equal(created.admin, false);
+  assert.equal(manager.list()[0].admin, false);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].file.toLowerCase().endsWith('wsl.exe'), true);
+  assert.deepEqual(calls[0].args, ['-d', 'Ubuntu']);
+  assert.equal(calls[0].cwd, 'C:\\existe');
+  assert.equal(fake.spawned[0].file, 'lancador.exe');
+  assert.deepEqual(fake.spawned[0].args, ['-x']);
+  assert.deepEqual(fake.spawned[0].options.env, { PP_PARAMS: 'p' });
+});
+
+test('RN-18: com painel sem elevação o terminal abre sem lançador e pedir administrador é recusado', () => {
+  const { manager, fake } = makeManager({ isAdmin: false, launchLowPrivilege: () => assert.fail('não deveria usar o lançador') });
+  assert.equal(manager.create({ shell: 'cmd' }).admin, false);
+  assert.equal(manager.create({ shell: 'cmd', admin: false }).admin, false);
+  assert.throws(() => manager.create({ shell: 'cmd', admin: true }), status(400));
+  assert.equal(fake.spawned.length, 2);
+});
+
+test('RN-17: admin precisa ser booleano', () => {
+  const { manager, fake } = makeManager({ isAdmin: true });
+  for (const bad of ['false', 0, 1, null, {}]) assert.throws(() => manager.create({ shell: 'cmd', admin: bad }), status(400));
+  assert.equal(fake.spawned.length, 0);
+});

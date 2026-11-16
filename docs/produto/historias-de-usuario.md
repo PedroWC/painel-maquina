@@ -36,14 +36,19 @@ Cenário: Sessão expirada
   Então sou levado à tela de login
 ```
 
-## US-03 · Abrir um terminal de administrador
-**Como** operador **quero** abrir um terminal escolhendo shell e pasta **para** trabalhar na máquina pelo navegador. · RF-03 · UC-03 · RN-07, RN-15
+## US-03 · Abrir um terminal, com ou sem administrador
+**Como** operador **quero** abrir um terminal escolhendo shell, pasta e se ele tem permissão de administrador **para** trabalhar na máquina pelo navegador com o menor privilégio necessário. · RF-03 · UC-03 · RN-07, RN-15, RN-18
 
 ```gherkin
 Cenário: Abrir PowerShell em uma pasta
   Dado que estou na aba Terminais
   Quando escolho PowerShell, informo uma pasta existente e confirmo
   Então um terminal abre naquela pasta, marcado como "admin"
+
+Cenário: Terminal sem administrador
+  Dado que estou na aba Terminais
+  Quando desmarco "Administrador" e abro um terminal
+  Então ele abre marcado como "sem admin" e ações de administrador falham
 
 Cenário: Limite de sessões
   Dado que já existem 20 sessões

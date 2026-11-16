@@ -5,6 +5,8 @@
 
 (function () {
   const seletorShell = document.getElementById('term-shell');
+  const campoAdmin = document.getElementById('term-admin');
+  const rotuloAdmin = document.getElementById('term-admin-rotulo');
   const campoPasta = document.getElementById('term-pasta');
   const campoNome = document.getElementById('term-nome');
   const botaoNova = document.getElementById('term-nova');
@@ -136,7 +138,7 @@
 
       const titulo = document.createElement('span');
       titulo.className = 'sessao-titulo';
-      titulo.textContent = `${sessao.name} · ${sessao.shell}${sessao.admin ? ' · admin' : ''}${sessao.exited ? ' · finalizada' : ''}`;
+      titulo.textContent = `${sessao.name} · ${sessao.shell}${sessao.admin ? ' · admin' : ' · sem admin'}${sessao.exited ? ' · finalizada' : ''}`;
       item.appendChild(titulo);
       item.appendChild(criarBotao('Renomear', 'mini', () => renomear(sessao), `Renomear ${sessao.name}`));
       item.appendChild(
@@ -157,6 +159,9 @@
     const { status, dados } = await Painel.api('/api/terminals');
     if (status !== 200) return;
     sessoes = dados.terminals;
+    // RN-18: sem painel elevado não há o que escolher; o terminal abre sem administrador.
+    rotuloAdmin.hidden = !dados.panelAdmin;
+    if (!dados.panelAdmin) campoAdmin.checked = false;
     if (seletorShell.options.length === 0) {
       for (const shell of dados.shells) {
         const opcao = document.createElement('option');
@@ -178,6 +183,7 @@
       method: 'POST',
       body: {
         shell: seletorShell.value,
+        admin: campoAdmin.checked,
         cwd: campoPasta.value,
         name: campoNome.value,
         cols: terminal ? terminal.cols : 120,

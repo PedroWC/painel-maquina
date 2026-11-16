@@ -299,3 +299,43 @@ test('RF-22: a API abre terminal WSL em uma distribuição e audita a distribui�
     await srv.close();
   }
 });
+
+test('RN-18: a API abre terminal sem administrador, informa o privilégio do painel e audita a escolha', async () => {
+  const lowered = [];
+  const { srv, fake, auth } = await setup({
+    manager: { launchLowPrivilege: (o) => { lowered.push(o); return { file: 'lancador.exe', args: [], env: {} }; } },
+  });
+  try {
+    const list = await request({ port: srv.port, path: '/api/terminals', headers: auth });
+    assert.equal(list.json.panelAdmin, true);
+
+    const low = await post(srv.port, '/api/terminals', { shell: 'cmd', admin: false }, auth);
+    assert.equal(low.status, 200);
+    assert.equal(low.json.admin, false);
+    assert.equal(fake.spawned[0].file, 'lancador.exe');
+    const high = await post(srv.port, '/api/terminals', { shell: 'cmd', admin: true }, auth);
+    assert.equal(high.json.admin, true);
+    const standard = await post(srv.port, '/api/terminals', { shell: 'cmd' }, auth);
+    assert.equal(standard.json.admin, true);
+    assert.equal(lowered.length, 1);
+
+    const audit = srv.readAudit();
+    assert.match(audit, /"admin":false/);
+    assert.match(audit, /"admin":true/);
+    assert.equal((await post(srv.port, '/api/terminals', { shell: 'cmd', admin: 'false' }, auth)).status, 400);
+  } finally {
+    await srv.close();
+  }
+});
+
+test('RN-18: com painel sem elevação a API não oferece administrador e recusa o pedido', async () => {
+  const { srv, auth } = await setup({ manager: { isAdmin: false } });
+  try {
+    const list = await request({ port: srv.port, path: '/api/terminals', headers: auth });
+    assert.equal(list.json.panelAdmin, false);
+    assert.equal((await post(srv.port, '/api/terminals', { shell: 'cmd', admin: true }, auth)).status, 400);
+    assert.equal((await post(srv.port, '/api/terminals', { shell: 'cmd', admin: false }, auth)).json.admin, false);
+  } finally {
+    await srv.close();
+  }
+});

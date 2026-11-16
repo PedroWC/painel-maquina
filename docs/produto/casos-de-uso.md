@@ -40,8 +40,10 @@ flowchart LR
 <a id="uc-03"></a>
 ## UC-03 · Abrir terminal
 
-- **Requisitos:** RF-03 · **Regras:** RN-07, RN-15, RN-17
-- **Fluxo principal:** 1) Na aba Terminais, o operador escolhe shell, pasta e nome. 2) Confirma. 3) O sistema cria a sessão com privilégio de administrador, marcada como "admin". 4) O terminal abre pronto para digitar.
+- **Requisitos:** RF-03 · **Regras:** RN-07, RN-15, RN-17, RN-18
+- **Fluxo principal:** 1) Na aba Terminais, o operador escolhe shell, pasta, nome e se o terminal terá administrador (caixa "Administrador", marcada por padrão). 2) Confirma. 3) O sistema cria a sessão com o privilégio escolhido, marcada como "admin" ou "sem admin". 4) O terminal abre pronto para digitar.
+- **Alternativo B (sem administrador):** com a caixa desmarcada, o shell abre com token restrito: não consegue ações de administrador (por exemplo, `net session` falha).
+- **Exceção C (painel sem elevação):** a caixa não é oferecida e o terminal abre sem administrador.
 - **Alternativo A (pasta inexistente):** o sistema usa a pasta padrão do usuário e informa.
 - **Exceção A (limite):** com 20 sessões abertas, o sistema recusa e pede para encerrar alguma.
 - **Exceção B (shell indisponível):** Git Bash ou WSL ausentes não aparecem como opção.
