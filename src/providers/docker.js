@@ -60,7 +60,7 @@ function createDockerProvider({ cli }) {
       if (err instanceof HttpError && err.status === 404) return { disponivel: false };
       throw err;
     }
-    let motor = false;
+    let motor; // definido nos dois caminhos abaixo (sem valor inicial inútil: no-useless-assignment)
     try {
       await cli.run(EXECUTABLE, ['info', '--format', '{{.ServerVersion}}'], { timeoutMs: 8000 });
       motor = true;
