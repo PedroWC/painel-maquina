@@ -12,6 +12,7 @@ const { createTerminalRoutes } = require('./routes/terminals');
 const { createPowerShell } = require('./powershell');
 const { createTaskRoutes } = require('./routes/tasks');
 const { createServiceRoutes } = require('./routes/services');
+const { createProcessRoutes } = require('./routes/processes');
 
 function main() {
   let config;
@@ -37,12 +38,17 @@ function main() {
   const ps = createPowerShell();
   const taskRoutes = createTaskRoutes({ ps });
   const serviceRoutes = createServiceRoutes({ ps });
+  // RN-04: o processo do painel e os dos terminais não podem ser encerrados pela aba de processos.
+  const processRoutes = createProcessRoutes({
+    ps,
+    protectedPids: () => new Set([process.pid, ...terminals.protectedPids()]),
+  });
   const server = createServer({
     config,
     auth,
     audit,
     isAdmin: admin,
-    routes: [...terminalRoutes.routes, ...taskRoutes.routes, ...serviceRoutes.routes],
+    routes: [...terminalRoutes.routes, ...taskRoutes.routes, ...serviceRoutes.routes, ...processRoutes.routes],
     websockets: [...terminalRoutes.websockets],
   });
 

@@ -166,4 +166,46 @@ if ($p.path) {
 'ok'
 `;
 
-module.exports = { TASK_LIST, TASK_ACTION, TASK_SAVE, SERVICE_LIST, SERVICE_ACTION, SERVICE_CREATE, SERVICE_EDIT };
+// Processos e portas. Não lista títulos de janela (podem conter dados pessoais).
+const PROCESS_LIST = `
+$procs = @(Get-Process | Sort-Object WS -Descending | Select-Object -First 200 | ForEach-Object {
+  [pscustomobject]@{
+    pid = $_.Id
+    name = $_.ProcessName
+    mem = [math]::Round($_.WS / 1MB, 1)
+    cpu = if ($_.CPU) { [math]::Round($_.CPU, 1) } else { 0 }
+  }
+})
+$names = @{}
+Get-Process | ForEach-Object { $names[[int]$_.Id] = $_.ProcessName }
+$ports = @(Get-NetTCPConnection -State Listen | Sort-Object LocalPort | ForEach-Object {
+  [pscustomobject]@{
+    port = $_.LocalPort
+    addr = $_.LocalAddress
+    pid = $_.OwningProcess
+    name = $names[[int]$_.OwningProcess]
+  }
+})
+ConvertTo-Json -InputObject ([pscustomobject]@{ procs = $procs; ports = $ports }) -Compress -Depth 4
+`;
+
+// Encerra um único processo pelo PID (inteiro validado) e devolve o nome, para a auditoria.
+const PROCESS_KILL = `
+$proc = Get-Process -Id ([int]$p.pid) -ErrorAction SilentlyContinue
+if (-not $proc) { throw 'PROCESSO_NAO_EXISTE' }
+$name = $proc.ProcessName
+Stop-Process -InputObject $proc -Force
+$name
+`;
+
+module.exports = {
+  TASK_LIST,
+  TASK_ACTION,
+  TASK_SAVE,
+  SERVICE_LIST,
+  SERVICE_ACTION,
+  SERVICE_CREATE,
+  SERVICE_EDIT,
+  PROCESS_LIST,
+  PROCESS_KILL,
+};
