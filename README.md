@@ -2,7 +2,7 @@
 
 Painel web para gerenciar uma máquina Windows em um só lugar, com privilégios de administrador: **sessões de terminal**, **tarefas agendadas**, **serviços**, **containers** e outras tecnologias de execução (pm2, Kubernetes, Podman, WSL), detectadas automaticamente quando instaladas.
 
-> **Status:** em desenvolvimento inicial (pré-`0.1.0`). Já funcionam: login por token, sessões de terminal como administrador, tarefas agendadas, serviços do Windows, processos e portas, Docker, pm2, Kubernetes e WSL (Compose e Podman estão a caminho). A documentação vem antes do código e já está completa em [`docs/`](docs/README.md); as funcionalidades serão entregues por etapas e registradas no [CHANGELOG](CHANGELOG.md).
+> **Status:** em desenvolvimento inicial (pré-`0.1.0`). Já funcionam: login por token, sessões de terminal como administrador, tarefas agendadas, serviços do Windows, processos e portas, Docker, Podman, pm2, Kubernetes e WSL (o Compose está a caminho). A documentação vem antes do código e já está completa em [`docs/`](docs/README.md); as funcionalidades serão entregues por etapas e registradas no [CHANGELOG](CHANGELOG.md).
 
 > ⚠️ **Aviso de segurança.** Este software dá controle administrativo completo da máquina a quem se autenticar nele. Use apenas em máquinas suas, mantenha o servidor em `127.0.0.1` e acesse remotamente por túnel SSH. Leia [SECURITY.md](SECURITY.md) e [segurança](docs/arquitetura/seguranca.md).
 

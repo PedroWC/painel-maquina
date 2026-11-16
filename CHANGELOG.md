@@ -35,4 +35,6 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 - Provedor WSL: lista as distribuições (versão, padrão e estado), encerra uma distribuição, desliga o WSL (confirmação digitando `wsl`) e abre terminal em uma distribuição (`wsl.exe -d`). A saída UTF-16 e traduzida do `wsl.exe` é decodificada e interpretada sem depender do idioma (RF-22).
 - O executor de CLIs aceita `encoding: 'auto'` para ferramentas que escrevem em UTF-16.
 - A API de terminais aceita `distro` para o shell WSL.
+- Provedor Podman: containers e imagens (iniciar, parar, reiniciar, remover e logs), lendo o formato de lista JSON do Podman, com mensagem amigável quando a máquina do Podman está parada (RF-21).
+- Docker e Podman passam a compartilhar o motor de containers (`container-engine.js`).
 - Estrutura do projeto: `package.json` (Node 24), ESLint, executor de testes nativo com cobertura, `config.example.json` e integração contínua (lint, testes, auditoria, varredura de segredos e validação do título do PR).

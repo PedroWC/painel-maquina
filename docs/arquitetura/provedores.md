@@ -117,6 +117,15 @@ Ferramentas instaladas por npm (como o pm2) são scripts `.cmd`, e o Node recusa
 
 O provedor pm2 (`src/providers/pm2.js`) faz isso: localiza o script `node_modules/pm2/bin/pm2` e o executa com o mesmo `node` do painel. A ordem de busca é: opção `pm2Entry` do `config.json`, variável de ambiente `PAINEL_PM2_ENTRY`, o `where pm2.cmd`, a pasta do próprio `node.exe` (prefixo global quando o Node foi instalado em pasta própria, como no WinGet) e as pastas usuais do npm. O arquivo precisa se chamar `pm2` e existir. Ele serve de modelo para outras ferramentas instaladas por npm.
 
+## Docker e Podman: motor de containers compartilhado
+
+Docker e Podman têm CLIs compatíveis, então a lógica comum está em `src/providers/container-engine.js` (detecção da CLI e do motor, listagem de containers e imagens, ações `start`, `stop`, `restart`, `rm` e `rmi`, logs e a mensagem de "motor parado"). `docker.js` e `podman.js` só informam o executável, como ler a saída e como reconhecer o motor parado.
+
+- **Formatos diferentes:** o Docker imprime um objeto JSON por linha (`{{json .}}`); o Podman imprime uma lista JSON (`--format json`), com `Names` em lista, portas como objetos e tamanhos em bytes. Os parsers normalizam os dois para o mesmo formato.
+- **Podman no Windows** depende de uma máquina virtual (`podman machine`). Com ela parada, a aba mostra "execute `podman machine start`" em vez do erro técnico.
+- **Nunca força nada:** remover e parar não usam `-f`/`--force`; se o container estiver em uso, a mensagem do próprio motor aparece.
+- Um terceiro motor compatível (por exemplo, nerdctl) entra com um arquivo de configuração desse tipo.
+
 ## Cuidados específicos do WSL
 
 - **Saída em UTF-16:** o `wsl.exe` escreve em UTF-16LE e traduz a saída. O executor de CLIs aceita `encoding: 'auto'` (bytes decodificados como UTF-16LE se houver bytes nulos, senão UTF-8) e o provedor o usa em toda chamada, inclusive nas mensagens de erro.
