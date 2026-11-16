@@ -38,7 +38,7 @@ cd painel-maquina
 npm ci
 npm run gerar-token      # mostra o token uma única vez
 npm start                # teste manual (use PowerShell como administrador)
-.\scripts\instalar-tarefa.ps1   # execução contínua (PowerShell como administrador)
+.\scripts\instalar-tarefa.ps1 -IniciarAgora   # execução contínua e elevada (PowerShell como administrador)
 ```
 
 ## Documentação

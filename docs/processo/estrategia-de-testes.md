@@ -10,6 +10,8 @@ Rastreabilidade de cada requisito e regra para seus testes em [rastreabilidade](
 
 Comandos: `npm test`, `npm run test:cov`, `npm run lint`.
 
+Testes lentos (por exemplo, o reinício automático do painel pelo vigia, cerca de 2 minutos) só rodam no CI (`CI=true`) ou localmente com `PAINEL_TESTES_LENTOS=1`.
+
 ## Pirâmide
 
 | Nível | Local | O que cobre | Dependências externas |
@@ -25,7 +27,7 @@ Comandos: `npm test`, `npm run test:cov`, `npm run lint`.
 2. Todo RF e toda RN tem pelo menos um teste (ou item no roteiro manual quando for de interface).
 3. Toda rota nova tem testes de segurança: sem cookie (**401**), `Host` ou `Origin` inválidos (**403**), entrada inválida (**400**).
 4. Provedores têm sempre os casos: ferramenta ausente (rota 404 e aba oculta), presente, falha, tempo esgotado e ação fora da allowlist.
-5. Testes de sistema só criam, alteram e removem recursos com o prefixo `PainelTeste_` (ou processos filhos criados pelo próprio teste) e limpam em `after`/`finally`. Nunca tocam em recursos que não criaram. Os testes de escrita em serviços só rodam com privilégio de administrador e são ignorados sem ele.
+5. O teste do instalador roda em porta própria (8791) e **só com administrador e sem `config.json` existente** (nunca sobrescreve a configuração real); remove a tarefa, o `config.json` e os logs que criou. Testes de sistema só criam, alteram e removem recursos com o prefixo `PainelTeste_` (ou processos filhos criados pelo próprio teste) e limpam em `after`/`finally`. Nunca tocam em recursos que não criaram. Os testes de escrita em serviços só rodam com privilégio de administrador e são ignorados sem ele.
 6. Dados de teste são genéricos e determinísticos; sem dependência de relógio ou rede.
 
 ## Estrutura

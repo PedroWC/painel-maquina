@@ -34,6 +34,7 @@ O navegador conversa com o painel por HTTP (API JSON) e WebSocket (terminais). O
 | `src/server.js` | Servidor HTTP, borda de segurança, sessão, lista de rotas injetável e arquivos estáticos (WebSocket entra com os terminais) |
 | `src/security.js` | Verificação de `Host` e `Origin`, cookies e cabeçalhos de segurança |
 | `src/system.js` | Detecção de privilégio de administrador |
+| `src/logger.js` | Espelha o console em `painel.log` (a tarefa agendada roda sem janela), com rotação em 5 MB |
 | `src/config.js` | Leitura e validação da configuração (host, porta, hash do token, `allowedHosts`) |
 | `src/auth.js` | Geração e hash do token, login, sessões e bloqueio por tentativas |
 | `src/audit.js` | Registro de auditoria em JSON Lines |
@@ -100,4 +101,4 @@ Sem banco de dados. Sessões web e sessões de terminal ficam em memória e se p
 
 ## Implantação
 
-Tarefa agendada `PainelMaquina` (S4U, nível mais alto, na inicialização) instalada por `scripts/instalar-tarefa.ps1` ([ADR 0007](adr/0007-execucao-elevada-via-agendador.md)). Veja [instalação](../operacao/instalacao.md).
+Tarefa agendada `PainelMaquina` instalada por `scripts/instalar-tarefa.ps1` ([ADR 0007](adr/0007-execucao-elevada-via-agendador.md) e [ADR 0013](adr/0013-vigia-periodico-para-manter-o-painel-ativo.md)): logon S4U (sem senha), nível de execução mais alto, sem janela, com dois gatilhos, **início com o Windows** (30 s depois) e **vigia a cada 2 minutos** que sobe o painel se ele tiver parado. Veja [instalação](../operacao/instalacao.md).

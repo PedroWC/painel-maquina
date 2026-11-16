@@ -1,7 +1,5 @@
 # Instalação e operação
 
-> O painel ainda está em desenvolvimento. Este guia descreve o procedimento previsto; comandos e scripts serão entregues junto das funcionalidades correspondentes (veja o [CHANGELOG](../../CHANGELOG.md)).
-
 ## Requisitos
 
 - Windows 10 ou 11 (x64)
@@ -18,7 +16,7 @@ npm ci
 npm run gerar-token
 ```
 
-`npm run gerar-token` cria o `config.json` e mostra o token **uma única vez**. Guarde-o em um gerenciador de senhas. O arquivo guarda só o hash ([RN-16](../requisitos/regras-de-negocio.md#rn-16)) e **não deve ser versionado**.
+`npm run gerar-token` cria o `config.json` e mostra o token **uma única vez**. Guarde-o em um gerenciador de senhas. O arquivo guarda só o hash ([RN-16](../requisitos/regras-de-negocio.md#rn-16)), tem permissões restritas ao seu usuário, ao SYSTEM e aos Administradores, e **não deve ser versionado**.
 
 ## Execução manual (teste)
 
@@ -31,19 +29,43 @@ Abra `http://127.0.0.1:8780` e entre com o token. Sem privilégio de administrad
 
 ## Execução contínua (recomendado)
 
-Em um PowerShell **como administrador**, na pasta do projeto:
+Em um PowerShell **como administrador** (botão direito, "Executar como administrador"), na pasta do projeto:
 
 ```powershell
-.\scripts\instalar-tarefa.ps1
+.\scripts\instalar-tarefa.ps1 -IniciarAgora
 ```
 
-O script registra a tarefa `PainelMaquina` ([ADR 0007](../arquitetura/adr/0007-execucao-elevada-via-agendador.md)): inicia com o Windows, usa o nível de execução mais alto, reinicia em caso de falha e roda sem janela. O painel protege essa tarefa ([RN-03](../requisitos/regras-de-negocio.md#rn-03)).
+O script confere os pré-requisitos (administrador, `npm ci`, Node.js e `config.json` com token) e registra a tarefa `PainelMaquina` ([ADR 0007](../arquitetura/adr/0007-execucao-elevada-via-agendador.md), [ADR 0013](../arquitetura/adr/0013-vigia-periodico-para-manter-o-painel-ativo.md)):
 
-Para remover:
+| Propriedade | Valor |
+|---|---|
+| Conta | O usuário que executou o script, com logon **S4U**: não pede nem guarda senha |
+| Privilégio | Nível de execução mais alto (administrador), sem pedir confirmação do UAC |
+| Início | 30 segundos depois da inicialização do Windows, mesmo sem ninguém conectado |
+| Vigia | A cada 2 minutos tenta iniciar a tarefa; se o painel já está rodando não faz nada, se tiver caído sobe de novo |
+| Janela | Nenhuma |
+| Instâncias | Uma só (`IgnoreNew`) |
+
+O painel protege essa tarefa: ele não consegue pará-la, desativá-la, editá-la nem excluí-la ([RN-03](../requisitos/regras-de-negocio.md#rn-03)). Reinstalar com o mesmo comando **atualiza** a tarefa, sem duplicá-la.
+
+O script aceita `-Nome` para usar outro nome de tarefa (por exemplo, para testes). Só o nome padrão, `PainelMaquina`, recebe a proteção acima.
+
+### Conferir
+
+```powershell
+Get-ScheduledTask -TaskName PainelMaquina | Get-ScheduledTaskInfo   # estado e último resultado
+Get-Content .\painel.log -Tail 20                                   # o que o painel registrou
+```
+
+Abra `http://127.0.0.1:8780`: o selo "administrador" deve aparecer no topo. Para validar o início automático, reinicie o computador, espere cerca de um minuto e abra o endereço de novo.
+
+### Remover
 
 ```powershell
 .\scripts\desinstalar-tarefa.ps1
 ```
+
+Para o painel e remove a tarefa. **Não apaga** o `config.json`, o `audit.log` nem o `painel.log`.
 
 ## Configuração
 
@@ -59,11 +81,14 @@ Stop-ScheduledTask -TaskName PainelMaquina; Start-ScheduledTask -TaskName Painel
 npm run gerar-token
 ```
 
-Gera um novo token e substitui o hash anterior. Todas as sessões ativas deixam de valer ao reiniciar o painel.
+Gera um novo token e substitui o hash anterior. Reinicie o painel (comando acima): todas as sessões ativas deixam de valer.
 
 ## Auditoria e logs
 
-As ações que alteram estado são gravadas em `audit.log` (JSON Lines), nunca com token, cookie ou texto digitado em terminais ([RN-06](../requisitos/regras-de-negocio.md#rn-06)). O arquivo não é versionado.
+- `audit.log` (JSON Lines): ações que alteram estado, incluindo recusas por proteção. Nunca contém token, cookie ou texto digitado em terminais ([RN-06](../requisitos/regras-de-negocio.md#rn-06)).
+- `painel.log`: o que o painel imprimiria no console (início, parada, avisos e erros), com data e nível. É útil porque a tarefa roda sem janela. Fica limitado a 5 MB: ao passar disso, o arquivo anterior vira `painel.log.1` e um novo é iniciado. Defina `PAINEL_LOG=0` para desligar.
+
+Nenhum dos dois é versionado.
 
 ## Atualização
 
@@ -73,15 +98,20 @@ npm ci
 Stop-ScheduledTask -TaskName PainelMaquina; Start-ScheduledTask -TaskName PainelMaquina
 ```
 
-Leia o [CHANGELOG](../../CHANGELOG.md) antes: mudanças incompatíveis trazem instruções de migração.
+Leia o [CHANGELOG](../../CHANGELOG.md) antes: mudanças incompatíveis trazem instruções de migração. Se uma versão alterar a tarefa, rode `.\scripts\instalar-tarefa.ps1` de novo.
 
 ## Problemas comuns
 
 | Sintoma | Causa provável | O que fazer |
 |---|---|---|
-| Porta em uso | Outro programa usa a 8780 | Altere `port` no `config.json` |
+| O instalador diz "Execute este script em um PowerShell como administrador" | O PowerShell não está elevado | Abra como administrador |
+| O instalador diz "config.json não encontrado" ou "sem token" | O token ainda não foi gerado | Rode `npm run gerar-token` |
+| O instalador diz "Dependências não instaladas" ou "Node.js não encontrado" | Falta `npm ci` ou o Node.js no `PATH` | Rode `npm ci`; instale o Node.js 24 |
+| A tarefa existe, mas o endereço não abre | O painel ainda está iniciando (30 s de atraso na inicialização) ou a porta está em uso | Espere; consulte `painel.log`; use `Start-ScheduledTask -TaskName PainelMaquina` |
+| Porta em uso | Outro programa usa a 8780 | Altere `port` no `config.json` e reinicie a tarefa |
+| O painel parou e voltou sozinho | O vigia o reiniciou (no máximo em 2 minutos) | Veja o motivo da queda no `painel.log` |
 | Terminais não abrem | Falha na dependência nativa | Rode `npm ci` com a versão de Node do `.nvmrc` |
-| Aba de uma ferramenta não aparece | Ferramenta não instalada ou fora do `PATH` do processo | Instale e use "Detectar novamente" em Provedores |
+| Aba de uma ferramenta não aparece | Ferramenta não instalada ou fora do `PATH` do processo | Instale e use "Detectar novamente" em Provedores. Na tarefa (S4U) só vale o `PATH` do sistema, não o do usuário |
 | Mensagem `AttachConsole failed` no console ao encerrar um terminal | Ruído do `node-pty` ao fechar o ConPTY; os processos da sessão são finalizados normalmente | Pode ser ignorada |
 | Aba Docker mostra "o motor não está respondendo" | O Docker está instalado, mas o Docker Desktop (motor) não está em execução | Inicie o Docker Desktop e clique em Atualizar |
 | "Acesso negado" em tarefas ou serviços | Painel sem privilégio de administrador | Instale pela tarefa elevada |

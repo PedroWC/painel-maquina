@@ -25,4 +25,7 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 - Framework de provedores opcionais (ADR 0012): contrato comum, detecção em tempo de execução com repetição periódica, abas geradas dinamicamente, tempo limite e isolamento de falhas, allowlist de operações e confirmação pelo nome quando exigida (RF-23, RN-11 a RN-14, RNF-10).
 - Provedor Docker: containers (iniciar, parar, reiniciar, remover e logs) e imagens (remover), com mensagem amigável quando o motor está parado (RF-15, RF-16).
 - Aba Provedores com o status de cada tecnologia e botão para detectar novamente.
+- Instalador da tarefa elevada: `scripts/instalar-tarefa.ps1` e `scripts/desinstalar-tarefa.ps1`. A tarefa inicia o painel com o Windows, como administrador, sem janela e sem guardar senha (logon S4U), e um vigia a cada 2 minutos o sobe de novo se ele cair (ADR 0007 e 0013; RNF-03).
+- `painel.log`: o que o painel imprimiria no console passa também para um arquivo, com rotação em 5 MB.
+- Roteiro de smoke manual (`tests/e2e/smoke.md`).
 - Estrutura do projeto: `package.json` (Node 24), ESLint, executor de testes nativo com cobertura, `config.example.json` e integração contínua (lint, testes, auditoria, varredura de segredos e validação do título do PR).

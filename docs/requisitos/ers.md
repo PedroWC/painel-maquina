@@ -104,7 +104,7 @@ Documentos relacionados: [regras de negócio](regras-de-negocio.md), [rastreabil
 |---|---|---|
 | RNF-01 | Segurança de acesso | O servidor escuta somente em loopback por padrão; toda rota de dados exige sessão; `Origin` e `Host` são verificados; CSP restritiva; limite de tentativas de login |
 | RNF-02 | Desempenho | Listagens respondem em até 3 s em condições normais; o terminal não deve introduzir latência perceptível |
-| RNF-03 | Disponibilidade | O painel inicia com o Windows e é reiniciado automaticamente em caso de falha |
+| RNF-03 | Disponibilidade | O painel inicia com o Windows, sem ninguém conectado, e volta sozinho em até 2 minutos se o processo cair ou for encerrado ([ADR 0013](../arquitetura/adr/0013-vigia-periodico-para-manter-o-painel-ativo.md)) |
 | RNF-04 | Compatibilidade | Windows 10/11 x64; Node.js 24; navegadores atuais (Chromium, Firefox) |
 | RNF-05 | Usabilidade | Interface em PT-BR, responsiva, com feedback de sucesso e erro para cada ação |
 | RNF-06 | Manutenibilidade | Cobertura de testes mínima de 80% no núcleo; lint sem erros; módulos pequenos e injetáveis |

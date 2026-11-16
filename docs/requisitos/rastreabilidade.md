@@ -66,12 +66,12 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 |---|---|
 | RNF-01 | Implementado: `tests/integration/security.test.js` e `tests/unit/security.test.js` (401, 403, 413, path traversal, cabeçalhos, Host e Origin). Rotas futuras repetem os testes de segurança |
 | RNF-02 | Verificação manual com cronômetro no roteiro de smoke |
-| RNF-03 | Verificação manual: reinício do PC e queda do processo (ver [instalação](../operacao/instalacao.md)) |
+| RNF-03 | Implementado: `tests/integration/instalador.windows.test.js` (tarefa S4U elevada, vigia e reinício após encerrar o processo; o reinício roda no CI e com `PAINEL_TESTES_LENTOS=1`) e `tests/unit/scripts.test.js`. Reinício do computador: roteiro manual `tests/e2e/smoke.md` |
 | RNF-04 | CI em `windows-latest` com Node 24 |
 | RNF-05 | Revisão dos protótipos e do roteiro de smoke |
 | RNF-06 | `npm run test:cov` com limite mínimo; `npm run lint` no CI |
 | RNF-07 | Implementado: `tests/unit/audit.test.js` (ausência de segredos nos registros) |
 | RNF-08 | Implementado: `tests/unit/config.test.js` |
-| RNF-09 | gitleaks no CI e `tests/unit/config.test.js` |
+| RNF-09 | gitleaks no CI, `tests/unit/config.test.js` e `tests/unit/scripts.test.js` (os scripts de instalação não pedem nem guardam senha) |
 | RNF-10 | Implementado: `tests/unit/providers/base.test.js` e `tests/unit/providers/registry.test.js` |
 | RNF-11 | Revisão manual de contraste e teclado no roteiro de smoke |

@@ -18,6 +18,7 @@ Para criar um novo, copie o modelo abaixo e use o próximo número livre.
 | [0010](0010-ferramentas-via-cli-com-execfile.md) | Ferramentas externas via CLI com `execFile` | aceito |
 | [0011](0011-frontend-vanilla-sem-build.md) | Frontend em JavaScript puro, sem etapa de build | aceito |
 | [0012](0012-provedores-opcionais-com-deteccao.md) | Provedores opcionais com detecção em tempo de execução | aceito |
+| [0013](0013-vigia-periodico-para-manter-o-painel-ativo.md) | Vigia periódico para manter o painel ativo | aceito (complementa o 0007) |
 
 ## Modelo
 
