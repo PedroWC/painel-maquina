@@ -7,6 +7,7 @@
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
+const { WebSocketServer } = require('ws');
 const { HttpError, badRequest, str } = require('./validate');
 const sec = require('./security');
 
@@ -69,7 +70,16 @@ function readJson(req) {
   });
 }
 
-function createServer({ config, auth, audit, routes = [], isAdmin = false, staticDir = PUBLIC_DIR }) {
+function createServer({
+  config,
+  auth,
+  audit,
+  routes = [],
+  websockets = [],
+  isAdmin = false,
+  staticDir = PUBLIC_DIR,
+  wsCheckMs = 5000,
+}) {
   const sessionSeconds = Math.round(config.sessionHours * 3600);
 
   async function login(ctx) {
@@ -185,9 +195,51 @@ function createServer({ config, auth, audit, routes = [], isAdmin = false, stati
     }
   }
 
-  return http.createServer((req, res) => {
+  const server = http.createServer((req, res) => {
     handle(req, res);
   });
+
+  // WebSocket (RNF-01): exige Host permitido, Origin presente e coincidente e
+  // sessão válida. O fluxo é derrubado quando a sessão deixa de valer.
+  const wss = new WebSocketServer({ noServer: true, maxPayload: 128 * 1024 });
+  server.on('upgrade', (req, socket, head) => {
+    const refuse = (status, text) => {
+      socket.write(`HTTP/1.1 ${status} ${text}\r\nConnection: close\r\nContent-Length: 0\r\n\r\n`);
+      socket.destroy();
+    };
+    let url;
+    try {
+      url = new URL(req.url, 'http://localhost');
+    } catch {
+      return refuse(400, 'Bad Request');
+    }
+    if (!sec.hostAllowed(req.headers.host, config)) return refuse(403, 'Forbidden');
+    if (req.headers.origin === undefined || !sec.originAllowed(req.headers.origin, req.headers.host)) {
+      return refuse(403, 'Forbidden');
+    }
+    const sid = sec.parseCookies(req.headers.cookie).sid;
+    if (!sid || !auth.isValid(sid)) return refuse(401, 'Unauthorized');
+    const route = websockets.find((r) => r.pattern.test(url.pathname));
+    if (!route) return refuse(404, 'Not Found');
+
+    return wss.handleUpgrade(req, socket, head, (ws) => {
+      const timer = setInterval(() => {
+        if (!auth.isValid(sid)) ws.terminate();
+      }, wsCheckMs);
+      timer.unref();
+      ws.on('close', () => clearInterval(timer));
+      route.handler(ws, {
+        url,
+        audit,
+        config,
+        ip: req.socket.remoteAddress || 'desconhecido',
+        isSessionValid: () => auth.isValid(sid),
+      });
+    });
+  });
+  server.on('close', () => wss.close());
+  server.closeWebSockets = () => wss.clients.forEach((client) => client.terminate());
+  return server;
 }
 
 module.exports = { createServer, readJson, sendJson, MAX_BODY_BYTES };

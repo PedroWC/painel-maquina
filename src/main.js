@@ -7,6 +7,8 @@ const { createAudit } = require('./audit');
 const { createAuth } = require('./auth');
 const { createServer } = require('./server');
 const { detectAdmin } = require('./system');
+const { createTerminalManager } = require('./terminals');
+const { createTerminalRoutes } = require('./routes/terminals');
 
 function main() {
   let config;
@@ -27,7 +29,24 @@ function main() {
     sessionMs: config.sessionHours * 3600 * 1000,
   });
   const admin = detectAdmin();
-  const server = createServer({ config, auth, audit, isAdmin: admin });
+  const terminals = createTerminalManager({ maxTerminals: config.maxTerminals, isAdmin: admin });
+  const terminalRoutes = createTerminalRoutes({ manager: terminals });
+  const server = createServer({
+    config,
+    auth,
+    audit,
+    isAdmin: admin,
+    routes: [...terminalRoutes.routes],
+    websockets: [...terminalRoutes.websockets],
+  });
+
+  const stop = () => {
+    terminals.shutdown();
+    audit.record({ action: 'parada', result: 'ok' });
+    process.exit(0);
+  };
+  process.on('SIGINT', stop);
+  process.on('SIGTERM', stop);
 
   server.listen(config.port, config.host, () => {
     console.log(`Painel em http://${config.host}:${config.port} (administrador: ${admin ? 'sim' : 'não'})`);

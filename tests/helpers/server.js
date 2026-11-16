@@ -20,7 +20,14 @@ function testHash() {
   return cachedHash;
 }
 
-async function startTestServer({ routes = [], configOverrides = {}, authOptions = {}, isAdmin = true } = {}) {
+async function startTestServer({
+  routes = [],
+  websockets = [],
+  configOverrides = {},
+  authOptions = {},
+  isAdmin = true,
+  wsCheckMs = 5000,
+} = {}) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'painel-teste-'));
   const auditFile = path.join(dir, 'audit.log');
   const config = normalize({ tokenHash: testHash(), ...configOverrides });
@@ -30,7 +37,7 @@ async function startTestServer({ routes = [], configOverrides = {}, authOptions 
     ...authOptions,
   });
   const audit = createAudit({ file: auditFile });
-  const server = createServer({ config, auth, audit, routes, isAdmin });
+  const server = createServer({ config, auth, audit, routes, websockets, isAdmin, wsCheckMs });
   await new Promise((resolve) => server.listen(0, '127.0.0.1', resolve));
   const { port } = server.address();
   return {
@@ -39,6 +46,7 @@ async function startTestServer({ routes = [], configOverrides = {}, authOptions 
     readAudit: () => (fs.existsSync(auditFile) ? fs.readFileSync(auditFile, 'utf8') : ''),
     close: () =>
       new Promise((resolve) => {
+        server.closeWebSockets();
         server.closeAllConnections();
         server.close(() => {
           fs.rmSync(dir, { recursive: true, force: true });
