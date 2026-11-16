@@ -1,0 +1,33 @@
+# Dependências
+node_modules/
+
+# Configuração local e segredos (nunca versionar)
+config.json
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+token.txt
+
+# Logs e dados de execução
+audit.log
+*.log
+logs/
+
+# Testes e cobertura
+coverage/
+.nyc_output/
+
+# Build e temporários
+dist/
+tmp/
+*.tmp
+
+# Sistema operacional e editores
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
