@@ -19,18 +19,18 @@ test('RF-15 e UC-10: detecção e listagem reais, com mensagem amigável se o mo
   assert.match(detected.versao, /^\d+\.\d+/);
   assert.equal(typeof detected.info.motor, 'boolean');
 
-  if (!detected.info.motor) {
-    await assert.rejects(provider.list(), (err) => {
-      assert.equal(err.status, 503);
-      assert.match(err.message, /motor não está respondendo/);
-      assert.equal(err.message.includes('npipe'), false);
-      return true;
-    });
-    return undefined;
+  // O estado do motor pode mudar entre a detecção (que espera no máximo 8 s por `docker info`) e a
+  // listagem: num runner frio do CI o motor respondia à listagem depois de a detecção já ter dado
+  // "parado". Por isso o teste não depende de a detecção coincidir com a listagem: vale qualquer
+  // um dos dois desfechos, desde que o erro, quando houver, seja a mensagem amigável.
+  try {
+    const { sections } = await provider.list();
+    assert.deepEqual(sections.map((s) => s.id), ['containers', 'imagens']);
+    for (const section of sections) assert.ok(Array.isArray(section.rows));
+  } catch (err) {
+    assert.equal(err.status, 503, `erro inesperado na listagem: ${err.message}`);
+    assert.match(err.message, /motor não está respondendo/);
+    assert.equal(err.message.includes('npipe'), false);
   }
-
-  const { sections } = await provider.list();
-  assert.deepEqual(sections.map((s) => s.id), ['containers', 'imagens']);
-  for (const section of sections) assert.ok(Array.isArray(section.rows));
   return undefined;
 });
