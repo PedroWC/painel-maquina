@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  qualidade:
+    name: Lint, testes e auditoria
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test:cov
+      - run: npm audit --omit=dev --audit-level=high
+
+  segredos:
+    name: Varredura de segredos
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  titulo-do-pr:
+    name: Título do PR (Conventional Commits)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validar título
+        env:
+          TITULO: ${{ github.event.pull_request.title }}
+        run: |
+          padrao='^(feat|fix|docs|refactor|test|chore|ci|perf|build|style|revert)(\([a-z0-9-]+\))?!?: .{3,100}$'
+          if ! printf '%s' "$TITULO" | grep -Eq "$padrao"; then
+            echo "O título do PR deve seguir: tipo(escopo): descrição"
+            exit 1
+          fi
