@@ -73,3 +73,11 @@ test('RN-16: saveConfig grava só o hash e não persiste campos calculados', () 
   assert.equal('token' in saved, false);
   fs.rmSync(dir, { recursive: true, force: true });
 });
+
+test('RNF-08: pm2Entry é opcional (vazio por padrão) e precisa ser um texto curto', () => {
+  assert.equal(normalize({}).pm2Entry, '');
+  const entry = path.join('C:', 'npm', 'node_modules', 'pm2', 'bin', 'pm2');
+  assert.equal(normalize({ pm2Entry: entry }).pm2Entry, entry);
+  assert.throws(() => normalize({ pm2Entry: 5 }), /pm2Entry/);
+  assert.throws(() => normalize({ pm2Entry: 'x'.repeat(261) }), /pm2Entry/);
+});
