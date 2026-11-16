@@ -30,9 +30,12 @@ O navegador conversa com o painel por HTTP (API JSON) e WebSocket (terminais). O
 
 | Módulo | Responsabilidade |
 |---|---|
-| `src/server.js` | Servidor HTTP/WebSocket, roteamento, cabeçalhos de segurança, arquivos estáticos |
+| `src/main.js` | Ponto de entrada: carrega a configuração, monta as dependências e inicia o servidor |
+| `src/server.js` | Servidor HTTP, borda de segurança, sessão, lista de rotas injetável e arquivos estáticos (WebSocket entra com os terminais) |
+| `src/security.js` | Verificação de `Host` e `Origin`, cookies e cabeçalhos de segurança |
+| `src/system.js` | Detecção de privilégio de administrador |
 | `src/config.js` | Leitura e validação da configuração (host, porta, hash do token, `allowedHosts`) |
-| `src/auth.js` | Login, sessões, rate limit, verificação de `Origin` e `Host` |
+| `src/auth.js` | Geração e hash do token, login, sessões e bloqueio por tentativas |
 | `src/audit.js` | Registro de auditoria em JSON Lines |
 | `src/validate.js` | Validação de entradas e allowlists |
 | `src/powershell.js` | Execução de scripts PowerShell estáticos com parâmetros por ambiente ([ADR 0006](adr/0006-powershell-com-parametros-por-ambiente.md)) |
