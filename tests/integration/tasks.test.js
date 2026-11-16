@@ -153,6 +153,7 @@ test('RN-03: a tarefa do painel não pode ser parada, desativada, editada nem ex
     assert.equal((await send('PUT', '/api/tasks', { ...validCreate, name: 'PainelMaquina' })).status, 409);
     assert.equal((await send('POST', '/api/tasks', { ...validCreate, name: 'painelmaquina' })).status, 409);
     assert.equal(ps.calls.length, 0);
+    assert.ok(srv.readAudit().split(/\r?\n/).filter((l) => l.includes('"recusado"')).length >= 5, 'as recusas devem ser auditadas');
     assert.equal((await send('POST', '/api/tasks/action', { name: 'PainelMaquina', op: 'run' })).status, 200);
   } finally {
     await srv.close();

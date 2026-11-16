@@ -139,7 +139,20 @@ function createServer({
       if (!match) continue;
       ctx.params = match.groups || {};
       if (method !== 'GET') ctx.body = await readJson(req);
-      const out = await route.handler(ctx);
+      let out;
+      try {
+        out = await route.handler(ctx);
+      } catch (err) {
+        // RN-03/RN-06: tentativas recusadas por proteção ou limite (409) ficam registradas.
+        if (err instanceof HttpError && err.status === 409) {
+          const detail = { motivo: err.message };
+          for (const key of ['name', 'op', 'pid']) {
+            if (ctx.body[key] !== undefined) detail[key] = ctx.body[key];
+          }
+          audit.record({ ip, action: 'recusado', target: `${method} ${url.pathname}`, result: 'recusado', detail });
+        }
+        throw err;
+      }
       return sendJson(res, 200, out === undefined ? { ok: true } : out);
     }
     throw new HttpError(404, 'Rota não encontrada.');

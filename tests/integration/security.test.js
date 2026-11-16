@@ -128,6 +128,40 @@ test('RNF-01: rotas inexistentes exigem sessão (401) e depois respondem 404', a
   }
 });
 
+test('RN-06: tentativas recusadas por proteção (409) são auditadas; erros de validação (400) não', async () => {
+  const { HttpError } = require('../../src/validate');
+  const routes = [
+    {
+      method: 'POST',
+      pattern: /^\/api\/protegido$/,
+      handler: () => {
+        throw new HttpError(409, 'Recurso protegido.');
+      },
+    },
+    {
+      method: 'POST',
+      pattern: /^\/api\/invalido$/,
+      handler: () => {
+        throw new HttpError(400, 'Entrada inválida.');
+      },
+    },
+  ];
+  const srv = await startTestServer({ routes });
+  try {
+    const { cookie } = await login(srv.port);
+    await post(srv.port, '/api/protegido', { name: 'EventLog', op: 'stop', confirm: 'segredo-123', pid: 7 }, { Cookie: cookie });
+    await post(srv.port, '/api/invalido', { name: 'x' }, { Cookie: cookie });
+    const events = srv.readAudit().trim().split(/\r?\n/).map((l) => JSON.parse(l)).filter((e) => e.action === 'recusado');
+    assert.equal(events.length, 1);
+    assert.deepEqual(events[0].detail, { motivo: 'Recurso protegido.', name: 'EventLog', op: 'stop', pid: 7 });
+    assert.equal(events[0].target, 'POST /api/protegido');
+    assert.equal(events[0].result, 'recusado');
+    assert.equal(srv.readAudit().includes('segredo-123'), false);
+  } finally {
+    await srv.close();
+  }
+});
+
 test('RNF-01: rotas registradas exigem sessão e erros internos não vazam detalhes', async () => {
   const routes = [
     { method: 'GET', pattern: /^\/api\/teste$/, handler: () => ({ valor: 1 }) },
