@@ -62,7 +62,8 @@ flowchart LR
 - **Requisitos:** RF-07, RF-08, RF-09, RF-25 · **Regras:** RN-03, RN-08, RN-06
 - **Fluxo principal:** 1) O operador abre a aba Tarefas. 2) O sistema lista tarefas (sem as de `\Microsoft\`). 3) O operador filtra e escolhe uma ação: executar, parar, ativar ou desativar. 4) O sistema executa e atualiza a linha.
 - **Alternativo A:** "Mostrar tarefas do Windows" inclui as de `\Microsoft\`.
-- **Exceção (tarefa protegida):** para a tarefa do painel, parar e desativar são recusados ([RN-03](../requisitos/regras-de-negocio.md#rn-03)).
+- **Exceção A (tarefa protegida):** para a tarefa do painel, parar e desativar são recusados ([RN-03](../requisitos/regras-de-negocio.md#rn-03)).
+- **Exceção B (tarefa desativada):** executar uma tarefa desativada é recusado com a orientação de ativá-la antes.
 - **Pós-condição:** ação registrada na auditoria.
 
 <a id="uc-06"></a>

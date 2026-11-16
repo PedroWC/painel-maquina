@@ -42,7 +42,9 @@ O navegador conversa com o painel por HTTP (API JSON) e WebSocket (terminais). O
 | `src/protections.js` | Recursos protegidos: tarefa e processo do painel, serviços críticos |
 | `src/terminals.js` | Gerenciador de sessões de terminal (node-pty injetável), histórico, limite e PIDs protegidos |
 | `src/routes/terminals.js` | Rotas HTTP e WebSocket dos terminais |
-| `src/routes/tasks.js` · `services.js` · `processes.js` | Tarefas agendadas, serviços, processos e portas |
+| `src/ps-scripts.js` | Scripts PowerShell estáticos (tarefas, serviços, processos) |
+| `src/routes/tasks.js` | Tarefas agendadas |
+| `src/routes/services.js` · `processes.js` | Serviços, processos e portas |
 | `src/routes/providers.js` | Status e recursos dos provedores |
 | `src/providers/` | Contrato (`base.js`), detecção (`registry.js`) e provedores: docker, compose, pm2, kubernetes, podman, wsl |
 | `public/` | Interface (HTML, CSS e JS puros) |

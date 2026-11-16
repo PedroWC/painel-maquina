@@ -16,10 +16,10 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RF-04 | UC-04 | US-04 | `tests/unit/terminals.test.js`, `tests/integration/terminals.test.js` | implementado |
 | RF-05 | UC-04 | US-04 | `tests/unit/terminals.test.js`, `tests/integration/terminals.test.js` | implementado |
 | RF-06 | UC-04 | US-04 | `tests/unit/terminals.test.js`, `tests/integration/terminals.test.js` | implementado |
-| RF-07 | UC-05 | US-05 | `tests/integration/tasks.test.js` | planejado |
-| RF-08 | UC-05 | US-05 | `tests/integration/tasks.test.js` | planejado |
-| RF-09 | UC-05 | US-05 | `tests/integration/tasks.test.js` | planejado |
-| RF-10 | UC-06, UC-07 | US-06, US-07 | `tests/integration/tasks.test.js` | planejado |
+| RF-07 | UC-05 | US-05 | `tests/integration/tasks.test.js`, `tests/integration/tasks.windows.test.js` | implementado |
+| RF-08 | UC-05 | US-05 | `tests/integration/tasks.test.js`, `tests/integration/tasks.windows.test.js` | implementado |
+| RF-09 | UC-05 | US-05 | `tests/integration/tasks.test.js`, `tests/integration/tasks.windows.test.js` | implementado |
+| RF-10 | UC-06, UC-07 | US-06, US-07 | `tests/integration/tasks.test.js`, `tests/integration/tasks.windows.test.js` | implementado |
 | RF-11 | UC-08 | US-08 | `tests/integration/services.test.js` | planejado |
 | RF-12 | UC-08 | US-08 | `tests/integration/services.test.js` | planejado |
 | RF-13 | UC-08 | US-08 | `tests/integration/services.test.js` | planejado |
@@ -34,7 +34,7 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RF-22 | UC-12 | US-12 | `tests/unit/providers/wsl.test.js` | planejado |
 | RF-23 | UC-13 | US-13 | `tests/unit/providers/registry.test.js` | planejado |
 | RF-24 | todos | US-14 | `tests/unit/audit.test.js`, `tests/integration/auth.test.js` | parcial |
-| RF-25 | UC-05, UC-08, UC-11 | US-15 | `tests/unit/protections.test.js` | parcial |
+| RF-25 | UC-05, UC-08, UC-11 | US-15 | `tests/unit/protections.test.js`, `tests/integration/tasks.test.js` | parcial |
 | RF-26 | todos | US-16 | `tests/e2e/smoke.md` (roteiro manual) | planejado |
 | RF-27 | todos | US-17 | `tests/e2e/smoke.md` (roteiro manual) | planejado |
 
@@ -44,12 +44,12 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 |---|---|---|
 | RN-01 | `tests/unit/auth.test.js`, `tests/integration/auth.test.js` | implementado |
 | RN-02 | `tests/unit/auth.test.js`, `tests/unit/security.test.js` | implementado |
-| RN-03 | `tests/unit/protections.test.js` | parcial |
+| RN-03 | `tests/unit/protections.test.js`, `tests/integration/tasks.test.js` | implementado |
 | RN-04 | `tests/unit/protections.test.js` | parcial |
-| RN-05 | `tests/e2e/smoke.md` (roteiro manual) | planejado |
+| RN-05 | `tests/integration/tasks.test.js` (tarefas); roteiro manual `tests/e2e/smoke.md` para os demais | parcial |
 | RN-06 | `tests/unit/audit.test.js`, `tests/integration/auth.test.js` | parcial |
 | RN-07 | `tests/unit/terminals.test.js`, `tests/integration/terminals.test.js` | implementado |
-| RN-08 | `tests/integration/tasks.test.js` | planejado |
+| RN-08 | `tests/integration/tasks.test.js`, `tests/integration/tasks.windows.test.js` | implementado |
 | RN-09 | `tests/unit/protections.test.js` | parcial |
 | RN-10 | `tests/unit/config.test.js` | implementado |
 | RN-11 | `tests/unit/providers/registry.test.js` | planejado |
@@ -58,7 +58,7 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RN-14 | `tests/unit/providers/registry.test.js` | planejado |
 | RN-15 | `tests/unit/terminals.test.js`, `tests/integration/terminals.test.js` | implementado |
 | RN-16 | `tests/unit/auth.test.js`, `tests/unit/config.test.js` | implementado |
-| RN-17 | `tests/unit/validate.test.js` | parcial |
+| RN-17 | `tests/unit/validate.test.js`, `tests/unit/powershell.test.js`, `tests/integration/tasks.test.js` | parcial |
 
 ## Requisitos não funcionais
 
