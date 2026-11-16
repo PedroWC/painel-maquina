@@ -26,7 +26,7 @@ module.exports = [
     files: ['public/**/*.js'],
     languageOptions: {
       sourceType: 'script',
-      globals: { ...globals.browser, Terminal: 'readonly', FitAddon: 'readonly', Painel: 'readonly' },
+      globals: { ...globals.browser, Terminal: 'readonly', FitAddon: 'readonly', Painel: 'readonly', UI: 'readonly' },
     },
   },
 ];

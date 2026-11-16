@@ -23,6 +23,7 @@
       <strong>Painel da Máquina</strong>
       <nav id="abas" aria-label="Áreas do painel">
         <button type="button" class="aba" data-aba="terminais">Terminais</button>
+        <button type="button" class="aba" data-aba="tarefas">Tarefas</button>
       </nav>
       <span id="selo-admin" class="selo" hidden>administrador</span>
       <span id="aviso-exposto" class="selo aviso" hidden>exposto fora do loopback</span>
@@ -46,15 +47,29 @@
           <div id="term-container" class="term-container"></div>
         </div>
       </section>
+
+      <section id="aba-tarefas" class="painel-aba" hidden>
+        <h1 class="titulo-aba">Tarefas agendadas</h1>
+        <div class="barra">
+          <input id="tarefas-filtro" type="search" placeholder="Filtrar por nome" aria-label="Filtrar tarefas">
+          <label class="inline"><input id="tarefas-todas" type="checkbox"> Mostrar tarefas do Windows</label>
+          <button id="tarefas-atualizar" type="button">Atualizar</button>
+          <button id="tarefas-nova" type="button" class="primario-inline">Nova tarefa</button>
+        </div>
+        <div id="tarefas-tabela"></div>
+      </section>
     </main>
   </section>
 
+  <dialog id="dialogo"></dialog>
   <div id="avisos" class="avisos" role="status" aria-live="polite"></div>
 
   <script src="/vendor/xterm.js"></script>
   <script src="/vendor/addon-fit.js"></script>
+  <script src="/ui.js"></script>
   <script src="/app.js"></script>
   <script src="/terminais.js"></script>
+  <script src="/tarefas.js"></script>
   <script src="/iniciar.js"></script>
 </body>
 </html>

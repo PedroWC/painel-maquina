@@ -43,6 +43,28 @@ button.perigo { border-color: var(--bad); color: var(--bad); }
 .term-area { background: #000; border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
 .term-container { height: calc(100vh - 260px); min-height: 280px; }
 .term-aviso { margin-bottom: 6px; padding: 4px 8px; border: 1px solid var(--warn); border-radius: 6px; color: var(--warn); }
+.titulo-aba { margin: 0 0 12px; font-size: 18px; }
+.tabela-rolavel { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; background: var(--panel); }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+th { color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+.acoes { display: flex; gap: 4px; flex-wrap: wrap; }
+.selo-mini { font-size: 12px; padding: 1px 8px; border-radius: 99px; border: 1px solid var(--line); color: var(--muted); white-space: nowrap; }
+.selo-mini.ok { color: var(--ok); border-color: var(--ok); }
+.selo-mini.off { color: var(--muted); }
+.selo-mini.mau { color: var(--bad); border-color: var(--bad); }
+input[type="search"] { min-width: 220px; }
+dialog { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 10px; padding: 0; width: min(520px, calc(100vw - 32px)); }
+dialog::backdrop { background: rgba(0, 0, 0, .6); }
+.dialogo-form { padding: 16px; display: flex; flex-direction: column; gap: 4px; }
+.dialogo-form h2 { margin: 0 0 8px; font-size: 16px; }
+.dialogo-form input[type="text"], .dialogo-form input[type="time"], .dialogo-form select { width: 100%; }
+.dialogo-form .campo { display: flex; flex-direction: column; }
+.dialogo-form .multi { display: flex; gap: 10px; flex-wrap: wrap; }
+.dialogo-form .dica { color: var(--muted); margin: 0; }
+.dialogo-fim { display: flex; justify-content: flex-end; gap: 8px; margin-top: 14px; }
+button.perigo:not(.mini) { border-color: var(--bad); color: var(--bad); }
 .avisos { position: fixed; right: 16px; bottom: 16px; display: flex; flex-direction: column; gap: 8px; max-width: min(420px, calc(100vw - 32px)); }
 .aviso-item { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); }
 .aviso-item.erro { border-color: var(--bad); color: var(--bad); }
