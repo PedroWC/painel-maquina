@@ -31,7 +31,7 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RF-19 | UC-12 | US-12 | `tests/unit/providers/pm2.test.js`, `tests/integration/pm2.test.js`, `tests/integration/pm2.windows.test.js` | parcial |
 | RF-20 | UC-12 | US-12 | `tests/unit/providers/kubernetes.test.js`, `tests/integration/kubernetes.test.js`, `tests/integration/kubernetes.windows.test.js` | parcial |
 | RF-21 | UC-12 | US-12 | `tests/unit/providers/podman.test.js` | planejado |
-| RF-22 | UC-12 | US-12 | `tests/unit/providers/wsl.test.js` | planejado |
+| RF-22 | UC-12 | US-12 | `tests/unit/providers/wsl.test.js`, `tests/integration/wsl.test.js`, `tests/integration/wsl.windows.test.js`, `tests/unit/terminals.test.js` | implementado |
 | RF-23 | UC-13 | US-13 | `tests/unit/providers/registry.test.js`, `tests/integration/providers.test.js` | implementado |
 | RF-24 | todos | US-14 | `tests/unit/audit.test.js`, `tests/integration/auth.test.js` | parcial |
 | RF-25 | UC-05, UC-08, UC-11 | US-15 | `tests/unit/protections.test.js`, `tests/integration/tasks.test.js`, `tests/integration/services.test.js`, `tests/integration/processes.test.js`, `tests/integration/tasks.test.js` | implementado |

@@ -56,6 +56,7 @@ defineProvider({
           logs: true,                                  // mostra o botão Logs
           nomeConfirmacao: 'um',                       // opcional: texto a digitar na confirmação (padrão: o id)
           padroes: { replicas: '3' },                  // opcional: valores iniciais dos campos da ação
+          terminal: { shell: 'wsl', distro: 'Ubuntu' },// opcional: a interface oferece "Abrir terminal" para a linha
         }],
       }],
     };
@@ -115,6 +116,14 @@ A interface **não precisa mudar**: a aba é montada a partir do que o provedor 
 Ferramentas instaladas por npm (como o pm2) são scripts `.cmd`, e o Node recusa executar `.cmd` com `execFile` sem shell. O provedor correspondente deve resolver o executável real (por exemplo, o `node` mais o script de entrada) em vez de ativar `shell: true`.
 
 O provedor pm2 (`src/providers/pm2.js`) faz isso: localiza o script `node_modules/pm2/bin/pm2` e o executa com o mesmo `node` do painel. A ordem de busca é: opção `pm2Entry` do `config.json`, variável de ambiente `PAINEL_PM2_ENTRY`, o `where pm2.cmd`, a pasta do próprio `node.exe` (prefixo global quando o Node foi instalado em pasta própria, como no WinGet) e as pastas usuais do npm. O arquivo precisa se chamar `pm2` e existir. Ele serve de modelo para outras ferramentas instaladas por npm.
+
+## Cuidados específicos do WSL
+
+- **Saída em UTF-16:** o `wsl.exe` escreve em UTF-16LE e traduz a saída. O executor de CLIs aceita `encoding: 'auto'` (bytes decodificados como UTF-16LE se houver bytes nulos, senão UTF-8) e o provedor o usa em toda chamada, inclusive nas mensagens de erro.
+- **Independente do idioma:** nomes e versões vêm de `--list --verbose`; quem está em execução vem de `--list --running --quiet`, cruzado com os nomes conhecidos. Assim, o estado traduzido ou a mensagem "nenhuma distribuição em execução" nunca viram uma distribuição.
+- **Ações:** encerrar uma distribuição (`--terminate`) e desligar todo o WSL (`--shutdown`). O desligamento derruba todas as distribuições, inclusive o motor do Docker Desktop, e por isso exige digitar `wsl`. A linha "Geral" usa o id `_todas`, que nenhum nome de distribuição pode ter (eles começam com letra ou número).
+- **Terminal na distribuição:** a linha traz `terminal: { shell, distro }` e a interface oferece "Abrir terminal"; a sessão é criada pela API de terminais (`wsl.exe -d <distro>`, nome validado) e a aba Terminais abre já nela.
+- **Sem distribuições instaladas** (erro do `wsl.exe`): a aba mostra um aviso e uma lista vazia, sem falhar.
 
 ## Cuidados específicos do Kubernetes
 
