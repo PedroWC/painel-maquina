@@ -65,7 +65,7 @@ Cada provedor invoca somente o seu próprio executável, usando lista de argumen
 <a id="rn-13"></a>
 ## RN-13 · Contexto do Kubernetes sempre visível
 
-Na aba Kubernetes, o contexto e o namespace ativos ficam sempre visíveis. Operações destrutivas (excluir, escalar para zero, reiniciar rollout) exigem confirmação digitando o nome do recurso. Relacionado: RF-20.
+Na aba Kubernetes, o contexto e o namespace ativos ficam sempre visíveis, em um banner e em seletores. Operações que alteram o cluster (excluir, escalar e reiniciar rollout) exigem confirmação digitando o **nome do recurso**, e o servidor confere o texto. O painel nunca altera o contexto do `kubectl` no kubeconfig: o contexto e o namespace escolhidos na tela vão explicitamente em cada comando. Relacionado: RF-20.
 
 <a id="rn-14"></a>
 ## RN-14 · Isolamento de falhas dos provedores

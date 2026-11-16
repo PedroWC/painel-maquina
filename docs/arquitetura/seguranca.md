@@ -30,6 +30,7 @@ O painel dá acesso administrativo completo à máquina. Por isso a segurança �
 | T15 | Escalada via terminal | Terminal tem o privilégio do painel por projeto; é sinalizado como admin e auditado (abertura e encerramento, sem o conteúdo digitado) | RN-07, RN-06 |
 | T16 | Curingas em nomes (`*`, `?`, `[ ]`) fazendo um comando atingir vários serviços ou tarefas | Validação recusa curingas; scripts operam sobre o objeto exato (`Where-Object -eq` e `-InputObject`) e recusam resultado ambíguo | RN-17, ADR 0006 |
 | T17 | Segredos ou dados sensíveis em `painel.log` | O log só espelha o console (início, parada, avisos e erros genéricos); o painel nunca imprime token, cookies, hash nem o texto digitado; o arquivo não é versionado | RNF-07, RNF-09 |
+| T18 | Ação no cluster ou contexto errado do Kubernetes | O banner e os seletores mostram sempre o contexto e o namespace; cada comando leva o contexto e o namespace explícitos (o kubeconfig nunca é alterado); excluir, escalar e reiniciar rollout exigem digitar o nome do recurso, conferido no servidor; ids restritos a pod, deployment e service | RN-13, RN-12 |
 
 ## Cabeçalhos e políticas
 

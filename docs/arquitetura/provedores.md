@@ -33,9 +33,16 @@ defineProvider({
     // ferramenta ausente: devolva { disponivel: false } (não lance erro)
   },
 
-  async list() {                 // => { sections, contexto? }
+  async list(query) {            // => { sections, contexto?, aviso?, controles? }
+    // query: parâmetros de consulta da URL (objeto sem protótipo, até 10 pares de texto curto)
     return {
       contexto: 'Contexto: dev · Namespace: padrao',   // opcional, vira um banner
+      aviso: 'Cluster inacessível',                    // opcional: problema não fatal, a aba continua utilizável
+      controles: [{                                    // opcional: seletores no topo da aba
+        id: 'namespace', rotulo: 'Namespace', valor: 'padrao',
+        opcoes: [{ valor: 'padrao', rotulo: 'padrao' }],
+        reinicia: ['outro-controle'],                  // controles que voltam ao padrão quando este muda
+      }],
       sections: [{
         id: 'itens',
         title: 'Itens',
@@ -47,26 +54,37 @@ defineProvider({
           status: { texto: 'Em execução', tom: 'ok' }, // opcional: ok | off | mau
           actions: ['restart', 'delete'],              // operações aplicáveis a esta linha
           logs: true,                                  // mostra o botão Logs
+          nomeConfirmacao: 'um',                       // opcional: texto a digitar na confirmação (padrão: o id)
+          padroes: { replicas: '3' },                  // opcional: valores iniciais dos campos da ação
         }],
       }],
     };
   },
 
-  actions: {                     // allowlist de operações (RN-12)
+  actions: {                     // allowlist de operações (RN-12); run SEMPRE assíncrona
     restart: { rotulo: 'Reiniciar', destrutiva: false, run: async (id, params) => {} },
     scale: {
       rotulo: 'Escalar',
       destrutiva: true,
       confirmarNome: true,       // exige digitar o nome do recurso
+      campos: [{ id: 'replicas', rotulo: 'Réplicas', inteiro: true, max: 3 }],  // a interface pede antes de executar
       validar: (params) => ({ replicas: params.replicas }),  // devolve os parâmetros já validados
       run: async (id, params) => {},
     },
   },
 
-  async logs(id) {},             // opcional => texto
+  async logs(id, query) {},      // opcional => texto (query: os valores dos seletores da aba)
   validateId(id) {},             // opcional; o padrão aceita só ids seguros
+  nomeConfirmacao(id) {},        // opcional: texto que o servidor espera na confirmação por nome
 });
 ```
+
+### Seletores, parâmetros e confirmação
+
+- Os **seletores** (`controles`) são genéricos: a interface os desenha, guarda o valor que o servidor resolveu e o envia em cada nova listagem (como parâmetros de consulta), em cada consulta de logs (idem) e em cada ação (no campo `params`). Assim a ação vale exatamente para o que a tela mostra. A atualização periódica não recria os seletores, para não fechar uma lista aberta.
+- O provedor **sempre valida** o que vem de `query` e `params` (a interface não é fronteira de segurança).
+- Em `aviso`, o provedor devolve problemas não fatais (por exemplo, cluster fora do ar) **sem** falhar a requisição, para que os seletores continuem disponíveis.
+- Em `confirmaPorNome`/`confirmarNome`, o servidor exige que `confirm` seja igual a `nomeConfirmacao(id)` (ou ao próprio `id`, se a função não existir).
 
 ## Regras que todo provedor precisa seguir
 
@@ -97,6 +115,14 @@ A interface **não precisa mudar**: a aba é montada a partir do que o provedor 
 Ferramentas instaladas por npm (como o pm2) são scripts `.cmd`, e o Node recusa executar `.cmd` com `execFile` sem shell. O provedor correspondente deve resolver o executável real (por exemplo, o `node` mais o script de entrada) em vez de ativar `shell: true`.
 
 O provedor pm2 (`src/providers/pm2.js`) faz isso: localiza o script `node_modules/pm2/bin/pm2` e o executa com o mesmo `node` do painel. A ordem de busca é: opção `pm2Entry` do `config.json`, variável de ambiente `PAINEL_PM2_ENTRY`, o `where pm2.cmd`, a pasta do próprio `node.exe` (prefixo global quando o Node foi instalado em pasta própria, como no WinGet) e as pastas usuais do npm. O arquivo precisa se chamar `pm2` e existir. Ele serve de modelo para outras ferramentas instaladas por npm.
+
+## Cuidados específicos do Kubernetes
+
+- **Nunca altera o kubeconfig:** o contexto atual do `kubectl` não é trocado. O contexto e o namespace escolhidos nos seletores vão em cada comando (`--context=`, `--namespace=`), e o banner "Contexto: ... · Namespace: ..." fica sempre visível ([RN-13](../requisitos/regras-de-negocio.md#rn-13)).
+- **Nada de recursos fora do escopo:** os ids são `kind/namespace/nome` com kind restrito a `pod`, `deployment` e `service`, e cada parte validada pelas regras de nomes do Kubernetes; `--all`, `--force` e afins nunca são usados.
+- **Confirmação por nome:** reiniciar rollout, escalar (0 a 100 réplicas) e excluir exigem digitar o **nome** do recurso (por exemplo, `web`, e não `deployment/prod/web`); o servidor confere.
+- **Cluster fora do ar ou sem permissão:** a listagem responde com um `aviso` amigável e mantém os seletores (para trocar de contexto), e as ações respondem 503 ou 403 com mensagem clara. Todo comando leva `--request-timeout=10s` para a aba não travar.
+- **Sem permissão para listar namespaces:** a aba segue com o namespace padrão do contexto.
 
 ## Cuidados específicos do pm2
 
