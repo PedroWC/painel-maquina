@@ -194,6 +194,7 @@ const PROCESS_KILL = `
 $proc = Get-Process -Id ([int]$p.pid) -ErrorAction SilentlyContinue
 if (-not $proc) { throw 'PROCESSO_NAO_EXISTE' }
 $name = $proc.ProcessName
+if (@($p.protectedNames) -contains $name) { throw 'PROCESSO_PROTEGIDO' }
 Stop-Process -InputObject $proc -Force
 $name
 `;

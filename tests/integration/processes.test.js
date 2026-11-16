@@ -6,6 +6,7 @@ const { startTestServer, request, login } = require('../helpers/server');
 const { createFakePs } = require('../helpers/fake-ps');
 const { createProcessRoutes } = require('../../src/routes/processes');
 const { PROCESS_LIST, PROCESS_KILL } = require('../../src/ps-scripts');
+const { CRITICAL_PROCESSES } = require('../../src/protections');
 const { HttpError } = require('../../src/validate');
 
 const OWN_PID = 4242;
@@ -70,7 +71,7 @@ test('RF-17: encerra um processo comum enviando só o PID inteiro ao sistema', a
     const res = await kill({ pid: 900 });
     assert.equal(res.status, 200);
     assert.equal(ps.calls[0].script, PROCESS_KILL);
-    assert.deepEqual(ps.calls[0].params, { pid: 900 });
+    assert.deepEqual(ps.calls[0].params, { pid: 900, protectedNames: CRITICAL_PROCESSES });
   } finally {
     await srv.close();
   }

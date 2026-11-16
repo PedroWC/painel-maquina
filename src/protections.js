@@ -52,6 +52,20 @@ function assertServiceAllowed(name, op) {
   }
 }
 
+// RN-20: processos sem os quais o Windows para ou reinicia. Encerrar qualquer um deles derruba o
+// sistema (tela azul ou logoff forçado), então o painel nunca o faz. O svchost entra porque um
+// deles pode hospedar serviços essenciais; o caminho seguro é parar o serviço pela aba Serviços.
+// Nomes como o Get-Process os mostra (sem .exe), em minúsculas.
+const CRITICAL_PROCESSES = [
+  'system', 'registry', 'idle', 'system idle process', 'memory compression', 'secure system',
+  'smss', 'csrss', 'wininit', 'winlogon', 'services', 'lsass', 'lsaiso', 'lsm', 'svchost',
+];
+const CRITICAL_PROCESS_SET = new Set(CRITICAL_PROCESSES);
+
+function isCriticalProcess(name) {
+  return CRITICAL_PROCESS_SET.has(String(name || '').toLowerCase());
+}
+
 // RN-04: o processo do painel e os de seus terminais não podem ser encerrados
 // pela aba de processos. PIDs 0 a 4 são processos do sistema.
 function assertProcessAllowed(pid, protectedPids) {
@@ -63,8 +77,10 @@ function assertProcessAllowed(pid, protectedPids) {
 module.exports = {
   SELF_TASK,
   CRITICAL_SERVICES,
+  CRITICAL_PROCESSES,
   isSelfTask,
   isCriticalService,
+  isCriticalProcess,
   requiresTypedConfirm,
   assertTaskAllowed,
   assertServiceAllowed,
