@@ -1,7 +1,7 @@
 'use strict';
 
 // Núcleo da interface: sessão (login/logout), navegação por abas, chamadas à
-// API e avisos. Todo texto vindo do servidor entra com textContent (nunca innerHTML).
+// API e avisos. Todo texto vindo do servidor entra como texto puro (textContent), nunca como HTML.
 
 (function () {
   const telaLogin = document.getElementById('tela-login');
