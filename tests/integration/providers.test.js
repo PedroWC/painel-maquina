@@ -106,8 +106,8 @@ test('RF-23: a listagem traz seções, ações com rótulos e destrutividade, e 
     assert.equal(res.status, 200);
     assert.equal(res.json.nome, 'Exemplo');
     assert.equal(res.json.temLogs, true);
-    assert.deepEqual(res.json.acoes.restart, { rotulo: 'Reiniciar', destrutiva: false, confirmarNome: false });
-    assert.deepEqual(res.json.acoes.delete, { rotulo: 'Excluir', destrutiva: true, confirmarNome: false });
+    assert.deepEqual(res.json.acoes.restart, { rotulo: 'Reiniciar', destrutiva: false, confirmarNome: false, campos: [] });
+    assert.deepEqual(res.json.acoes.delete, { rotulo: 'Excluir', destrutiva: true, confirmarNome: false, campos: [] });
     assert.equal(res.json.acoes.scale.confirmarNome, true);
     assert.equal(res.json.sections[0].rows[0].id, 'item-1');
     assert.equal('run' in res.json.acoes.restart, false, 'a função run nunca é exposta');

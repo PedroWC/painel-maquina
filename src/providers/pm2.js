@@ -9,7 +9,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { HttpError, badRequest } = require('../validate');
-const { defineProvider } = require('./base');
+const { defineProvider, humanDuration } = require('./base');
 
 const LOG_LINES = '300';
 const NUMERIC_ID = /^\d{1,9}$/;
@@ -89,13 +89,6 @@ function parseJlist(stdout) {
     from = stdout.indexOf('[', from + 1);
   }
   throw new HttpError(502, 'Resposta inesperada do pm2.');
-}
-
-function humanDuration(seconds) {
-  if (seconds < 60) return `${seconds}s`;
-  if (seconds < 3600) return `${Math.floor(seconds / 60)}min`;
-  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ${Math.floor((seconds % 3600) / 60)}min`;
-  return `${Math.floor(seconds / 86400)}d ${Math.floor((seconds % 86400) / 3600)}h`;
 }
 
 function createPm2Provider({

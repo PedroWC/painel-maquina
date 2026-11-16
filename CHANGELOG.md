@@ -30,4 +30,6 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 - Roteiro de smoke manual (`tests/e2e/smoke.md`).
 - Provedor pm2: listar processos (estado, CPU, memória, reinícios e tempo ativo), iniciar, reiniciar, parar, excluir e ver logs. O pm2 é executado pelo `node` com o script `bin/pm2` (sem shell), localizado por `pm2Entry`, `PAINEL_PM2_ENTRY`, `where` ou pastas usuais; detectar e listar não iniciam o daemon; o processo do próprio painel é protegido (RF-19, RN-04).
 - Opção de configuração `pm2Entry`.
+- Provedor Kubernetes: contextos e namespaces em seletores, deployments, pods e services; reiniciar rollout, escalar, excluir e logs. O contexto e o namespace ativos ficam sempre visíveis, vão explícitos em cada comando (o kubeconfig nunca é alterado) e as operações que alteram o cluster exigem digitar o nome do recurso, conferido no servidor. Cluster fora do ar ou sem permissão vira aviso amigável (RF-20, RN-13).
+- Framework de provedores: seletores genéricos, parâmetros de consulta, aviso não fatal, campos de formulário nas ações e texto de confirmação próprio por provedor.
 - Estrutura do projeto: `package.json` (Node 24), ESLint, executor de testes nativo com cobertura, `config.example.json` e integração contínua (lint, testes, auditoria, varredura de segredos e validação do título do PR).

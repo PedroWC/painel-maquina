@@ -66,8 +66,8 @@ test('RF-19: lista pelas rotas, com rótulos das ações e destrutividade', asyn
   try {
     const res = (await get('/api/p/pm2/items')).json;
     assert.equal(res.temLogs, true);
-    assert.deepEqual(res.acoes.stop, { rotulo: 'Parar', destrutiva: true, confirmarNome: false });
-    assert.deepEqual(res.acoes.restart, { rotulo: 'Reiniciar', destrutiva: false, confirmarNome: false });
+    assert.deepEqual(res.acoes.stop, { rotulo: 'Parar', destrutiva: true, confirmarNome: false, campos: [] });
+    assert.deepEqual(res.acoes.restart, { rotulo: 'Reiniciar', destrutiva: false, confirmarNome: false, campos: [] });
     assert.deepEqual(res.sections[0].rows.map((r) => [r.id, r.actions.length]), [['0', 3], ['1', 0]]);
   } finally {
     await srv.close();

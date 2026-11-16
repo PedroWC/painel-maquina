@@ -59,6 +59,11 @@ Executado antes de cada release, em uma máquina Windows real, com o painel inst
 - [ ] pm2 com um processo descartável (`pm2 start script.js --name PainelTeste_app`): ele aparece online; reiniciar, parar (confirmação), iniciar, ver logs e excluir funcionam
 - [ ] Com o painel gerenciado pelo próprio pm2, a linha dele aparece como "(painel)", sem ações
 
+- [ ] Kubernetes (com `kubectl` e um cluster de **teste**, por exemplo kind ou minikube): o banner mostra o contexto e o namespace, e os seletores trocam ambos sem alterar o contexto atual (confira com `kubectl config current-context`)
+- [ ] Criar um deployment descartável (`kubectl create deployment painelteste --image=nginx`): ele aparece com réplicas e estado; escalar, reiniciar rollout, ver logs de pod e excluir exigem digitar o **nome** (`painelteste`)
+- [ ] Parar o cluster de teste: a aba mostra o aviso de que não foi possível conectar, mantém os seletores e as demais abas seguem funcionando
+- [ ] **Nunca** rode este roteiro contra um cluster de produção
+
 ## 8. Interface e transversais (RF-24, RF-26, RF-27, RNF-02, RNF-05, RNF-11)
 
 - [ ] Listas de tarefas, serviços, processos e provedores respondem em até 3 segundos

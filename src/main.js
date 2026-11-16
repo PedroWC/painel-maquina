@@ -18,6 +18,7 @@ const { createCli } = require('./cli');
 const { createRegistry } = require('./providers/registry');
 const { createDockerProvider } = require('./providers/docker');
 const { createPm2Provider, createPm2Locator } = require('./providers/pm2');
+const { createKubernetesProvider } = require('./providers/kubernetes');
 const { createProviderRoutes } = require('./routes/providers');
 
 function main() {
@@ -64,6 +65,7 @@ function main() {
         locate: createPm2Locator({ cli, configured: config.pm2Entry }),
         isProtectedPid: isPanelPid,
       }),
+      createKubernetesProvider({ cli }),
     ],
   });
   const providerRoutes = createProviderRoutes({ registry });

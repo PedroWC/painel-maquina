@@ -54,4 +54,4 @@ Todas exigem sessão, exceto o login. Rotas que alteram estado exigem o cabeçal
 | `GET/POST/PUT /api/services` · `POST /api/services/action` | Serviços | RF-11 a RF-14 |
 | `GET /api/processes` · `POST /api/processes/kill` | Processos e portas | RF-17 |
 | `GET /api/providers` · `POST /api/providers/refresh` | Status dos provedores | RF-23 |
-| `GET /api/p/:id/items` · `POST /api/p/:id/action` · `GET /api/p/:id/logs` | Recursos de cada provedor (inclui Docker) | RF-15, RF-16, RF-18 a RF-22 |
+| `GET /api/p/:id/items` · `POST /api/p/:id/action` · `GET /api/p/:id/logs` | Recursos de cada provedor (Docker, pm2, Kubernetes...). A listagem e os logs aceitam parâmetros de consulta dos seletores (por exemplo, `context` e `namespace`) | RF-15, RF-16, RF-18 a RF-22 |
