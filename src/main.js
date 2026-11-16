@@ -17,6 +17,7 @@ const { createProcessRoutes } = require('./routes/processes');
 const { createCli } = require('./cli');
 const { createRegistry } = require('./providers/registry');
 const { createDockerProvider } = require('./providers/docker');
+const { createPm2Provider, createPm2Locator } = require('./providers/pm2');
 const { createProviderRoutes } = require('./routes/providers');
 
 function main() {
@@ -54,7 +55,17 @@ function main() {
   });
   // ADR 0012: provedores opcionais detectados em tempo de execução (RN-11).
   const cli = createCli();
-  const registry = createRegistry({ providers: [createDockerProvider({ cli })] });
+  const isPanelPid = (pid) => pid === process.pid || terminals.protectedPids().has(pid);
+  const registry = createRegistry({
+    providers: [
+      createDockerProvider({ cli }),
+      createPm2Provider({
+        cli,
+        locate: createPm2Locator({ cli, configured: config.pm2Entry }),
+        isProtectedPid: isPanelPid,
+      }),
+    ],
+  });
   const providerRoutes = createProviderRoutes({ registry });
   const server = createServer({
     config,

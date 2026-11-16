@@ -28,7 +28,7 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RF-16 | UC-10 | US-10 | `tests/unit/providers/docker.test.js`, `tests/integration/providers.test.js`, `tests/integration/docker.windows.test.js` | implementado |
 | RF-17 | UC-11 | US-11 | `tests/integration/processes.test.js`, `tests/integration/processes.windows.test.js` | implementado |
 | RF-18 | UC-12 | US-12 | `tests/unit/providers/compose.test.js` | planejado |
-| RF-19 | UC-12 | US-12 | `tests/unit/providers/pm2.test.js` | planejado |
+| RF-19 | UC-12 | US-12 | `tests/unit/providers/pm2.test.js`, `tests/integration/pm2.test.js`, `tests/integration/pm2.windows.test.js` | parcial |
 | RF-20 | UC-12 | US-12 | `tests/unit/providers/kubernetes.test.js` | planejado |
 | RF-21 | UC-12 | US-12 | `tests/unit/providers/podman.test.js` | planejado |
 | RF-22 | UC-12 | US-12 | `tests/unit/providers/wsl.test.js` | planejado |
@@ -45,7 +45,7 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RN-01 | `tests/unit/auth.test.js`, `tests/integration/auth.test.js` | implementado |
 | RN-02 | `tests/unit/auth.test.js`, `tests/unit/security.test.js` | implementado |
 | RN-03 | `tests/unit/protections.test.js`, `tests/integration/tasks.test.js`, `tests/integration/security.test.js`, `tests/integration/tasks.test.js` | implementado |
-| RN-04 | `tests/unit/protections.test.js`, `tests/integration/processes.test.js` | implementado |
+| RN-04 | `tests/unit/protections.test.js`, `tests/integration/processes.test.js`, `tests/unit/providers/pm2.test.js`, `tests/integration/processes.test.js` | implementado |
 | RN-05 | `tests/unit/protections.test.js`, `tests/integration/tasks.test.js`, `tests/integration/services.test.js` (tarefas); roteiro manual `tests/e2e/smoke.md` para os demais | parcial |
 | RN-06 | `tests/unit/audit.test.js`, `tests/integration/auth.test.js`, `tests/integration/security.test.js`, `tests/integration/auth.test.js` | parcial |
 | RN-07 | `tests/unit/terminals.test.js`, `tests/integration/terminals.test.js` | implementado |

@@ -48,7 +48,7 @@ O navegador conversa com o painel por HTTP (API JSON) e WebSocket (terminais). O
 | `src/routes/services.js` · `processes.js` | Serviços, processos e portas |
 | `src/routes/providers.js` | Status e recursos dos provedores (`/api/providers`, `/api/p/:id/...`) |
 | `src/cli.js` | Executor de CLIs externas (`execFile`, tempo limite, erros padronizados) |
-| `src/providers/` | Contrato (`base.js`), detecção (`registry.js`) e provedores: docker (pronto); compose, pm2, kubernetes, podman e wsl (planejados). Veja [provedores](provedores.md) |
+| `src/providers/` | Contrato (`base.js`), detecção (`registry.js`) e provedores: docker e pm2 (prontos); compose, kubernetes, podman e wsl (planejados). Veja [provedores](provedores.md) |
 | `public/` | Interface (HTML, CSS e JS puros) |
 | `scripts/` | Geração de token e instalação da tarefa elevada |
 
@@ -92,6 +92,7 @@ Arquivo `config.json` na raiz (não versionado). Modelo em `config.example.json`
 | `allowedHosts` | `[]` | Hosts adicionais aceitos no cabeçalho `Host` |
 | `sessionHours` | `12` | Duração da sessão ([RN-02](../requisitos/regras-de-negocio.md#rn-02)) |
 | `maxTerminals` | `20` | Limite de sessões de terminal ([RN-15](../requisitos/regras-de-negocio.md#rn-15)) |
+| `pm2Entry` | `""` | Caminho do script `bin/pm2`, se o provedor pm2 não o encontrar sozinho |
 
 Variáveis de ambiente `PAINEL_HOST` e `PAINEL_PORT` têm precedência sobre o arquivo.
 
