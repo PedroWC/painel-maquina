@@ -2,7 +2,9 @@
 
 Painel web para gerenciar uma máquina Windows em um só lugar, com privilégios de administrador: **sessões de terminal**, **tarefas agendadas**, **serviços**, **containers** e outras tecnologias de execução (pm2, Kubernetes, Podman, WSL), detectadas automaticamente quando instaladas.
 
-> **Status:** em desenvolvimento inicial (pré-`0.1.0`). Já funcionam: login por token, sessões de terminal como administrador, tarefas agendadas, serviços do Windows, processos e portas, Docker, Docker Compose, Podman, pm2, Kubernetes e WSL. A documentação vem antes do código e já está completa em [`docs/`](docs/README.md); as funcionalidades serão entregues por etapas e registradas no [CHANGELOG](CHANGELOG.md).
+> **Status:** versão `0.1.0`, a primeira. Funcionam: login por token, sessões de terminal como administrador, tarefas agendadas, serviços do Windows, processos e portas, Docker, Docker Compose, Podman, pm2, Kubernetes e WSL. A documentação está em [`docs/`](docs/README.md) e o histórico de mudanças no [CHANGELOG](CHANGELOG.md).
+>
+> **Limitações conhecidas:** somente Windows. Os provedores Docker Compose, Podman, pm2 e Kubernetes foram validados por testes com as ferramentas simuladas; os testes de sistema reais só rodam quando a ferramenta existe na máquina. A interface depende do roteiro de verificação manual em [`tests/e2e/smoke.md`](tests/e2e/smoke.md): execute-o antes de confiar no painel.
 
 > ⚠️ **Aviso de segurança.** Este software dá controle administrativo completo da máquina a quem se autenticar nele. Use apenas em máquinas suas, mantenha o servidor em `127.0.0.1` e acesse remotamente por túnel SSH. Leia [SECURITY.md](SECURITY.md) e [segurança](docs/arquitetura/seguranca.md).
 
@@ -33,7 +35,7 @@ Um servidor Node.js roda na própria máquina (tarefa agendada elevada) e expõe
 Guia completo em [docs/operacao/instalacao.md](docs/operacao/instalacao.md). Resumo previsto:
 
 ```powershell
-git clone <url-do-repositorio> painel-maquina
+git clone https://github.com/PedroWC/painel-maquina.git painel-maquina
 cd painel-maquina
 npm ci
 npm run gerar-token      # mostra o token uma única vez
