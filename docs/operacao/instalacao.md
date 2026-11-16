@@ -10,7 +10,7 @@
 ## Instalação
 
 ```powershell
-git clone <url-do-repositorio> painel-maquina
+git clone https://github.com/PedroWC/painel-maquina.git painel-maquina
 cd painel-maquina
 npm ci
 npm run gerar-token
