@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Painel da Máquina</title>
+  <link rel="stylesheet" href="/vendor/xterm.css">
   <link rel="stylesheet" href="/app.css">
 </head>
 <body>
@@ -20,15 +21,40 @@
   <section id="tela-app" hidden>
     <header>
       <strong>Painel da Máquina</strong>
+      <nav id="abas" aria-label="Áreas do painel">
+        <button type="button" class="aba" data-aba="terminais">Terminais</button>
+      </nav>
       <span id="selo-admin" class="selo" hidden>administrador</span>
       <span id="aviso-exposto" class="selo aviso" hidden>exposto fora do loopback</span>
       <button id="botao-sair" type="button">Sair</button>
     </header>
+
     <main>
-      <p>Autenticado. As áreas de terminais, tarefas, serviços e containers chegam nas próximas versões.</p>
+      <section id="aba-terminais" class="painel-aba" hidden>
+        <div class="barra">
+          <label class="inline">Shell
+            <select id="term-shell"></select>
+          </label>
+          <input id="term-pasta" type="text" placeholder="Pasta inicial (opcional)" maxlength="260" aria-label="Pasta inicial">
+          <input id="term-nome" type="text" placeholder="Nome (opcional)" maxlength="60" aria-label="Nome da sessão">
+          <button id="term-nova" type="button" class="primario-inline">Nova sessão</button>
+        </div>
+        <div id="term-sessoes" class="sessoes" role="tablist" aria-label="Sessões de terminal"></div>
+        <p id="term-vazio" class="vazio">Nenhuma sessão aberta. Crie uma para começar.</p>
+        <div id="term-area" class="term-area" hidden>
+          <div id="term-aviso" class="term-aviso" role="status" hidden></div>
+          <div id="term-container" class="term-container"></div>
+        </div>
+      </section>
     </main>
   </section>
 
+  <div id="avisos" class="avisos" role="status" aria-live="polite"></div>
+
+  <script src="/vendor/xterm.js"></script>
+  <script src="/vendor/addon-fit.js"></script>
   <script src="/app.js"></script>
+  <script src="/terminais.js"></script>
+  <script src="/iniciar.js"></script>
 </body>
 </html>
