@@ -40,7 +40,8 @@ O navegador conversa com o painel por HTTP (API JSON) e WebSocket (terminais). O
 | `src/validate.js` | Validação de entradas e allowlists |
 | `src/powershell.js` | Execução de scripts PowerShell estáticos com parâmetros por ambiente ([ADR 0006](adr/0006-powershell-com-parametros-por-ambiente.md)) |
 | `src/protections.js` | Recursos protegidos: tarefa e processo do painel, serviços críticos |
-| `src/routes/terminals.js` | Sessões de terminal (node-pty) e fluxo por WebSocket |
+| `src/terminals.js` | Gerenciador de sessões de terminal (node-pty injetável), histórico, limite e PIDs protegidos |
+| `src/routes/terminals.js` | Rotas HTTP e WebSocket dos terminais |
 | `src/routes/tasks.js` · `services.js` · `processes.js` | Tarefas agendadas, serviços, processos e portas |
 | `src/routes/providers.js` | Status e recursos dos provedores |
 | `src/providers/` | Contrato (`base.js`), detecção (`registry.js`) e provedores: docker, compose, pm2, kubernetes, podman, wsl |

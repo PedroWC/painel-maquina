@@ -82,4 +82,5 @@ Leia o [CHANGELOG](../../CHANGELOG.md) antes: mudanças incompatíveis trazem in
 | Porta em uso | Outro programa usa a 8780 | Altere `port` no `config.json` |
 | Terminais não abrem | Falha na dependência nativa | Rode `npm ci` com a versão de Node do `.nvmrc` |
 | Aba de uma ferramenta não aparece | Ferramenta não instalada ou fora do `PATH` do processo | Instale e use "Detectar novamente" em Provedores |
+| Mensagem `AttachConsole failed` no console ao encerrar um terminal | Ruído do `node-pty` ao fechar o ConPTY; os processos da sessão são finalizados normalmente | Pode ser ignorada |
 | "Acesso negado" em tarefas ou serviços | Painel sem privilégio de administrador | Instale pela tarefa elevada |
