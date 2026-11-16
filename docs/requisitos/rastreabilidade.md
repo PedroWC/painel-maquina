@@ -27,7 +27,7 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RF-15 | UC-10 | US-10 | `tests/unit/providers/docker.test.js`, `tests/integration/providers.test.js`, `tests/integration/docker.windows.test.js` | implementado |
 | RF-16 | UC-10 | US-10 | `tests/unit/providers/docker.test.js`, `tests/integration/providers.test.js`, `tests/integration/docker.windows.test.js` | implementado |
 | RF-17 | UC-11 | US-11 | `tests/integration/processes.test.js`, `tests/integration/processes.windows.test.js` | implementado |
-| RF-18 | UC-12 | US-12 | `tests/unit/providers/compose.test.js` | planejado |
+| RF-18 | UC-12 | US-12 | `tests/unit/providers/compose.test.js`, `tests/integration/providers.test.js`, `tests/integration/compose.windows.test.js` | parcial |
 | RF-19 | UC-12 | US-12 | `tests/unit/providers/pm2.test.js`, `tests/integration/pm2.test.js`, `tests/integration/pm2.windows.test.js` | parcial |
 | RF-20 | UC-12 | US-12 | `tests/unit/providers/kubernetes.test.js`, `tests/integration/kubernetes.test.js`, `tests/integration/kubernetes.windows.test.js` | parcial |
 | RF-21 | UC-12 | US-12 | `tests/unit/providers/podman.test.js`, `tests/integration/providers.test.js`, `tests/integration/podman.windows.test.js` | parcial |

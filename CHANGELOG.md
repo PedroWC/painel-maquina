@@ -37,4 +37,5 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 - A API de terminais aceita `distro` para o shell WSL.
 - Provedor Podman: containers e imagens (iniciar, parar, reiniciar, remover e logs), lendo o formato de lista JSON do Podman, com mensagem amigável quando a máquina do Podman está parada (RF-21).
 - Docker e Podman passam a compartilhar o motor de containers (`container-engine.js`).
+- Provedor Docker Compose: projetos e serviços, subir (sem construir imagens), parar e reiniciar o projeto e logs do projeto ou de um serviço; os arquivos do projeto vêm só da listagem do Compose e nada é removido (RF-18).
 - Estrutura do projeto: `package.json` (Node 24), ESLint, executor de testes nativo com cobertura, `config.example.json` e integração contínua (lint, testes, auditoria, varredura de segredos e validação do título do PR).

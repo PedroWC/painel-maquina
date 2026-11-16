@@ -59,6 +59,7 @@ Executado antes de cada release, em uma máquina Windows real, com o painel inst
 - [ ] pm2 com um processo descartável (`pm2 start script.js --name PainelTeste_app`): ele aparece online; reiniciar, parar (confirmação), iniciar, ver logs e excluir funcionam
 - [ ] Com o painel gerenciado pelo próprio pm2, a linha dele aparece como "(painel)", sem ações
 
+- [ ] Docker Compose (plugin instalado, motor ligado): um projeto descartável (`docker compose -p painelteste -f <arquivo> up -d`) aparece com seus serviços; reiniciar, parar (confirmação), subir de novo e ver logs do projeto e de um serviço funcionam; **não existe** botão que remova o projeto
 - [ ] Podman (se instalado): com a máquina parada a aba mostra "execute `podman machine start`"; com ela ligada, um container descartável (`podman run -d --name painelteste nginx`) aparece, e parar (confirmação), ver logs e remover funcionam
 - [ ] WSL: a aba lista as distribuições com versão e estado (a padrão aparece como "(padrão)"); "Abrir terminal" abre a aba Terminais já numa sessão dentro da distribuição (`uname -a` mostra Linux)
 - [ ] WSL: encerrar uma distribuição descartável pede confirmação e ela passa a "Parada"; desligar o WSL exige digitar `wsl` (**não conclua** se houver trabalho aberto no WSL ou o Docker Desktop em uso)
