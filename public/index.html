@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel da Máquina</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body>
+  <section id="tela-login" hidden>
+    <form id="form-login" class="cartao" autocomplete="off">
+      <h1>Painel da Máquina</h1>
+      <label for="token">Token de acesso</label>
+      <input id="token" name="token" type="password" required maxlength="256" autocomplete="off">
+      <p id="msg-login" role="alert" class="erro"></p>
+      <button type="submit" class="primario">Entrar</button>
+    </form>
+  </section>
+
+  <section id="tela-app" hidden>
+    <header>
+      <strong>Painel da Máquina</strong>
+      <span id="selo-admin" class="selo" hidden>administrador</span>
+      <span id="aviso-exposto" class="selo aviso" hidden>exposto fora do loopback</span>
+      <button id="botao-sair" type="button">Sair</button>
+    </header>
+    <main>
+      <p>Autenticado. As áreas de terminais, tarefas, serviços e containers chegam nas próximas versões.</p>
+    </main>
+  </section>
+
+  <script src="/app.js"></script>
+</body>
+</html>
