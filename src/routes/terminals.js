@@ -21,15 +21,16 @@ function createTerminalRoutes({ manager }) {
         const shell = str(body.shell === undefined ? 'powershell' : body.shell, { field: 'shell', max: 20 });
         const cwd = optionalStr(body.cwd, { field: 'pasta', max: 260 });
         const name = optionalStr(body.name, { field: 'nome', max: 60 });
+        const distro = optionalStr(body.distro, { field: 'distribuição', max: 64 });
         const cols = body.cols === undefined ? undefined : int(body.cols, { field: 'cols', min: 1, max: 500 });
         const rows = body.rows === undefined ? undefined : int(body.rows, { field: 'rows', min: 1, max: 500 });
-        const created = manager.create({ shell, cwd, name, cols, rows });
+        const created = manager.create({ shell, cwd, name, cols, rows, distro });
         audit.record({
           ip,
           action: 'terminal.criar',
           target: created.id,
           result: 'ok',
-          detail: { shell, pid: created.pid, admin: created.admin },
+          detail: { shell, distro: created.distro, pid: created.pid, admin: created.admin },
         });
         return created;
       },

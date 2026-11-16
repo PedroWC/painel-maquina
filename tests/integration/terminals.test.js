@@ -282,3 +282,20 @@ test('RN-06: criar, anexar, renomear e encerrar são auditados sem o texto digit
     await srv.close();
   }
 });
+
+test('RF-22: a API abre terminal WSL em uma distribuição e audita a distribuição', async () => {
+  const { srv, fake, auth } = await setup();
+  try {
+    const res = await post(srv.port, '/api/terminals', { shell: 'wsl', distro: 'Ubuntu' }, auth);
+    assert.equal(res.status, 200);
+    assert.equal(res.json.distro, 'Ubuntu');
+    assert.deepEqual(fake.spawned[0].args, ['-d', 'Ubuntu']);
+    assert.match(srv.readAudit(), /"distro":"Ubuntu"/);
+    assert.equal((await post(srv.port, '/api/terminals', { shell: 'cmd', distro: 'Ubuntu' }, auth)).status, 400);
+    assert.equal((await post(srv.port, '/api/terminals', { shell: 'wsl', distro: '--exec calc' }, auth)).status, 400);
+    assert.equal((await post(srv.port, '/api/terminals', { shell: 'wsl', distro: 5 }, auth)).status, 400);
+    assert.equal(fake.spawned.length, 1);
+  } finally {
+    await srv.close();
+  }
+});
