@@ -61,7 +61,7 @@ function createContainerEngineProvider({
       if (err instanceof HttpError && err.status === 404) return { disponivel: false };
       throw err;
     }
-    let motor = false;
+    let motor; // definido nos dois caminhos abaixo (sem valor inicial inútil: no-useless-assignment)
     try {
       await cli.run(executable, infoArgs, { timeoutMs: ENGINE_CHECK_TIMEOUT_MS });
       motor = true;
