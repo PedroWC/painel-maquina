@@ -9,6 +9,7 @@ const { execFileSync } = require('node:child_process');
 const ROOT = path.join(__dirname, '..');
 const CONFIG_PATH = path.join(ROOT, 'config.json');
 const AUDIT_PATH = path.join(ROOT, 'audit.log');
+const LOG_PATH = path.join(ROOT, 'painel.log');
 
 const DEFAULTS = Object.freeze({
   host: '127.0.0.1',
@@ -94,6 +95,7 @@ function restrictFilePermissions(file) {
 module.exports = {
   CONFIG_PATH,
   AUDIT_PATH,
+  LOG_PATH,
   DEFAULTS,
   isLoopback,
   normalize,

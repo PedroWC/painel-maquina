@@ -2,7 +2,8 @@
 
 // Ponto de entrada: carrega a configuração, monta as dependências e inicia o servidor.
 
-const { loadConfig, CONFIG_PATH, AUDIT_PATH } = require('./config');
+const { loadConfig, CONFIG_PATH, AUDIT_PATH, LOG_PATH } = require('./config');
+const { installFileLogger } = require('./logger');
 const { createAudit } = require('./audit');
 const { createAuth } = require('./auth');
 const { createServer } = require('./server');
@@ -19,6 +20,10 @@ const { createDockerProvider } = require('./providers/docker');
 const { createProviderRoutes } = require('./routes/providers');
 
 function main() {
+  // O que vai ao console também vai para painel.log (na tarefa agendada o console fica oculto e
+  // process.stdout.isTTY continua verdadeiro, então não dá para detectar por ele). PAINEL_LOG=0 desliga.
+  if (process.env.PAINEL_LOG !== '0') installFileLogger({ file: LOG_PATH });
+
   let config;
   try {
     config = loadConfig({ file: CONFIG_PATH });

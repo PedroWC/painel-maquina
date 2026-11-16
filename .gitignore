@@ -13,6 +13,7 @@ token.txt
 # Logs e dados de execução
 audit.log
 *.log
+*.log.1
 logs/
 
 # Testes e cobertura
