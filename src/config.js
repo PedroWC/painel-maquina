@@ -18,6 +18,7 @@ const DEFAULTS = Object.freeze({
   allowedHosts: [],
   sessionHours: 12,
   maxTerminals: 20,
+  pm2Entry: '',
 });
 
 const LOOPBACK_HOSTS = new Set(['127.0.0.1', '::1', 'localhost']);
@@ -48,6 +49,10 @@ function normalize(raw, env = {}) {
   }
   if (!Number.isInteger(cfg.maxTerminals) || cfg.maxTerminals < 1 || cfg.maxTerminals > 100) {
     throw new Error('Configuração inválida: maxTerminals deve ser um inteiro entre 1 e 100.');
+  }
+
+  if (typeof cfg.pm2Entry !== 'string' || cfg.pm2Entry.length > 260) {
+    throw new Error('Configuração inválida: pm2Entry deve ser um texto de até 260 caracteres.');
   }
 
   // RN-10: fora do loopback exige allowedHosts e é sinalizado como exposto.

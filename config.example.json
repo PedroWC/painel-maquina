@@ -4,5 +4,6 @@
   "tokenHash": "",
   "allowedHosts": [],
   "sessionHours": 12,
-  "maxTerminals": 20
+  "maxTerminals": 20,
+  "pm2Entry": ""
 }

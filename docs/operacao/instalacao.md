@@ -112,6 +112,8 @@ Leia o [CHANGELOG](../../CHANGELOG.md) antes: mudanças incompatíveis trazem in
 | O painel parou e voltou sozinho | O vigia o reiniciou (no máximo em 2 minutos) | Veja o motivo da queda no `painel.log` |
 | Terminais não abrem | Falha na dependência nativa | Rode `npm ci` com a versão de Node do `.nvmrc` |
 | Aba de uma ferramenta não aparece | Ferramenta não instalada ou fora do `PATH` do processo | Instale e use "Detectar novamente" em Provedores. Na tarefa (S4U) só vale o `PATH` do sistema, não o do usuário |
+| A aba do pm2 não aparece, mas o pm2 está instalado | O pm2 foi instalado em uma pasta fora do `PATH` do sistema (na tarefa agendada vale só o `PATH` do sistema) | Informe o caminho de `node_modules\pm2\bin\pm2` em `pm2Entry` no `config.json`, reinicie a tarefa e use "Detectar novamente" |
+| A aba do pm2 diz que o daemon não está em execução | Nenhum processo foi iniciado com o pm2 nesta conta | Inicie algo com `pm2 start`; o painel não inicia o daemon sozinho |
 | Mensagem `AttachConsole failed` no console ao encerrar um terminal | Ruído do `node-pty` ao fechar o ConPTY; os processos da sessão são finalizados normalmente | Pode ser ignorada |
 | Aba Docker mostra "o motor não está respondendo" | O Docker está instalado, mas o Docker Desktop (motor) não está em execução | Inicie o Docker Desktop e clique em Atualizar |
 | "Acesso negado" em tarefas ou serviços | Painel sem privilégio de administrador | Instale pela tarefa elevada |
