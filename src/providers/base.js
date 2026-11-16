@@ -22,6 +22,14 @@ function safeId(value, field = 'identificador') {
   return value;
 }
 
+// Duração legível (por exemplo, "1h 2min") para colunas de tempo ativo e idade.
+function humanDuration(seconds) {
+  if (seconds < 60) return `${seconds}s`;
+  if (seconds < 3600) return `${Math.floor(seconds / 60)}min`;
+  if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ${Math.floor((seconds % 3600) / 60)}min`;
+  return `${Math.floor(seconds / 86400)}d ${Math.floor((seconds % 86400) / 3600)}h`;
+}
+
 function defineProvider(definition) {
   const { id, nome, detect, list, actions } = definition;
   if (typeof id !== 'string' || !PROVIDER_ID.test(id)) throw new Error(`Provedor com id inválido: ${id}`);
@@ -37,4 +45,4 @@ function defineProvider(definition) {
   return Object.freeze({ validateId: safeId, ...definition });
 }
 
-module.exports = { defineProvider, safeId, SAFE_ID, PROVIDER_ID };
+module.exports = { defineProvider, safeId, humanDuration, SAFE_ID, PROVIDER_ID };

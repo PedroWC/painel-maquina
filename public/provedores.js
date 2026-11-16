@@ -45,16 +45,38 @@
     return valor === undefined || valor === null ? '—' : valor;
   }
 
-  async function executar(provedor, meta, op, linha) {
+  // estado: valores atuais dos seletores da aba (por exemplo, contexto e namespace do Kubernetes);
+  // viajam junto de cada ação e consulta de logs para que valham exatamente o que a tela mostra.
+  async function executar(provedor, meta, op, linha, estado) {
     const definicao = meta.acoes[op];
     const nome = (linha.cells && linha.cells.nome) || linha.id;
+    const params = { ...estado };
+
+    // Ações com parâmetros próprios (por exemplo, número de réplicas) pedem um formulário antes.
+    if (definicao.campos && definicao.campos.length > 0) {
+      const valores = await UI.formulario({
+        titulo: `${definicao.rotulo}: ${nome}`,
+        confirmar: definicao.rotulo,
+        campos: definicao.campos.map((c) => ({
+          id: c.id,
+          rotulo: c.rotulo,
+          obrigatorio: true,
+          max: c.max || 260,
+          valor: (linha.padroes && linha.padroes[c.id]) || '',
+        })),
+      });
+      if (!valores) return false;
+      for (const c of definicao.campos) params[c.id] = c.inteiro ? Number(valores[c.id]) : valores[c.id];
+    }
+
     let confirm;
     if (definicao.destrutiva) {
       if (definicao.confirmarNome || meta.confirmaPorNome) {
+        // RN-13: digitar o nome do recurso (o provedor pode definir um texto mais curto que o id).
         confirm = await UI.confirmarNome({
           titulo: `${definicao.rotulo}: ${provedor.nome}`,
           mensagem: 'Esta operação é destrutiva.',
-          nome: linha.id,
+          nome: linha.nomeConfirmacao || linha.id,
           rotulo: definicao.rotulo,
         });
         if (!confirm) return false;
@@ -69,28 +91,31 @@
     }
     const { status, dados } = await Painel.api(`/api/p/${provedor.id}/action`, {
       method: 'POST',
-      body: { op, id: linha.id, confirm },
+      body: { op, id: linha.id, confirm, params },
     });
     if (status === 200) Painel.aviso(`${provedor.nome}: ${definicao.rotulo.toLowerCase()} concluído para "${nome}".`, 'ok');
     else Painel.aviso(dados.error || 'Não foi possível concluir a operação.', 'erro');
     return true;
   }
 
-  function verLogs(provedor, linha) {
+  function verLogs(provedor, linha, estado) {
     const nome = (linha.cells && linha.cells.nome) || linha.id;
     return UI.visualizador({
       titulo: `Logs: ${nome}`,
       obter: async () => {
-        const { status, dados } = await Painel.api(`/api/p/${provedor.id}/logs?id=${encodeURIComponent(linha.id)}`);
+        const consulta = new URLSearchParams({ ...estado, id: linha.id });
+        const { status, dados } = await Painel.api(`/api/p/${provedor.id}/logs?${consulta}`);
         if (status !== 200) throw new Error(dados.error || 'Não foi possível obter os logs.');
         return dados.text;
       },
     });
   }
 
-  function desenharSecoes(provedor, resposta, conteudo, recarregar) {
+  function desenharSecoes(provedor, resposta, conteudo, recarregar, estado) {
     conteudo.replaceChildren();
     if (resposta.contexto) conteudo.appendChild(UI.criar('div', { classe: 'banner', texto: resposta.contexto }));
+    // Problema não fatal (por exemplo, cluster fora do ar): a aba segue com os seletores para trocar de contexto.
+    if (resposta.aviso) conteudo.appendChild(UI.criar('p', { classe: 'erro-aba', role: 'alert', texto: resposta.aviso }));
     for (const secao of resposta.sections || []) {
       conteudo.appendChild(UI.criar('h2', { classe: 'subtitulo', texto: secao.title }));
       const destino = UI.criar('div');
@@ -112,11 +137,11 @@
               UI.botao(resposta.acoes[op].rotulo, {
                 classe: resposta.acoes[op].destrutiva ? 'mini perigo' : 'mini',
                 aoClicar: async () => {
-                  if (await executar(provedor, resposta, op, l)) recarregar();
+                  if (await executar(provedor, resposta, op, l, estado)) recarregar();
                 },
               }),
             );
-          if (l.logs && resposta.temLogs) botoes.push(UI.botao('Logs', { aoClicar: () => verLogs(provedor, l) }));
+          if (l.logs && resposta.temLogs) botoes.push(UI.botao('Logs', { aoClicar: () => verLogs(provedor, l, estado) }));
           return UI.acoes(...botoes);
         },
       });
@@ -129,18 +154,49 @@
     const botao = UI.criar('button', { type: 'button', classe: 'aba', 'data-aba': nomeAba, texto: provedor.nome });
     const conteudo = UI.criar('div');
     const atualizar = UI.criar('button', { type: 'button', texto: 'Atualizar' });
+    const seletores = UI.criar('div', { classe: 'barra' });
+    const estado = {}; // valores dos seletores (contexto, namespace...), sempre os que o servidor resolveu
+    let assinatura = '';
     const secao = UI.criar('section', { id: `aba-${nomeAba}`, classe: 'painel-aba', hidden: '' }, [
       UI.criar('h1', { classe: 'titulo-aba', texto: provedor.nome }),
       UI.criar('div', { classe: 'barra' }, [atualizar]),
+      seletores,
       conteudo,
     ]);
     document.getElementById('abas').appendChild(botao);
     document.querySelector('main').appendChild(secao);
 
     let temporizador = null;
+
+    // Os seletores só são recriados quando mudam (a atualização periódica não pode fechar uma lista aberta).
+    function atualizarSeletores(controles) {
+      for (const c of controles) estado[c.id] = c.valor;
+      const nova = JSON.stringify(controles);
+      if (nova === assinatura) return;
+      assinatura = nova;
+      seletores.replaceChildren();
+      for (const c of controles) {
+        const lista = UI.criar('select', { id: `sel-${provedor.id}-${c.id}`, 'aria-label': c.rotulo });
+        for (const opcao of c.opcoes) {
+          const o = UI.criar('option', { value: opcao.valor, texto: opcao.rotulo });
+          if (opcao.valor === c.valor) o.selected = true;
+          lista.appendChild(o);
+        }
+        lista.addEventListener('change', () => {
+          estado[c.id] = lista.value;
+          for (const outro of c.reinicia || []) delete estado[outro]; // por exemplo, trocar o contexto volta ao namespace padrão
+          carregar();
+        });
+        seletores.appendChild(UI.criar('label', { classe: 'inline', texto: `${c.rotulo} ` }, [lista]));
+      }
+    }
+
     async function carregar() {
-      const { status, dados } = await Painel.api(`/api/p/${provedor.id}/items`);
-      if (status === 200) return desenharSecoes(provedor, dados, conteudo, carregar);
+      const { status, dados } = await Painel.api(`/api/p/${provedor.id}/items?${new URLSearchParams(estado)}`);
+      if (status === 200) {
+        atualizarSeletores(dados.controles || []);
+        return desenharSecoes(provedor, dados, conteudo, carregar, estado);
+      }
       // UC-10 (exceção A) e RN-14: o erro fica só nesta aba, com a mensagem amigável.
       conteudo.replaceChildren(UI.criar('p', { classe: 'erro-aba', role: 'alert', texto: dados.error || 'Não foi possível carregar.' }));
       return undefined;
