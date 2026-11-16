@@ -27,8 +27,8 @@ O painel dá acesso administrativo completo à máquina. Por isso a segurança �
 | T12 | Esgotamento de recursos | Limite de 20 sessões de terminal; histórico de 200 KB por sessão; limite de corpo das requisições | RN-15 |
 | T13 | Segredos ou dados pessoais publicados | `.gitignore`, hash do token, varredura de segredos no CI, revisão antes de publicar | ADR 0009 |
 | T14 | Dependência comprometida | Poucas dependências; `package-lock.json`; `npm audit` e Dependabot | ADR 0002 |
-| T16 | Curingas em nomes (`*`, `?`, `[ ]`) fazendo um comando atingir vários serviços ou tarefas | Validação recusa curingas; scripts operam sobre o objeto exato (`Where-Object -eq` e `-InputObject`) e recusam resultado ambíguo | RN-17, ADR 0006 |
 | T15 | Escalada via terminal | Terminal tem o privilégio do painel por projeto; é sinalizado como admin e auditado (abertura e encerramento, sem o conteúdo digitado) | RN-07, RN-06 |
+| T16 | Curingas em nomes (`*`, `?`, `[ ]`) fazendo um comando atingir vários serviços ou tarefas | Validação recusa curingas; scripts operam sobre o objeto exato (`Where-Object -eq` e `-InputObject`) e recusam resultado ambíguo | RN-17, ADR 0006 |
 
 ## Cabeçalhos e políticas
 

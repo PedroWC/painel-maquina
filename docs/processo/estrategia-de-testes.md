@@ -25,7 +25,7 @@ Comandos: `npm test`, `npm run test:cov`, `npm run lint`.
 2. Todo RF e toda RN tem pelo menos um teste (ou item no roteiro manual quando for de interface).
 3. Toda rota nova tem testes de segurança: sem cookie (**401**), `Host` ou `Origin` inválidos (**403**), entrada inválida (**400**).
 4. Provedores têm sempre os casos: ferramenta ausente (rota 404 e aba oculta), presente, falha, tempo esgotado e ação fora da allowlist.
-5. Testes de sistema só criam, alteram e removem recursos com o prefixo `PainelTeste_` e limpam em `after`/`finally`. Nunca tocam em recursos que não criaram.
+5. Testes de sistema só criam, alteram e removem recursos com o prefixo `PainelTeste_` (ou processos filhos criados pelo próprio teste) e limpam em `after`/`finally`. Nunca tocam em recursos que não criaram. Os testes de escrita em serviços só rodam com privilégio de administrador e são ignorados sem ele.
 6. Dados de teste são genéricos e determinísticos; sem dependência de relógio ou rede.
 
 ## Estrutura
