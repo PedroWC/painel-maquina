@@ -94,4 +94,13 @@ A interface **não precisa mudar**: a aba é montada a partir do que o provedor 
 
 ## Observação sobre executáveis `.cmd` no Windows
 
-Ferramentas instaladas por npm (como o pm2) são scripts `.cmd`, e o Node recusa executar `.cmd` com `execFile` sem shell. O provedor correspondente deve resolver o executável real (por exemplo, o `node` mais o script de entrada) em vez de ativar `shell: true`. Isso será tratado no provedor pm2.
+Ferramentas instaladas por npm (como o pm2) são scripts `.cmd`, e o Node recusa executar `.cmd` com `execFile` sem shell. O provedor correspondente deve resolver o executável real (por exemplo, o `node` mais o script de entrada) em vez de ativar `shell: true`.
+
+O provedor pm2 (`src/providers/pm2.js`) faz isso: localiza o script `node_modules/pm2/bin/pm2` e o executa com o mesmo `node` do painel. A ordem de busca é: opção `pm2Entry` do `config.json`, variável de ambiente `PAINEL_PM2_ENTRY`, o `where pm2.cmd`, a pasta do próprio `node.exe` (prefixo global quando o Node foi instalado em pasta própria, como no WinGet) e as pastas usuais do npm. O arquivo precisa se chamar `pm2` e existir. Ele serve de modelo para outras ferramentas instaladas por npm.
+
+## Cuidados específicos do pm2
+
+- **Sem efeito colateral:** detectar e listar nunca iniciam o daemon do pm2. O provedor confere o arquivo `pm2.pid` da pasta do pm2 (`PM2_HOME`, ou `.pm2` no perfil do usuário) e, sem daemon, mostra um aviso e uma lista vazia.
+- **Saída com ruído:** o `pm2 jlist` pode imprimir linhas como `[PM2] Spawning PM2 daemon` antes do JSON; a leitura testa cada `[` até achar a lista.
+- **O painel não se derruba:** se o próprio painel (ou um terminal dele) estiver sendo gerenciado pelo pm2, a linha aparece marcada, sem ações, e o servidor recusa parar, reiniciar ou excluir esse processo ([RN-04](../requisitos/regras-de-negocio.md#rn-04)).
+- **Execução como tarefa agendada:** o `PATH` do usuário pode não valer sob logon S4U; se a aba do pm2 não aparecer, informe o caminho em `pm2Entry`.

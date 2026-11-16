@@ -28,4 +28,6 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 - Instalador da tarefa elevada: `scripts/instalar-tarefa.ps1` e `scripts/desinstalar-tarefa.ps1`. A tarefa inicia o painel com o Windows, como administrador, sem janela e sem guardar senha (logon S4U), e um vigia a cada 2 minutos o sobe de novo se ele cair (ADR 0007 e 0013; RNF-03).
 - `painel.log`: o que o painel imprimiria no console passa também para um arquivo, com rotação em 5 MB.
 - Roteiro de smoke manual (`tests/e2e/smoke.md`).
+- Provedor pm2: listar processos (estado, CPU, memória, reinícios e tempo ativo), iniciar, reiniciar, parar, excluir e ver logs. O pm2 é executado pelo `node` com o script `bin/pm2` (sem shell), localizado por `pm2Entry`, `PAINEL_PM2_ENTRY`, `where` ou pastas usuais; detectar e listar não iniciam o daemon; o processo do próprio painel é protegido (RF-19, RN-04).
+- Opção de configuração `pm2Entry`.
 - Estrutura do projeto: `package.json` (Node 24), ESLint, executor de testes nativo com cobertura, `config.example.json` e integração contínua (lint, testes, auditoria, varredura de segredos e validação do título do PR).

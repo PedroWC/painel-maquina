@@ -55,6 +55,9 @@ Executado antes de cada release, em uma máquina Windows real, com o painel inst
 - [ ] Docker instalado e **motor parado**: a aba mostra "o motor não está respondendo", sem erro técnico
 - [ ] Docker com motor ligado: criar um container descartável pela linha de comando, ver na aba, parar (confirmação), ver logs, remover
 - [ ] Instalar uma ferramenta nova (por exemplo, pm2) e clicar em "Detectar novamente": a aba aparece sem reiniciar o painel
+- [ ] pm2 sem nenhum processo: a aba avisa que o daemon não está em execução e **não** o inicia
+- [ ] pm2 com um processo descartável (`pm2 start script.js --name PainelTeste_app`): ele aparece online; reiniciar, parar (confirmação), iniciar, ver logs e excluir funcionam
+- [ ] Com o painel gerenciado pelo próprio pm2, a linha dele aparece como "(painel)", sem ações
 
 ## 8. Interface e transversais (RF-24, RF-26, RF-27, RNF-02, RNF-05, RNF-11)
 

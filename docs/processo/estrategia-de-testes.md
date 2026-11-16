@@ -10,6 +10,8 @@ Rastreabilidade de cada requisito e regra para seus testes em [rastreabilidade](
 
 Comandos: `npm test`, `npm run test:cov`, `npm run lint`.
 
+O teste do pm2 real usa um `PM2_HOME` temporário e isolado (nunca os seus processos) e é ignorado se o pm2 não estiver instalado; para testar um pm2 fora do `PATH`, defina `PAINEL_PM2_ENTRY`.
+
 Testes lentos (por exemplo, o reinício automático do painel pelo vigia, cerca de 2 minutos) só rodam no CI (`CI=true`) ou localmente com `PAINEL_TESTES_LENTOS=1`.
 
 ## Pirâmide
