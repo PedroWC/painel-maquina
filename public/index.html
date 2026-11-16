@@ -24,6 +24,7 @@
       <nav id="abas" aria-label="Áreas do painel">
         <button type="button" class="aba" data-aba="terminais">Terminais</button>
         <button type="button" class="aba" data-aba="tarefas">Tarefas</button>
+        <button type="button" class="aba" data-aba="servicos">Serviços</button>
       </nav>
       <span id="selo-admin" class="selo" hidden>administrador</span>
       <span id="aviso-exposto" class="selo aviso" hidden>exposto fora do loopback</span>
@@ -58,6 +59,21 @@
         </div>
         <div id="tarefas-tabela"></div>
       </section>
+
+      <section id="aba-servicos" class="painel-aba" hidden>
+        <h1 class="titulo-aba">Serviços do Windows</h1>
+        <div class="barra">
+          <input id="servicos-filtro" type="search" placeholder="Filtrar por nome" aria-label="Filtrar serviços">
+          <select id="servicos-estado" aria-label="Filtrar por estado">
+            <option value="">Todos os estados</option>
+            <option value="Running">Em execução</option>
+            <option value="Stopped">Parado</option>
+          </select>
+          <button id="servicos-atualizar" type="button">Atualizar</button>
+          <button id="servicos-novo" type="button" class="primario-inline">Novo serviço</button>
+        </div>
+        <div id="servicos-tabela"></div>
+      </section>
     </main>
   </section>
 
@@ -70,6 +86,7 @@
   <script src="/app.js"></script>
   <script src="/terminais.js"></script>
   <script src="/tarefas.js"></script>
+  <script src="/servicos.js"></script>
   <script src="/iniciar.js"></script>
 </body>
 </html>
