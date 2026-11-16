@@ -231,3 +231,29 @@ test('RF-03: os shells padrão apontam para executáveis do Windows', () => {
   assert.ok(shells.wsl.file.toLowerCase().endsWith('wsl.exe'));
   assert.ok(shells.gitbash.file.toLowerCase().endsWith('bash.exe'));
 });
+
+test('RF-22: abre um terminal do WSL em uma distribuição específica com wsl.exe -d', () => {
+  const { manager, fake } = makeManager();
+  const created = manager.create({ shell: 'wsl', distro: 'Ubuntu-22.04' });
+  assert.deepEqual(fake.spawned[0].args, ['-d', 'Ubuntu-22.04']);
+  assert.equal(created.distro, 'Ubuntu-22.04');
+  assert.equal(created.name, 'WSL Ubuntu-22.04');
+  assert.equal(manager.list()[0].distro, 'Ubuntu-22.04');
+});
+
+test('RF-22: sem distribuição o WSL abre como antes e os outros shells têm distro nula', () => {
+  const { manager, fake } = makeManager();
+  assert.equal(manager.create({ shell: 'wsl' }).distro, null);
+  assert.deepEqual(fake.spawned[0].args, []);
+  assert.equal(manager.create({ shell: 'cmd', distro: '' }).distro, null);
+});
+
+test('RN-17: a distribuição só vale para o WSL e precisa ser um nome seguro', () => {
+  const { manager, fake } = makeManager();
+  assert.throws(() => manager.create({ shell: 'cmd', distro: 'Ubuntu' }), status(400));
+  assert.throws(() => manager.create({ shell: 'powershell', distro: 'Ubuntu' }), status(400));
+  for (const distro of ['-d', '--exec', 'a b', 'a;calc', '../x', 'a'.repeat(65), '-u root']) {
+    assert.throws(() => manager.create({ shell: 'wsl', distro }), status(400), distro);
+  }
+  assert.equal(fake.spawned.length, 0, 'nada foi iniciado');
+});

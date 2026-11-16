@@ -59,6 +59,8 @@ Executado antes de cada release, em uma máquina Windows real, com o painel inst
 - [ ] pm2 com um processo descartável (`pm2 start script.js --name PainelTeste_app`): ele aparece online; reiniciar, parar (confirmação), iniciar, ver logs e excluir funcionam
 - [ ] Com o painel gerenciado pelo próprio pm2, a linha dele aparece como "(painel)", sem ações
 
+- [ ] WSL: a aba lista as distribuições com versão e estado (a padrão aparece como "(padrão)"); "Abrir terminal" abre a aba Terminais já numa sessão dentro da distribuição (`uname -a` mostra Linux)
+- [ ] WSL: encerrar uma distribuição descartável pede confirmação e ela passa a "Parada"; desligar o WSL exige digitar `wsl` (**não conclua** se houver trabalho aberto no WSL ou o Docker Desktop em uso)
 - [ ] Kubernetes (com `kubectl` e um cluster de **teste**, por exemplo kind ou minikube): o banner mostra o contexto e o namespace, e os seletores trocam ambos sem alterar o contexto atual (confira com `kubectl config current-context`)
 - [ ] Criar um deployment descartável (`kubectl create deployment painelteste --image=nginx`): ele aparece com réplicas e estado; escalar, reiniciar rollout, ver logs de pod e excluir exigem digitar o **nome** (`painelteste`)
 - [ ] Parar o cluster de teste: a aba mostra o aviso de que não foi possível conectar, mantém os seletores e as demais abas seguem funcionando

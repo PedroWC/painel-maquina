@@ -44,4 +44,7 @@ function int(value, { field = 'valor', min = 0, max = Number.MAX_SAFE_INTEGER } 
   return value;
 }
 
-module.exports = { HttpError, badRequest, str, optionalStr, oneOf, int };
+// Nome de distribuição do WSL: começa com letra ou número (nunca vira opção de linha de comando).
+const DISTRO_NAME = /^[A-Za-z0-9][A-Za-z0-9_.-]{0,63}$/;
+
+module.exports = { HttpError, badRequest, str, optionalStr, oneOf, int, DISTRO_NAME };

@@ -216,10 +216,20 @@
 
   botaoNova.addEventListener('click', criar);
 
+  // Outras abas (por exemplo, WSL) pedem para abrir uma sessão já criada.
+  let pendente = null;
+  Painel.abrirTerminal = (id) => {
+    pendente = id;
+    Painel.abrirAba('terminais');
+  };
+
   Painel.registrarAba('terminais', {
     async mostrar() {
       await carregar();
-      if (!selecionada && sessoes.length > 0) selecionar(sessoes[0].id);
+      if (pendente) {
+        selecionar(pendente);
+        pendente = null;
+      } else if (!selecionada && sessoes.length > 0) selecionar(sessoes[0].id);
       // RF-26: atualiza a lista periodicamente (não mexe no terminal aberto)
       temporizador = setInterval(carregar, 10000);
     },

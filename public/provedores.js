@@ -98,6 +98,17 @@
     return true;
   }
 
+  // O provedor pode oferecer um terminal para a linha (por exemplo, uma distribuição do WSL):
+  // a sessão é criada pela API de terminais e a aba Terminais abre já nela.
+  async function abrirTerminal(destino) {
+    const { status, dados } = await Painel.api('/api/terminals', {
+      method: 'POST',
+      body: { shell: destino.shell, distro: destino.distro },
+    });
+    if (status !== 200) return Painel.aviso(dados.error || 'Não foi possível abrir o terminal.', 'erro');
+    return Painel.abrirTerminal(dados.id);
+  }
+
   function verLogs(provedor, linha, estado) {
     const nome = (linha.cells && linha.cells.nome) || linha.id;
     return UI.visualizador({
@@ -142,6 +153,7 @@
               }),
             );
           if (l.logs && resposta.temLogs) botoes.push(UI.botao('Logs', { aoClicar: () => verLogs(provedor, l, estado) }));
+          if (l.terminal) botoes.push(UI.botao('Abrir terminal', { aoClicar: () => abrirTerminal(l.terminal) }));
           return UI.acoes(...botoes);
         },
       });

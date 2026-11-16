@@ -19,6 +19,7 @@ const { createRegistry } = require('./providers/registry');
 const { createDockerProvider } = require('./providers/docker');
 const { createPm2Provider, createPm2Locator } = require('./providers/pm2');
 const { createKubernetesProvider } = require('./providers/kubernetes');
+const { createWslProvider } = require('./providers/wsl');
 const { createProviderRoutes } = require('./routes/providers');
 
 function main() {
@@ -66,6 +67,7 @@ function main() {
         isProtectedPid: isPanelPid,
       }),
       createKubernetesProvider({ cli }),
+      createWslProvider({ cli }),
     ],
   });
   const providerRoutes = createProviderRoutes({ registry });

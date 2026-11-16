@@ -48,7 +48,7 @@ Todas exigem sessão, exceto o login. Rotas que alteram estado exigem o cabeçal
 | Método e caminho | Função | Requisito |
 |---|---|---|
 | `POST /api/login` · `POST /api/logout` · `GET /api/me` | Sessão | RF-01, RF-02 |
-| `GET/POST /api/terminals` · `DELETE /api/terminals/:id` · `POST /api/terminals/:id/rename` | Terminais | RF-03 a RF-06 |
+| `GET/POST /api/terminals` (o POST aceita `distro` para o shell WSL) · `DELETE /api/terminals/:id` · `POST /api/terminals/:id/rename` | Terminais | RF-03 a RF-06, RF-22 |
 | `WS /ws/term?id=` | Fluxo do terminal | RF-03, RF-05 |
 | `GET/POST/PUT /api/tasks` · `POST /api/tasks/action` | Tarefas | RF-07 a RF-10 |
 | `GET/POST/PUT /api/services` · `POST /api/services/action` | Serviços | RF-11 a RF-14 |

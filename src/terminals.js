@@ -7,7 +7,7 @@ const crypto = require('node:crypto');
 const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
-const { HttpError, badRequest } = require('./validate');
+const { HttpError, badRequest, DISTRO_NAME } = require('./validate');
 
 const SCROLLBACK_CHARS = 200 * 1024; // RN-15: cerca de 200 KB de histórico
 const MIN_SIZE = 1;
@@ -67,6 +67,7 @@ function createTerminalManager({
       id: s.id,
       name: s.name,
       shell: s.shell,
+      distro: s.distro,
       cwd: s.cwd,
       pid: s.pid,
       admin: s.admin,
@@ -93,9 +94,14 @@ function createTerminalManager({
   }
 
   // RF-03: cria a sessão. RN-15: respeita o limite de sessões simultâneas.
-  function create({ shell = 'powershell', cwd, name, cols, rows } = {}) {
+  function create({ shell = 'powershell', cwd, name, cols, rows, distro } = {}) {
     const def = shells[shell];
     if (!def || !exists(def.file)) throw badRequest(`Shell indisponível: ${shell}.`);
+    // RF-22: terminal em uma distribuição específica do WSL (wsl.exe -d <distro>); nome validado.
+    const hasDistro = typeof distro === 'string' && distro !== '';
+    if (hasDistro && shell !== 'wsl') throw badRequest('A distribuição só vale para o shell WSL.');
+    if (hasDistro && !DISTRO_NAME.test(distro)) throw badRequest('distribuição inválida.');
+    const args = hasDistro ? [...def.args, '-d', distro] : def.args;
     if (sessions.size >= maxTerminals) {
       throw new HttpError(409, `Limite de ${maxTerminals} sessões atingido. Encerre alguma antes de abrir outra.`);
     }
@@ -103,7 +109,7 @@ function createTerminalManager({
     const usable = typeof cwd === 'string' && cwd !== '' && isDirectory(cwd);
     const dir = usable ? cwd : homeDir;
     const id = crypto.randomBytes(6).toString('hex');
-    const pty = spawnPty(def.file, def.args, {
+    const pty = spawnPty(def.file, args, {
       name: 'xterm-256color',
       cols: clampSize(cols, 120),
       rows: clampSize(rows, 30),
@@ -113,8 +119,9 @@ function createTerminalManager({
 
     const session = {
       id,
-      name: name || `${def.label} ${sessions.size + 1}`,
+      name: name || (hasDistro ? `${def.label} ${distro}` : `${def.label} ${sessions.size + 1}`),
       shell,
+      distro: hasDistro ? distro : null,
       cwd: dir,
       pid: pty.pid,
       admin: isAdmin, // RN-07: herda o privilégio do painel
