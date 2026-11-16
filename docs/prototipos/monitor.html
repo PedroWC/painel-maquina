@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Protótipo — Monitor de recursos</title>
+  <link rel="stylesheet" href="wireframe.css">
+</head>
+<body>
+  <header>
+    <strong>Painel da Máquina</strong>
+    <nav>
+      <a href="terminais.html">Terminais</a>
+      <a href="tarefas.html">Tarefas</a>
+      <a href="servicos.html">Serviços</a>
+      <a href="docker.html">Docker</a>
+      <a href="processos.html">Processos</a>
+      <a class="on" href="monitor.html">Monitor</a>
+      <a href="provedores.html">Provedores</a>
+    </nav>
+    <span class="badge admin">administrador</span>
+    <button>Sair</button>
+  </header>
+  <main>
+    <h1>Monitor de recursos</h1>
+    <div class="bar">
+      <label>Visão <select><option>Resumo</option><option>Detalhado</option></select></label>
+      <label>Atualização <select><option>Tempo real (2 s)</option><option>30 segundos</option><option>1 minuto</option><option>5 minutos</option></select></label>
+      <label>Ordenar por <select><option>CPU</option><option>RAM</option><option>GPU</option><option>Nome</option></select></label>
+      <button>Pausar</button>
+      <button>Atualizar agora</button>
+      <span class="nota">Atualizado às 14:32:08</span>
+    </div>
+    <table>
+      <thead><tr><th>CPU</th><th>Memória (RAM)</th><th>GPU</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>12,5%</strong><br>6 núcleos lógicos</td>
+          <td><strong>51,4%</strong><br>8,2 GB de 15,9 GB</td>
+          <td><strong>3,0%</strong><br>GPU de exemplo · vídeo 1,1 GB de 8 GB · 39 °C</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2 style="font-size:15px;margin-top:20px">Consumo: máquina, Windows e programas</h2>
+    <table>
+      <thead><tr><th>Consumo</th><th>Processos</th><th>CPU</th><th>RAM</th><th>GPU</th></tr></thead>
+      <tbody>
+        <tr><td>Geral da máquina</td><td>247</td><td>12,5%</td><td>8,2 GB</td><td>3,0%</td></tr>
+        <tr><td>Windows (nativo)</td><td>147</td><td>4,2%</td><td>4,8 GB</td><td>1,0%</td></tr>
+        <tr><td>Programas (não nativos)</td><td>100</td><td>6,3%</td><td>7,1 GB</td><td>2,0%</td></tr>
+      </tbody>
+    </table>
+    <h2 style="font-size:15px;margin-top:20px">Programas que mais consomem</h2>
+    <table>
+      <thead><tr><th>Nome</th><th>PID</th><th>CPU</th><th>RAM</th><th>GPU</th><th>Memória de vídeo</th><th>Ações</th></tr></thead>
+      <tbody>
+        <tr><td>navegador</td><td>9004</td><td>2,3%</td><td>812 MB</td><td>1,8%</td><td>196 MB</td><td class="acoes"><button class="danger">Encerrar</button></td></tr>
+        <tr><td>editor</td><td>7120</td><td>0,9%</td><td>456 MB</td><td>0%</td><td>—</td><td class="acoes"><button class="danger">Encerrar</button></td></tr>
+      </tbody>
+    </table>
+    <h2 style="font-size:15px;margin-top:20px">Processos do Windows que mais consomem</h2>
+    <table>
+      <thead><tr><th>Nome</th><th>PID</th><th>CPU</th><th>RAM</th><th>GPU</th><th>Memória de vídeo</th><th>Ações</th></tr></thead>
+      <tbody>
+        <tr><td>dwm</td><td>2008</td><td>1,7%</td><td>92 MB</td><td>1,1%</td><td>534 MB</td><td class="acoes"><button class="danger">Encerrar</button></td></tr>
+        <tr><td>svchost <span class="badge">protegido</span></td><td>180</td><td>0,5%</td><td>90 MB</td><td>0%</td><td>—</td><td class="acoes"><button class="danger" disabled>Encerrar</button></td></tr>
+      </tbody>
+    </table>
+    <p class="nota">Protótipo estático · RF-28 a RF-31 · UC-14 · RN-19, RN-20. No modo Detalhado há filtro por nome ou PID e por tipo, e todos os processos. Encerrar um processo do Windows exige digitar o nome. A tabela fica parada enquanto o ponteiro está sobre ela.</p>
+  </main>
+</body>
+</html>

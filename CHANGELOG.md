@@ -9,6 +9,11 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 ### Adicionado
 - Terminal com ou sem administrador: caixa "Administrador" ao abrir a sessão (marcada por padrão); sem ela, o shell abre com token restrito, a sessão aparece como "sem admin" e a escolha é auditada (RF-03, RN-07, RN-18, ADR 0014).
 - A API de terminais aceita `admin` e informa `panelAdmin`.
+- Aba Monitor: uso geral de CPU, RAM e GPU (com memória de vídeo e, com `nvidia-smi`, temperatura), consumo separado entre o Windows (nativo) e os programas, visão resumo ou detalhada (filtro por nome, PID e tipo; ordenação por CPU, RAM, GPU ou nome), atualização em tempo real (2 s), 30 segundos, 1 minuto ou 5 minutos, pausa, e encerramento de processos pelo monitor (RF-28 a RF-31, RN-19, RN-21, RNF-12, ADR 0015).
+- Rota `GET /api/monitor`.
+
+### Segurança
+- Processos críticos do Windows (`csrss`, `wininit`, `winlogon`, `lsass`, `smss`, `services`, `svchost` e o núcleo) não podem mais ser encerrados, nem pela aba Processos: a conferência é feita no servidor, pelo nome. Encerrar outro processo do Windows pelo monitor exige digitar o nome (RN-20).
 
 ## [0.1.0] - 2026-11-16
 

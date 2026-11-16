@@ -128,3 +128,15 @@ flowchart LR
 - **Requisitos:** RF-23 · **Regras:** RN-11
 - **Fluxo principal:** 1) O operador abre "Provedores". 2) O sistema mostra cada tecnologia conhecida como disponível (com versão) ou não encontrada. 3) O operador pode forçar nova detecção.
 - **Pós-condição:** abas dos provedores disponíveis refletem o resultado.
+
+<a id="uc-14"></a>
+## UC-14 · Monitorar recursos
+
+- **Requisitos:** RF-28 a RF-31, RF-26 · **Regras:** RN-19, RN-20, RN-21, RN-04, RN-05
+- **Fluxo principal:** 1) O operador abre a aba Monitor. 2) O sistema mostra CPU, RAM e GPU gerais e o consumo separado entre máquina, Windows e programas. 3) O operador escolhe a visão (resumo ou detalhada) e o intervalo (tempo real, 30 s, 1 min ou 5 min). 4) O sistema atualiza no intervalo escolhido.
+- **Alternativo A (detalhado):** o operador filtra por nome, PID ou tipo e ordena por CPU, RAM, GPU ou nome.
+- **Alternativo B (encerrar processo):** o operador escolhe "Encerrar"; para um programa confirma, para um processo do Windows digita o nome; o sistema encerra e atualiza.
+- **Alternativo C (pausar):** o operador pausa a atualização; a aba em segundo plano também para sozinha e retoma ao voltar.
+- **Exceção A (processo protegido):** o painel, os terminais, o núcleo e os processos críticos do Windows têm o botão desabilitado; no servidor a recusa responde 409.
+- **Exceção B (sem GPU ou sem contadores):** o cartão da GPU mostra "Indisponível" e o restante funciona.
+- **Exceção C (falha da leitura):** o painel mostra o aviso na barra de estado e tenta de novo.

@@ -43,6 +43,10 @@ O navegador conversa com o painel por HTTP (API JSON) e WebSocket (terminais). O
 | `src/protections.js` | Recursos protegidos: tarefa e processo do painel, serviços críticos |
 | `src/terminals.js` | Gerenciador de sessões de terminal (node-pty injetável), histórico, limite e PIDs protegidos |
 | `src/routes/terminals.js` | Rotas HTTP e WebSocket dos terminais |
+| `src/monitor-sampler.js` | Amostrador de processos e GPU: um PowerShell persistente que responde uma linha JSON por pedido ([ADR 0015](adr/0015-amostrador-persistente-para-o-monitor-de-recursos.md)) |
+| `src/monitor.js` | Cálculo de CPU, RAM e GPU, classificação Windows × programa, grupos, cache e parada por ociosidade |
+| `src/gpu-info.js` | Dados opcionais da GPU pelo `nvidia-smi` (memória total e temperatura) |
+| `src/routes/monitor.js` | Rota `GET /api/monitor` (resumo e detalhado) |
 | `src/de-elevate.js` | Lançador de shell sem administrador (token restrito, [ADR 0014](adr/0014-terminal-sem-administrador-por-token-restrito.md)) |
 | `src/ps-scripts.js` | Scripts PowerShell estáticos (tarefas, serviços, processos) |
 | `src/routes/tasks.js` | Tarefas agendadas |

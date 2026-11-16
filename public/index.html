@@ -26,6 +26,7 @@
         <button type="button" class="aba" data-aba="tarefas">Tarefas</button>
         <button type="button" class="aba" data-aba="servicos">Serviços</button>
         <button type="button" class="aba" data-aba="processos">Processos</button>
+        <button type="button" class="aba" data-aba="monitor">Monitor</button>
         <button type="button" class="aba" data-aba="provedores">Provedores</button>
       </nav>
       <span id="selo-admin" class="selo" hidden>administrador</span>
@@ -92,6 +93,54 @@
         <div id="processos-lista"></div>
       </section>
 
+      <section id="aba-monitor" class="painel-aba" hidden>
+        <h1 class="titulo-aba">Monitor de recursos</h1>
+        <div class="barra">
+          <label class="inline">Visão
+            <select id="mon-modo">
+              <option value="resumo">Resumo</option>
+              <option value="detalhado">Detalhado</option>
+            </select>
+          </label>
+          <label class="inline">Atualização
+            <select id="mon-intervalo">
+              <option value="2000">Tempo real (2 s)</option>
+              <option value="30000">30 segundos</option>
+              <option value="60000">1 minuto</option>
+              <option value="300000">5 minutos</option>
+            </select>
+          </label>
+          <label class="inline">Ordenar por
+            <select id="mon-ordem">
+              <option value="cpu">CPU</option>
+              <option value="ram">RAM</option>
+              <option value="gpu">GPU</option>
+              <option value="nome">Nome</option>
+            </select>
+          </label>
+          <button id="mon-pausar" type="button">Pausar</button>
+          <button id="mon-agora" type="button">Atualizar agora</button>
+          <span id="mon-estado" class="estado-monitor" role="status"></span>
+        </div>
+        <div id="mon-cartoes" class="cartoes"></div>
+        <h2 class="subtitulo">Consumo: máquina, Windows e programas</h2>
+        <div id="mon-grupos"></div>
+        <div id="mon-detalhe" class="barra" hidden>
+          <input id="mon-filtro" type="search" placeholder="Filtrar por nome ou PID" aria-label="Filtrar processos do monitor">
+          <label class="inline">Tipo
+            <select id="mon-tipo">
+              <option value="todos">Todos</option>
+              <option value="programas">Programas</option>
+              <option value="windows">Windows</option>
+            </select>
+          </label>
+        </div>
+        <h2 id="mon-titulo-lista" class="subtitulo">Programas que mais consomem</h2>
+        <div id="mon-lista"></div>
+        <h2 id="mon-titulo-windows" class="subtitulo">Processos do Windows que mais consomem</h2>
+        <div id="mon-lista-windows"></div>
+      </section>
+
       <section id="aba-provedores" class="painel-aba" hidden>
         <h1 class="titulo-aba">Provedores</h1>
         <p class="dica-aba">Tecnologias opcionais detectadas nesta máquina. Cada uma ganha uma aba própria quando está instalada.</p>
@@ -114,6 +163,7 @@
   <script src="/tarefas.js"></script>
   <script src="/servicos.js"></script>
   <script src="/processos.js"></script>
+  <script src="/monitor.js"></script>
   <script src="/provedores.js"></script>
   <script src="/iniciar.js"></script>
 </body>

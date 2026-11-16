@@ -17,6 +17,7 @@ Painel web para gerenciar uma máquina Windows em um só lugar, com privilégios
 | Serviços | Lista, inicia, para, reinicia, muda o tipo de inicialização, cria, edita e exclui serviços |
 | Docker | Containers (ciclo de vida e logs) e imagens |
 | Processos e portas | Mostra quem usa cada porta e encerra processos |
+| Monitor de recursos | CPU, RAM e GPU gerais e por processo, separando o Windows dos programas, em resumo ou detalhado, com atualização de tempo real a 5 minutos e encerramento de processos |
 | Provedores opcionais | pm2, Kubernetes, Docker Compose, Podman e WSL: a aba só aparece se a ferramenta estiver instalada |
 | Segurança | Token (somente hash em disco), bloqueio por tentativas, escuta só em loopback, auditoria, confirmações e recursos protegidos |
 

@@ -12,6 +12,7 @@ Abra qualquer arquivo diretamente no navegador (a navegação entre eles funcion
 | [servicos.html](servicos.html) | Serviços | RF-11 a RF-14, RF-25 | UC-08, UC-09 |
 | [docker.html](docker.html) | Docker | RF-15, RF-16 | UC-10 |
 | [processos.html](processos.html) | Processos e portas | RF-17, RF-25 | UC-11 |
+| [monitor.html](monitor.html) | Monitor de recursos | RF-28 a RF-31 | UC-14 |
 | [provedores.html](provedores.html) | Status dos provedores e exemplo de aba | RF-18 a RF-23 | UC-12, UC-13 |
 | [modal-tarefa.html](modal-tarefa.html) | Nova tarefa e confirmação por nome | RF-10, RF-27 | UC-06, UC-07 |
 

@@ -91,3 +91,18 @@ Todo valor recebido do cliente (nomes, caminhos, argumentos, identificadores) é
 ## RN-18 · Terminal com ou sem administrador
 
 Ao abrir um terminal, o operador escolhe se ele tem permissão de administrador. O padrão é o privilégio do painel (administrador, quando o painel está elevado). Abrir **sem** administrador usa um token restrito do próprio painel: os grupos de administrador ficam como "somente negar" e os privilégios são removidos ([ADR 0014](../arquitetura/adr/0014-terminal-sem-administrador-por-token-restrito.md)). Se o painel não está elevado, pedir administrador é recusado (400). A escolha é auditada ([RN-06](#rn-06)). Relacionado: RF-03, RN-07.
+
+<a id="rn-19"></a>
+## RN-19 · Windows (nativo) e programas
+
+No monitor, um processo é **do Windows** quando seu executável está dentro da pasta do Windows (`%SystemRoot%`) ou do Windows Defender, ou quando é o núcleo do sistema (PID 0 a 4, `System`, `Registry`, `Memory Compression`) ou um processo crítico do Windows. Todo o resto é **programa**. Sem permissão para ler o caminho (painel sem elevação), só o núcleo e os críticos conhecidos contam como Windows. Os totais de RAM por grupo somam a memória de trabalho de cada processo e são aproximados, porque páginas compartilhadas contam mais de uma vez. Relacionado: RF-29.
+
+<a id="rn-20"></a>
+## RN-20 · Processos críticos do Windows não são encerrados
+
+O painel nunca encerra os processos sem os quais o Windows para ou reinicia: `System`, `Registry`, `smss`, `csrss`, `wininit`, `winlogon`, `services`, `lsass`, `lsaiso`, `lsm`, `Memory Compression`, `Secure System` e `svchost` (que pode hospedar serviços essenciais; para um serviço, usa-se a aba Serviços). A conferência é feita **no servidor, pelo nome**, antes de encerrar, e vale para a aba Processos e para o monitor. Encerrar qualquer outro processo do Windows exige digitar o nome do processo. A recusa responde 409 e é auditada. Relacionado: RF-25, RF-31, RN-04.
+
+<a id="rn-21"></a>
+## RN-21 · Uma coleta para todos
+
+A leitura de recursos é compartilhada: chamadas simultâneas usam a mesma coleta e há um cache de cerca de 1 segundo, de modo que vários navegadores abertos não multiplicam o custo. O amostrador é encerrado após 2 minutos sem consultas. Relacionado: RF-28, RNF-12.

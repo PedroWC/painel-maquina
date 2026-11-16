@@ -248,3 +248,33 @@ Cenário: Confirmação por nome
   Quando escolho excluir um serviço ou uma tarefa
   Então preciso digitar o nome do recurso para habilitar o botão
 ```
+
+## US-18 · Acompanhar o consumo da máquina
+**Como** operador **quero** ver CPU, RAM e GPU, separando o Windows dos programas, **para** descobrir o que está pesando e encerrar o que for preciso. · RF-28 a RF-31 · UC-14 · RN-19, RN-20, RN-21
+
+```gherkin
+Cenário: Resumo
+  Dado que estou na aba Monitor
+  Quando abro a visão Resumo
+  Então vejo CPU, RAM e GPU gerais, o consumo do Windows e dos programas e os maiores consumidores
+
+Cenário: Detalhado
+  Quando escolho a visão Detalhado
+  Então vejo todos os processos e posso filtrar por nome, PID ou tipo e ordenar por CPU, RAM, GPU ou nome
+
+Cenário: Intervalo de atualização
+  Quando escolho "30 segundos"
+  Então os dados passam a ser atualizados a cada 30 segundos
+
+Cenário: Encerrar um programa
+  Quando escolho Encerrar em um programa e confirmo
+  Então o processo é encerrado e a lista é atualizada
+
+Cenário: Processo do Windows
+  Quando escolho Encerrar em um processo do Windows
+  Então preciso digitar o nome do processo para habilitar o botão
+
+Cenário: Processo crítico
+  Quando o processo é essencial ao Windows, como csrss ou svchost
+  Então o botão fica desabilitado e o servidor recusa o pedido
+```
