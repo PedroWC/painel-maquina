@@ -35,6 +35,16 @@ function assertTaskAllowed(name, op) {
   }
 }
 
+// Serviços que são o canal de acesso remoto exigem confirmação reforçada (digitar o nome).
+const REINFORCED_SERVICES = new Set(['sshd']);
+const REINFORCED_OPS = new Set(['stop', 'restart', 'manual', 'disabled', 'delete', 'edit']);
+
+// RN-05: excluir sempre exige digitar o nome; o sshd também em operações que podem derrubá-lo.
+function requiresTypedConfirm(name, op) {
+  if (op === 'delete') return true;
+  return REINFORCED_SERVICES.has(String(name).toLowerCase()) && REINFORCED_OPS.has(op);
+}
+
 // Em serviços críticos só é permitido iniciar.
 function assertServiceAllowed(name, op) {
   if (isCriticalService(name) && op !== 'start') {
@@ -43,9 +53,9 @@ function assertServiceAllowed(name, op) {
 }
 
 // RN-04: o processo do painel e os de seus terminais não podem ser encerrados
-// pela aba de processos.
+// pela aba de processos. PIDs 0 a 4 são processos do sistema.
 function assertProcessAllowed(pid, protectedPids) {
-  if (protectedPids.has(pid)) {
+  if (pid <= 4 || protectedPids.has(pid)) {
     throw conflict('Processo protegido: pertence ao painel ou a um de seus terminais.');
   }
 }
@@ -55,6 +65,7 @@ module.exports = {
   CRITICAL_SERVICES,
   isSelfTask,
   isCriticalService,
+  requiresTypedConfirm,
   assertTaskAllowed,
   assertServiceAllowed,
   assertProcessAllowed,

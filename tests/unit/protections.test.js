@@ -8,6 +8,7 @@ const {
   assertServiceAllowed,
   assertProcessAllowed,
   isCriticalService,
+  requiresTypedConfirm,
 } = require('../../src/protections');
 const { HttpError } = require('../../src/validate');
 
@@ -55,4 +56,21 @@ test('RN-04: processos do painel e dos terminais não podem ser encerrados', () 
   blocked(() => assertProcessAllowed(100, protectedPids));
   blocked(() => assertProcessAllowed(200, protectedPids));
   assert.doesNotThrow(() => assertProcessAllowed(300, protectedPids));
+});
+
+test('RN-04: PIDs de 0 a 4 (processos do sistema) nunca podem ser encerrados', () => {
+  for (const pid of [0, 1, 4]) blocked(() => assertProcessAllowed(pid, new Set()));
+  assert.doesNotThrow(() => assertProcessAllowed(5, new Set()));
+});
+
+test('RN-05: excluir sempre exige digitar o nome; o sshd também ao parar, reiniciar ou desativar', () => {
+  assert.equal(requiresTypedConfirm('meu-servico', 'delete'), true);
+  assert.equal(requiresTypedConfirm('meu-servico', 'stop'), false);
+  assert.equal(requiresTypedConfirm('meu-servico', 'restart'), false);
+  for (const op of ['stop', 'restart', 'manual', 'disabled', 'delete', 'edit']) {
+    assert.equal(requiresTypedConfirm('sshd', op), true, op);
+    assert.equal(requiresTypedConfirm('SSHD', op), true, op);
+  }
+  assert.equal(requiresTypedConfirm('sshd', 'start'), false);
+  assert.equal(requiresTypedConfirm('sshd', 'auto'), false);
 });

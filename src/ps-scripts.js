@@ -4,7 +4,9 @@
 // (JSON da variável PP_PARAMS). Não use crases nem interpolação de dados aqui.
 
 const TASK_PRELUDE = `
-$exists = Get-ScheduledTask -TaskName $p.name -TaskPath $p.path -ErrorAction SilentlyContinue
+$found = @(Get-ScheduledTask -TaskName $p.name -TaskPath $p.path -ErrorAction SilentlyContinue)
+if ($found.Count -gt 1) { throw 'TAREFA_AMBIGUA' }
+$exists = if ($found.Count -eq 1) { $found[0] } else { $null }
 `;
 
 const TASK_LIST = `
@@ -101,4 +103,67 @@ if ($p.mode -eq 'create') {
 'ok'
 `;
 
-module.exports = { TASK_LIST, TASK_ACTION, TASK_SAVE };
+// Serviços: operam sobre o objeto EXATO (Where-Object -eq + -InputObject). Get-Service -Name
+// interpreta curingas e um nome "*" atingiria todos os serviços.
+const SERVICE_FIND = `
+$svc = @(Get-Service | Where-Object { $_.Name -eq $p.name })
+if ($svc.Count -ne 1) { throw 'SERVICO_NAO_EXISTE' }
+$target = $svc[0]
+`;
+
+const SERVICE_LIST = `
+$s = @(Get-CimInstance Win32_Service | ForEach-Object {
+  [pscustomobject]@{
+    name = $_.Name
+    display = $_.DisplayName
+    state = $_.State
+    start = $_.StartMode
+    user = $_.StartName
+    path = $_.PathName
+    desc = $_.Description
+  }
+})
+ConvertTo-Json -InputObject $s -Compress -Depth 3
+`;
+
+const SERVICE_ACTION = `${SERVICE_FIND}
+switch ($p.op) {
+  'start' { Start-Service -InputObject $target }
+  'stop' { Stop-Service -InputObject $target -Force }
+  'restart' { Restart-Service -InputObject $target -Force }
+  'auto' { Set-Service -InputObject $target -StartupType Automatic }
+  'manual' { Set-Service -InputObject $target -StartupType Manual }
+  'disabled' { Set-Service -InputObject $target -StartupType Disabled }
+  'delete' {
+    & sc.exe delete $target.Name | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw ('sc.exe falhou com código ' + $LASTEXITCODE) }
+  }
+  default { throw 'OPERACAO_INVALIDA' }
+}
+'ok'
+`;
+
+const SERVICE_CREATE = `
+$already = @(Get-Service | Where-Object { $_.Name -eq $p.name })
+if ($already.Count -gt 0) { throw 'SERVICO_EXISTE' }
+$a = @{ Name = $p.name; BinaryPathName = $p.path; StartupType = $p.start }
+if ($p.display) { $a.DisplayName = $p.display }
+if ($p.desc) { $a.Description = $p.desc }
+New-Service @a | Out-Null
+'ok'
+`;
+
+const SERVICE_EDIT = `${SERVICE_FIND}
+$a = @{ InputObject = $target }
+if ($p.display) { $a.DisplayName = $p.display }
+if ($null -ne $p.desc) { $a.Description = $p.desc }
+if ($p.start) { $a.StartupType = $p.start }
+if ($a.Count -gt 1) { Set-Service @a }
+if ($p.path) {
+  & sc.exe config $target.Name binPath= $p.path | Out-Null
+  if ($LASTEXITCODE -ne 0) { throw ('sc.exe falhou com código ' + $LASTEXITCODE) }
+}
+'ok'
+`;
+
+module.exports = { TASK_LIST, TASK_ACTION, TASK_SAVE, SERVICE_LIST, SERVICE_ACTION, SERVICE_CREATE, SERVICE_EDIT };
