@@ -19,6 +19,8 @@ npm ci
 npm test
 ```
 
+Para rodar o painel localmente, veja [Como executar](README.md#como-executar-how-to-run). **Não rode `npm ci` na pasta em que o painel está em execução** (pare a tarefa antes); para checar o CI localmente sem mexer nela, use uma cópia da pasta.
+
 Requer Windows 10/11 e Node.js 24 (`.nvmrc`). Testes unitários e de integração usam simulações e **não alteram sua máquina**. Testes marcados `windows` criam apenas recursos temporários `PainelTeste_*` e os removem ao final.
 
 ## Fluxo

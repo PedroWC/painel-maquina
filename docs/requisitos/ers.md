@@ -127,7 +127,7 @@ Documentos relacionados: [regras de negócio](regras-de-negocio.md), [rastreabil
 ## 5. Interfaces externas
 
 - **Navegador:** HTTP e WebSocket em `http://127.0.0.1:8780` (padrão).
-- **Sistema:** PowerShell (tarefas, serviços, processos), `sc.exe`, `docker`, `pm2`, `kubectl`, `podman`, `wsl`, sempre via `execFile` ([RN-12](regras-de-negocio.md#rn-12)).
+- **Sistema:** PowerShell (tarefas, serviços, processos e o amostrador do monitor), `sc.exe`, `docker`, `pm2`, `kubectl`, `podman`, `wsl` e, opcionalmente, `nvidia-smi`, sempre via `execFile` ([RN-12](regras-de-negocio.md#rn-12)).
 - **Armazenamento:** `config.json` (configuração local) e `audit.log` (auditoria).
 
 ## 6. Fora do escopo
