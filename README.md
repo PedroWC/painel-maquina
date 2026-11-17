@@ -1,5 +1,7 @@
 # Painel da Máquina
 
+[![CI](https://github.com/PedroWC/painel-maquina/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/PedroWC/painel-maquina/actions/workflows/ci.yml)
+
 **Um painel web, só seu, para controlar uma máquina Windows pelo navegador.** Abra terminais (com ou sem administrador), gerencie tarefas agendadas, serviços, processos e containers, e acompanhe CPU, RAM e GPU em tempo real, tudo em um só lugar e sem precisar sentar na máquina.
 
 ![Monitor de recursos: cartões de CPU, RAM e GPU e a tabela de consumo separada entre a máquina inteira, o Windows e os programas](docs/imagens/monitor-resumo.png)

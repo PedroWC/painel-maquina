@@ -36,13 +36,16 @@ gitGraph
 7. **Pull Request** para a `main`, usando o modelo em `.github/PULL_REQUEST_TEMPLATE.md`. O CI precisa passar (lint, testes, varredura de segredos, `npm audit`).
 8. **Squash merge** e remoção da branch.
 
-## Proteção da `main` (configurar no GitHub)
+## Proteção da `main` (configurada no GitHub)
 
-- Exigir Pull Request antes de integrar.
-- Exigir que o CI passe.
-- Exigir branch atualizada com a `main`.
-- Bloquear push forçado e exclusão da branch.
-- Histórico linear (somente squash).
+- Pull Request obrigatório antes de integrar, sem exigir aprovações (o projeto tem um só mantenedor).
+- O CI precisa passar: `Lint, testes e auditoria`, `Varredura de segredos` e `Título do PR (Conventional Commits)`.
+- A branch precisa estar atualizada com a `main`.
+- Push forçado e exclusão da branch bloqueados.
+- Histórico linear (somente squash ou rebase; commit de merge não entra na `main`).
+- **Administradores não são obrigados** a seguir essas regras (a opção "Do not allow bypassing" está desligada), para que o mantenedor consiga agir numa emergência. Mesmo assim, o fluxo normal é sempre por PR.
+
+Os alertas de vulnerabilidade do Dependabot também estão ativados.
 
 ## Commits
 
