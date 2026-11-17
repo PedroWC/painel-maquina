@@ -18,6 +18,7 @@ A documentação é a fonte da verdade do projeto e é escrita **antes** do cód
 | [`requisitos/`](requisitos/) | [ERS](requisitos/ers.md) (RF e RNF), [regras de negócio](requisitos/regras-de-negocio.md), [rastreabilidade](requisitos/rastreabilidade.md) |
 | [`produto/`](produto/) | [casos de uso](produto/casos-de-uso.md), [histórias de usuário](produto/historias-de-usuario.md), [mapa do site](produto/mapa-do-site.md) |
 | [`prototipos/`](prototipos/) | Wireframes HTML estáticos de cada tela |
+| [`imagens/`](imagens/) | Capturas reais da interface usadas no README e as regras de privacidade para novas capturas |
 | [`arquitetura/`](arquitetura/) | [Visão geral](arquitetura/visao-geral.md), [provedores](arquitetura/provedores.md), [segurança e ameaças](arquitetura/seguranca.md), [ADRs](arquitetura/adr/README.md) |
 | [`processo/`](processo/) | [Git workflow](processo/git-workflow.md), [nomenclatura](processo/nomenclatura.md), [versionamento](processo/versionamento.md), [estratégia de testes](processo/estrategia-de-testes.md), [definição de pronto](processo/definicao-de-pronto.md) |
 | [`operacao/`](operacao/) | [Instalação e operação](operacao/instalacao.md), [acesso remoto](operacao/acesso-remoto.md) |

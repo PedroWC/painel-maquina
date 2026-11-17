@@ -1,12 +1,69 @@
 # Painel da Máquina
 
-Painel web para gerenciar uma máquina Windows em um só lugar, com privilégios de administrador: **sessões de terminal**, **tarefas agendadas**, **serviços**, **containers** e outras tecnologias de execução (pm2, Kubernetes, Podman, WSL), detectadas automaticamente quando instaladas.
+**Um painel web, só seu, para controlar uma máquina Windows pelo navegador.** Abra terminais (com ou sem administrador), gerencie tarefas agendadas, serviços, processos e containers, e acompanhe CPU, RAM e GPU em tempo real, tudo em um só lugar e sem precisar sentar na máquina.
+
+![Monitor de recursos: cartões de CPU, RAM e GPU e a tabela de consumo separada entre a máquina inteira, o Windows e os programas](docs/imagens/monitor-resumo.png)
 
 > **Status:** versão `0.2.0`. Funcionam: login por token, sessões de terminal com ou sem administrador, tarefas agendadas, serviços do Windows, processos e portas, monitor de recursos (CPU, RAM e GPU), Docker, Docker Compose, Podman, pm2, Kubernetes e WSL. A documentação está em [`docs/`](docs/README.md) e o histórico de mudanças no [CHANGELOG](CHANGELOG.md).
 >
 > **Limitações conhecidas:** somente Windows. Os provedores Docker Compose, Podman, pm2 e Kubernetes foram validados por testes com as ferramentas simuladas; os testes de sistema reais só rodam quando a ferramenta existe na máquina. A interface depende do roteiro de verificação manual em [`tests/e2e/smoke.md`](tests/e2e/smoke.md): execute-o antes de confiar no painel.
 
 > ⚠️ **Aviso de segurança.** Este software dá controle administrativo completo da máquina a quem se autenticar nele. Use apenas em máquinas suas, mantenha o servidor em `127.0.0.1` e acesse remotamente por túnel SSH. Leia [SECURITY.md](SECURITY.md) e [segurança](docs/arquitetura/seguranca.md).
+
+## O que é
+
+O Painel da Máquina é um pequeno servidor (Node.js) que roda **na própria máquina Windows**, como administrador, e mostra uma interface web. Você entra com um token e ganha, no navegador, o que normalmente exigiria vários programas abertos: um PowerShell elevado, o Agendador de Tarefas, o `services.msc`, o Gerenciador de Tarefas, o Docker e outros.
+
+- **Para quem é:** quem administra a própria máquina (um PC de desenvolvimento, um servidor doméstico) e quer acessá-la de outro lugar com segurança.
+- **Como se acessa:** pelo próprio computador em `http://127.0.0.1:8780`, ou de outro computador por um túnel SSH. O painel **nunca** é exposto na rede.
+- **O que ele não é:** não é multiusuário, não gerencia várias máquinas e não foi feito para ficar na internet.
+
+```mermaid
+flowchart LR
+  N["Navegador<br/>(no seu computador)"] -->|local ou túnel SSH| P["Painel<br/>127.0.0.1:8780"]
+  P --> W["Windows<br/>terminais, tarefas, serviços,<br/>processos e recursos"]
+  P --> T["Ferramentas opcionais<br/>Docker, Podman, pm2,<br/>Kubernetes, WSL, Compose"]
+```
+
+## Como ele se parece
+
+### Ver o que está pesando na máquina
+
+O **Monitor** mostra o uso de CPU, RAM e GPU e separa o consumo entre o **Windows** (processos nativos) e os **programas** que você instalou. Escolha entre uma visão **resumo** ou **detalhada**, e atualize em tempo real, a cada 30 segundos, 1 minuto ou 5 minutos.
+
+![Monitor em modo detalhado, filtrando os processos do Windows, com CPU, RAM, GPU e memória de vídeo por processo; System e csrss aparecem como protegidos](docs/imagens/monitor-detalhado.png)
+
+*Visão detalhada: cada processo tem o seu consumo e um botão para encerrar. Processos críticos do Windows aparecem como "protegido" e o painel nunca os encerra.*
+
+### Abrir terminais, com ou sem administrador
+
+Terminais de verdade no navegador (PowerShell, cmd, Git Bash e WSL), que continuam vivos ao fechar a aba. Ao abrir, você escolhe se o terminal tem permissão de administrador. O mesmo comando mostra a diferença:
+
+![Terminal aberto com administrador: o comando net session responde que não existem entradas na lista](docs/imagens/terminal-admin.png)
+
+*Com administrador: o comando funciona.*
+
+![Terminal aberto sem administrador: o mesmo comando recebe acesso negado](docs/imagens/terminal-sem-admin.png)
+
+*Sem administrador: o mesmo comando recebe "Acesso negado".*
+
+### Gerenciar serviços, tarefas e processos
+
+Liste, inicie, pare, reinicie, crie, edite e exclua **serviços** e **tarefas agendadas**, e veja **processos** e as **portas** em escuta. Ações perigosas pedem confirmação, e excluir exige digitar o nome do item.
+
+![Aba Serviços do Windows com estado, tipo de inicialização, conta, caminho e as ações iniciar, reiniciar, editar e excluir](docs/imagens/servicos.png)
+
+### Usar as ferramentas que você já tem
+
+Docker, Docker Compose, Podman, pm2, Kubernetes e WSL ganham uma aba própria **só se estiverem instalados**. O painel detecta sozinho e passa a mostrar a aba quando você instalar uma nova.
+
+![Aba Provedores com Docker e WSL disponíveis e as demais tecnologias como não encontradas](docs/imagens/provedores.png)
+
+### Entrar com um token
+
+O acesso é por um token gerado na sua máquina (só o hash fica em disco), com bloqueio após tentativas erradas e auditoria de tudo que altera algo.
+
+![Tela de login com o campo Token de acesso e o botão Entrar](docs/imagens/login.png)
 
 ## Funcionalidades
 
@@ -23,7 +80,7 @@ Painel web para gerenciar uma máquina Windows em um só lugar, com privilégios
 
 ## Como funciona
 
-Um servidor Node.js roda na própria máquina (tarefa agendada elevada) e expõe uma interface web em `http://127.0.0.1:8780`. Para acessar de outro computador, use um túnel SSH ([acesso remoto](docs/operacao/acesso-remoto.md)).
+Um servidor Node.js roda na própria máquina (tarefa agendada elevada) e expõe uma interface web em `http://127.0.0.1:8780`. Para acessar de outro computador, use um túnel SSH ([acesso remoto](docs/operacao/acesso-remoto.md)). Para ver o código por dentro, comece pela [visão geral da arquitetura](docs/arquitetura/visao-geral.md).
 
 ## Requisitos
 

@@ -7,6 +7,7 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 ## [Não lançado]
 
 ### Adicionado
+- Imagens reais no README (monitor, terminais com e sem administrador, serviços, provedores e login) e uma abertura que explica o que é o sistema, para quem é e como se acessa; notas de geração e privacidade em `docs/imagens/`.
 - Seção "Como executar" no README: primeira instalação, modos de execução, acesso remoto, parar e reiniciar, atualização, configuração e testes.
 
 ### Corrigido
