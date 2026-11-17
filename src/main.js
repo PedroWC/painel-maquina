@@ -23,6 +23,11 @@ const { createWslProvider } = require('./providers/wsl');
 const { createPodmanProvider } = require('./providers/podman');
 const { createComposeProvider } = require('./providers/compose');
 const { createProviderRoutes } = require('./routes/providers');
+const { createSampler } = require('./monitor-sampler');
+const { createMonitor } = require('./monitor');
+const { createGpuInfo } = require('./gpu-info');
+const { createMonitorRoutes } = require('./routes/monitor');
+const { isCriticalProcess } = require('./protections');
 
 function main() {
   // O que vai ao console também vai para painel.log (na tarefa agendada o console fica oculto e
@@ -75,6 +80,13 @@ function main() {
     ],
   });
   const providerRoutes = createProviderRoutes({ registry });
+  // ADR 0015: o amostrador só roda enquanto alguém consulta o monitor (para após 2 min sem uso).
+  const monitor = createMonitor({
+    sampler: createSampler(),
+    gpuInfo: createGpuInfo({ cli }),
+    isProtected: (pid, name) => pid <= 4 || pid === process.pid || terminals.protectedPids().has(pid) || isCriticalProcess(name),
+  });
+  const monitorRoutes = createMonitorRoutes({ monitor });
   const server = createServer({
     config,
     auth,
@@ -86,6 +98,7 @@ function main() {
       ...serviceRoutes.routes,
       ...processRoutes.routes,
       ...providerRoutes.routes,
+      ...monitorRoutes.routes,
     ],
     websockets: [...terminalRoutes.websockets],
   });
@@ -94,6 +107,7 @@ function main() {
 
   const stop = () => {
     registry.stop();
+    monitor.shutdown();
     terminals.shutdown();
     audit.record({ action: 'parada', result: 'ok' });
     process.exit(0);

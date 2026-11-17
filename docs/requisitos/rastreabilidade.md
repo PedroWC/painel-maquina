@@ -35,6 +35,10 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RF-23 | UC-13 | US-13 | `tests/unit/providers/registry.test.js`, `tests/integration/providers.test.js` | implementado |
 | RF-24 | todos | US-14 | `tests/unit/audit.test.js`, `tests/integration/auth.test.js` | parcial |
 | RF-25 | UC-05, UC-08, UC-11 | US-15 | `tests/unit/protections.test.js`, `tests/integration/tasks.test.js`, `tests/integration/services.test.js`, `tests/integration/processes.test.js`, `tests/integration/tasks.test.js` | implementado |
+| RF-28 | UC-14 | US-18 | `tests/unit/monitor.test.js`, `tests/unit/monitor-sampler.test.js`, `tests/unit/gpu-info.test.js`, `tests/integration/monitor.test.js`, `tests/integration/monitor.windows.test.js` | implementado |
+| RF-29 | UC-14 | US-18 | `tests/unit/monitor.test.js`, `tests/integration/monitor.test.js`, `tests/integration/monitor.windows.test.js` | implementado |
+| RF-30 | UC-14 | US-18 | `tests/e2e/smoke.md` (roteiro manual) | planejado |
+| RF-31 | UC-14 | US-18 | `tests/integration/monitor.test.js`, `tests/integration/monitor.windows.test.js`, `tests/integration/processes.test.js` | implementado |
 | RF-26 | todos | US-16 | `tests/e2e/smoke.md` (roteiro manual) | planejado |
 | RF-27 | todos | US-17 | `tests/e2e/smoke.md` (roteiro manual) | planejado |
 
@@ -59,6 +63,9 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RN-14 | `tests/unit/providers/registry.test.js`, `tests/integration/providers.test.js` | implementado |
 | RN-15 | `tests/unit/terminals.test.js`, `tests/integration/terminals.test.js` | implementado |
 | RN-16 | `tests/unit/auth.test.js`, `tests/unit/config.test.js` | implementado |
+| RN-19 | `tests/unit/monitor.test.js`, `tests/integration/monitor.windows.test.js` | implementado |
+| RN-20 | `tests/unit/protections-process.test.js`, `tests/integration/monitor.test.js`, `tests/integration/monitor.windows.test.js` | implementado |
+| RN-21 | `tests/unit/monitor.test.js` | implementado |
 | RN-17 | `tests/unit/validate.test.js`, `tests/unit/powershell.test.js`, `tests/integration/tasks.test.js` | parcial |
 
 ## Requisitos não funcionais
@@ -76,3 +83,4 @@ O nome de cada teste inclui o ID que ele cobre, por exemplo `RN-03: não permite
 | RNF-09 | gitleaks no CI, `tests/unit/config.test.js` e `tests/unit/scripts.test.js` (os scripts de instalação não pedem nem guardam senha) |
 | RNF-10 | Implementado: `tests/unit/providers/base.test.js` e `tests/unit/providers/registry.test.js` |
 | RNF-11 | Revisão manual de contraste e teclado no roteiro de smoke |
+| RNF-12 | Implementado: `tests/unit/monitor.test.js` (parada por ociosidade) e `tests/unit/monitor-sampler.test.js` |

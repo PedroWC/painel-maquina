@@ -78,3 +78,15 @@ button.perigo:not(.mini) { border-color: var(--bad); color: var(--bad); }
 .aviso-item { padding: 8px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); }
 .aviso-item.erro { border-color: var(--bad); color: var(--bad); }
 .aviso-item.ok { border-color: var(--ok); color: var(--ok); }
+
+/* Monitor de recursos (RF-28) */
+.cartoes { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; margin-bottom: 8px; }
+.medida { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+.medida h3 { margin: 0 0 4px; font-size: 13px; color: var(--muted); font-weight: 600; text-transform: uppercase; letter-spacing: .04em; }
+.medida-valor { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+.medida-linha { margin: 6px 0 0; font-size: 12px; color: var(--muted); }
+.medidor { height: 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
+.medidor > div { height: 100%; background: var(--accent); transition: width .3s ease; }
+.medidor.alto > div { background: var(--warn); }
+.medidor.critico > div { background: var(--bad); }
+.estado-monitor { color: var(--muted); font-size: 12px; margin-left: auto; }

@@ -10,6 +10,7 @@ flowchart TD
   P --> S[Serviços]
   P --> D[Docker]
   P --> PR[Processos e portas]
+  P --> M[Monitor]
   P --> PV[Provedores]
   P --> X[Sair]
   X --> L
@@ -21,6 +22,9 @@ flowchart TD
   S --> S1[Novo/editar serviço - modal]
   S --> S2[Confirmar exclusão - modal]
   D --> D1[Logs do container - modal]
+  M --> M1[Resumo]
+  M --> M2[Detalhado]
+  M --> M3[Confirmar encerramento - modal]
   PV --> PV1[pm2]
   PV --> PV2[Kubernetes]
   PV --> PV3[Compose]
@@ -38,6 +42,7 @@ flowchart TD
 | Serviços | `#/servicos` | RF-11 a RF-14 | [servicos](../prototipos/servicos.html) |
 | Docker | `#/docker` | RF-15, RF-16 | [docker](../prototipos/docker.html) |
 | Processos e portas | `#/processos` | RF-17 | [processos](../prototipos/processos.html) |
+| Monitor de recursos | `#/monitor` | RF-28 a RF-31 | [monitor](../prototipos/monitor.html) |
 | Provedores (status) | `#/provedores` | RF-23 | [provedores](../prototipos/provedores.html) |
 | pm2, Kubernetes, Compose, Podman, WSL | `#/p/<id>` | RF-18 a RF-22 | mesmo padrão da aba Docker |
 
@@ -52,6 +57,7 @@ Todas exigem sessão, exceto o login. Rotas que alteram estado exigem o cabeçal
 | `WS /ws/term?id=` | Fluxo do terminal | RF-03, RF-05 |
 | `GET/POST/PUT /api/tasks` · `POST /api/tasks/action` | Tarefas | RF-07 a RF-10 |
 | `GET/POST/PUT /api/services` · `POST /api/services/action` | Serviços | RF-11 a RF-14 |
-| `GET /api/processes` · `POST /api/processes/kill` | Processos e portas | RF-17 |
+| `GET /api/processes` · `POST /api/processes/kill` | Processos e portas (o encerramento também atende o Monitor) | RF-17, RF-31 |
+| `GET /api/monitor?mode=resumo\|detalhado&sort=cpu\|ram\|gpu\|nome` | Monitor de recursos | RF-28 a RF-30 |
 | `GET /api/providers` · `POST /api/providers/refresh` | Status dos provedores | RF-23 |
 | `GET /api/p/:id/items` · `POST /api/p/:id/action` · `GET /api/p/:id/logs` | Recursos de cada provedor (Docker, pm2, Kubernetes...). A listagem e os logs aceitam parâmetros de consulta dos seletores (por exemplo, `context` e `namespace`) | RF-15, RF-16, RF-18 a RF-22 |

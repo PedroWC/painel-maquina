@@ -50,6 +50,19 @@ Executado antes de cada release, em uma máquina Windows real, com o painel inst
 - [ ] Encerrar um processo descartável (por exemplo, um `notepad` aberto para o teste) pede confirmação e o encerra
 - [ ] O botão Encerrar do processo do painel e dos shells dos terminais está desabilitado
 
+## 6.1 Monitor de recursos (RF-28 a RF-31, RN-19 a RN-21)
+
+- [ ] A aba Monitor mostra CPU, RAM e GPU com valores plausíveis (compare com o Gerenciador de Tarefas) e a GPU mostra o nome e a memória de vídeo
+- [ ] A tabela "Consumo" separa Geral, Windows e Programas; `explorer`, `dwm` e `svchost` aparecem como Windows, e um navegador ou editor como Programa
+- [ ] "Tempo real (2 s)" atualiza a cada poucos segundos; trocar para 30 segundos, 1 minuto e 5 minutos muda o ritmo (observe o horário em "Atualizado às")
+- [ ] "Pausar" para a atualização e "Continuar" retoma; trocar de aba do navegador pausa e voltar retoma
+- [ ] Visão Detalhado: filtrar por nome e por tipo e ordenar por CPU, RAM, GPU e nome funciona; com o mouse sobre a tabela as linhas ficam paradas
+- [ ] Abrir um jogo ou vídeo e conferir que a GPU e a memória de vídeo sobem e o processo aparece com GPU
+- [ ] Encerrar um programa de teste (por exemplo, um `notepad` aberto de propósito) pede confirmação e o remove
+- [ ] Em um processo do Windows (por exemplo, `dwm`), o botão pede para digitar o nome; **cancele** (não encerre)
+- [ ] `System`, `csrss`, `svchost` e o próprio painel estão com o botão desabilitado e marcados "protegido"
+- [ ] Depois de 2 minutos fora da aba Monitor, o processo `powershell` auxiliar some do Gerenciador de Tarefas; ao voltar, reaparece
+
 ## 7. Provedores (RF-15, RF-16, RF-23, RN-11 a RN-14)
 
 - [ ] A aba **Provedores** mostra cada tecnologia como disponível ou não encontrada, com versão

@@ -98,6 +98,15 @@ Documentos relacionados: [regras de negócio](regras-de-negocio.md), [rastreabil
 | RF-26 | Atualizar periodicamente as listagens da aba ativa e permitir atualização manual | S | todos |
 | RF-27 | Exigir confirmação explícita antes de ações destrutivas | M | todos |
 
+### 3.8 Monitor de recursos
+
+| ID | Requisito | Prioridade | Casos de uso |
+|---|---|---|---|
+| RF-28 | Mostrar o uso geral de CPU, memória (RAM) e GPU da máquina, com a memória de vídeo e, quando houver `nvidia-smi`, a temperatura da GPU | M | UC-14 |
+| RF-29 | Oferecer a visão **resumo** (totais, consumo do Windows e dos programas, maiores consumidores) e a visão **detalhada** (todos os processos, com filtro e ordenação), separando o consumo do Windows (nativo) do dos programas não nativos ([RN-19](regras-de-negocio.md#rn-19)) | M | UC-14 |
+| RF-30 | Permitir escolher o intervalo de atualização (tempo real, 30 segundos, 1 minuto ou 5 minutos), pausar e atualizar na hora; a atualização para sozinha com a aba em segundo plano | M | UC-14 |
+| RF-31 | Encerrar processos pelo monitor, com confirmação (digitando o nome, se for do Windows) e as proteções de [RN-04](regras-de-negocio.md#rn-04) e [RN-20](regras-de-negocio.md#rn-20) | M | UC-14 |
+
 ## 4. Requisitos não funcionais
 
 | ID | Categoria | Requisito |
@@ -113,6 +122,7 @@ Documentos relacionados: [regras de negócio](regras-de-negocio.md), [rastreabil
 | RNF-09 | Privacidade e segredos | Nenhum segredo no repositório; o token é armazenado apenas como hash |
 | RNF-10 | Extensibilidade | Novas tecnologias entram como provedores que seguem um contrato comum, sem alterar o núcleo |
 | RNF-11 | Acessibilidade | Contraste adequado, navegação por teclado nos controles principais e rótulos nos campos |
+| RNF-12 | Custo do monitoramento | O monitor só consome recursos enquanto alguém o consulta: o amostrador para após 2 minutos sem leituras; leituras seguintes levam dezenas de milissegundos ([ADR 0015](../arquitetura/adr/0015-amostrador-persistente-para-o-monitor-de-recursos.md)) |
 
 ## 5. Interfaces externas
 
