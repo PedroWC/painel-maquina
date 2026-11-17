@@ -153,7 +153,7 @@ function createMonitor({
       raw = await sampler.sample();
       cpu = cpuTimes(osModule);
     }
-    let gpuExtra = null;
+    let gpuExtra; // definido nos dois caminhos abaixo (leitura ou nulo)
     try {
       gpuExtra = await gpuInfo();
     } catch {
