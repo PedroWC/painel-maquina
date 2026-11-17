@@ -6,11 +6,18 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 
 ## [Não lançado]
 
+## [0.2.0] - 2026-11-16
+
+Terminal com ou sem administrador e o novo monitor de recursos (CPU, RAM e GPU), com uma proteção a mais contra encerrar processos críticos do Windows.
+
 ### Adicionado
 - Terminal com ou sem administrador: caixa "Administrador" ao abrir a sessão (marcada por padrão); sem ela, o shell abre com token restrito, a sessão aparece como "sem admin" e a escolha é auditada (RF-03, RN-07, RN-18, ADR 0014).
 - A API de terminais aceita `admin` e informa `panelAdmin`.
 - Aba Monitor: uso geral de CPU, RAM e GPU (com memória de vídeo e, com `nvidia-smi`, temperatura), consumo separado entre o Windows (nativo) e os programas, visão resumo ou detalhada (filtro por nome, PID e tipo; ordenação por CPU, RAM, GPU ou nome), atualização em tempo real (2 s), 30 segundos, 1 minuto ou 5 minutos, pausa, e encerramento de processos pelo monitor (RF-28 a RF-31, RN-19, RN-21, RNF-12, ADR 0015).
 - Rota `GET /api/monitor`.
+
+### Alterado
+- O privilégio do terminal deixa de ser sempre o do painel: é escolhido ao criar a sessão (o padrão continua sendo o do painel) e aparece como "admin" ou "sem admin" (RN-07 reescrita, RN-18).
 
 ### Segurança
 - Processos críticos do Windows (`csrss`, `wininit`, `winlogon`, `lsass`, `smss`, `services`, `svchost` e o núcleo) não podem mais ser encerrados, nem pela aba Processos: a conferência é feita no servidor, pelo nome. Encerrar outro processo do Windows pelo monitor exige digitar o nome (RN-20).
@@ -63,5 +70,6 @@ Primeira versão. O painel gerencia terminais, tarefas agendadas, serviços, pro
 - Nomes de tarefas e serviços com curingas (`*`, `?`, `[ ]`) são recusados e os scripts operam sobre o objeto exato, evitando que um comando atinja vários recursos.
 - Nenhum processo externo é executado por shell: apenas `execFile` com argumentos validados e lista de operações permitidas por provedor.
 
-[Não lançado]: https://github.com/PedroWC/painel-maquina/compare/v0.1.0...HEAD
+[Não lançado]: https://github.com/PedroWC/painel-maquina/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/PedroWC/painel-maquina/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/PedroWC/painel-maquina/releases/tag/v0.1.0
