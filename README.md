@@ -2,7 +2,7 @@
 
 Painel web para gerenciar uma máquina Windows em um só lugar, com privilégios de administrador: **sessões de terminal**, **tarefas agendadas**, **serviços**, **containers** e outras tecnologias de execução (pm2, Kubernetes, Podman, WSL), detectadas automaticamente quando instaladas.
 
-> **Status:** versão `0.1.0`, a primeira. Funcionam: login por token, sessões de terminal como administrador, tarefas agendadas, serviços do Windows, processos e portas, Docker, Docker Compose, Podman, pm2, Kubernetes e WSL. A documentação está em [`docs/`](docs/README.md) e o histórico de mudanças no [CHANGELOG](CHANGELOG.md).
+> **Status:** versão `0.2.0`. Funcionam: login por token, sessões de terminal com ou sem administrador, tarefas agendadas, serviços do Windows, processos e portas, monitor de recursos (CPU, RAM e GPU), Docker, Docker Compose, Podman, pm2, Kubernetes e WSL. A documentação está em [`docs/`](docs/README.md) e o histórico de mudanças no [CHANGELOG](CHANGELOG.md).
 >
 > **Limitações conhecidas:** somente Windows. Os provedores Docker Compose, Podman, pm2 e Kubernetes foram validados por testes com as ferramentas simuladas; os testes de sistema reais só rodam quando a ferramenta existe na máquina. A interface depende do roteiro de verificação manual em [`tests/e2e/smoke.md`](tests/e2e/smoke.md): execute-o antes de confiar no painel.
 
