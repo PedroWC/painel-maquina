@@ -36,8 +36,8 @@ Testes lentos (por exemplo, o reinício automático do painel pelo vigia, cerca 
 
 ```
 tests/
-├── unit/            auth, config, audit, validate, rate-limit, protections, providers/*
-├── integration/     auth, terminals, tasks, services, processes, security (+ *.windows.test.js)
+├── unit/            auth, config, audit, validate, rate-limit, protections, monitor, monitor-sampler, gpu-info, de-elevate, providers/*
+├── integration/     auth, terminals, tasks, services, processes, monitor, providers, security (+ *.windows.test.js)
 ├── helpers/         servidor de teste, executores simulados
 └── e2e/             smoke.md (roteiro manual)
 ```

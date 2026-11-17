@@ -50,7 +50,14 @@ Formato: `tipo(escopo): descrição` em PT-BR, no imperativo, até 100 caractere
 
 ## Correções urgentes (`hotfix/`)
 
-Para um defeito grave em versão já lançada: `hotfix/N-slug` a partir da `main`, correção mínima com teste, PR com prioridade, nova versão PATCH.
+Para um defeito grave em versão já lançada: `hotfix/N-slug` a partir da `main`, correção mínima com teste (ou, se for só de documentação, a correção e a verificação dos links), PR com prioridade e CHANGELOG em `[Não lançado]`. A correção só vira uma versão PATCH quando o mantenedor pedir uma release; integrar o PR não cria tag.
+
+## PRs empilhados
+
+Quando um PR depende de outro ainda aberto, a base dele é a branch do primeiro. Dois cuidados:
+
+- O CI só roda em PRs cuja base é a `main`: mudar a base de um PR para a `main` **não** dispara o CI; é preciso um push novo.
+- Se o primeiro PR for integrado por **squash**, os commits originais não existem na `main` e o segundo PR passa a ter conflitos de texto. Integre o primeiro com **commit de merge**, ou atualize a branch do segundo com `git merge -X ours origin/main` e confira que a árvore ficou idêntica antes de enviar.
 
 ## Dados sensíveis
 

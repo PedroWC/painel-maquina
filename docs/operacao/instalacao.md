@@ -5,7 +5,7 @@
 - Windows 10 ou 11 (x64)
 - [Node.js 24](https://nodejs.org/) (versão em `.nvmrc`)
 - PowerShell 5.1 ou superior (já incluído no Windows)
-- Opcionais, detectados automaticamente: Docker, pm2, kubectl, Podman, WSL ([ADR 0012](../arquitetura/adr/0012-provedores-opcionais-com-deteccao.md))
+- Opcionais, detectados automaticamente: Docker (e Compose), pm2, kubectl, Podman, WSL ([ADR 0012](../arquitetura/adr/0012-provedores-opcionais-com-deteccao.md)); `nvidia-smi` acrescenta memória total e temperatura da GPU ao Monitor
 
 ## Instalação
 
@@ -25,7 +25,7 @@ npm run gerar-token
 npm start
 ```
 
-Abra `http://127.0.0.1:8780` e entre com o token. Sem privilégio de administrador o painel funciona, mas as ações que exigem elevação falham e os terminais não são "admin".
+Abra `http://127.0.0.1:8780` e entre com o token. Sem privilégio de administrador o painel funciona, mas as ações que exigem elevação falham, a caixa "Administrador" não aparece e os terminais abrem "sem admin" ([RN-18](../requisitos/regras-de-negocio.md#rn-18)). Para rodar uma segunda instância ao lado da tarefa, use outra porta: `$env:PAINEL_PORT = 8791; npm start` (ela usa o mesmo `config.json` e o mesmo token).
 
 ## Execução contínua (recomendado)
 
@@ -58,6 +58,15 @@ Get-Content .\painel.log -Tail 20                                   # o que o pa
 ```
 
 Abra `http://127.0.0.1:8780`: o selo "administrador" deve aparecer no topo. Para validar o início automático, reinicie o computador, espere cerca de um minuto e abra o endereço de novo.
+
+### Parar, iniciar e reiniciar
+
+```powershell
+Stop-ScheduledTask  -TaskName PainelMaquina
+Start-ScheduledTask -TaskName PainelMaquina
+```
+
+Reiniciar **encerra os terminais abertos**: as sessões ficam só em memória. O Monitor usa um PowerShell auxiliar que o painel inicia sob demanda e encerra sozinho depois de 2 minutos sem consultas ([ADR 0015](../arquitetura/adr/0015-amostrador-persistente-para-o-monitor-de-recursos.md)).
 
 ### Remover
 
@@ -92,13 +101,18 @@ Nenhum dos dois é versionado.
 
 ## Atualização
 
+**Pare a tarefa antes de reinstalar as dependências.** Enquanto o painel roda, o Windows mantém travado o arquivo nativo do `node-pty` (`conpty.node`); um `npm ci` nesse momento apaga o `node_modules` e falha no meio (`EPERM`), deixando a pasta incompleta e o terminal sem o `xterm`.
+
 ```powershell
+Stop-ScheduledTask -TaskName PainelMaquina
 git pull
-npm ci
-Stop-ScheduledTask -TaskName PainelMaquina; Start-ScheduledTask -TaskName PainelMaquina
+npm ci          # só se o package-lock.json mudou
+Start-ScheduledTask -TaskName PainelMaquina
 ```
 
-Leia o [CHANGELOG](../../CHANGELOG.md) antes: mudanças incompatíveis trazem instruções de migração. Se uma versão alterar a tarefa, rode `.\scripts\instalar-tarefa.ps1` de novo.
+Leia o [CHANGELOG](../../CHANGELOG.md) antes: mudanças incompatíveis trazem instruções de migração. Se uma versão alterar a tarefa, rode `.\scripts\instalar-tarefa.ps1` de novo. A atualização encerra os terminais abertos.
+
+Para conferir a versão em uso: `node -p "require('./package.json').version"`.
 
 ## Problemas comuns
 
@@ -110,7 +124,11 @@ Leia o [CHANGELOG](../../CHANGELOG.md) antes: mudanças incompatíveis trazem in
 | A tarefa existe, mas o endereço não abre | O painel ainda está iniciando (30 s de atraso na inicialização) ou a porta está em uso | Espere; consulte `painel.log`; use `Start-ScheduledTask -TaskName PainelMaquina` |
 | Porta em uso | Outro programa usa a 8780 | Altere `port` no `config.json` e reinicie a tarefa |
 | O painel parou e voltou sozinho | O vigia o reiniciou (no máximo em 2 minutos) | Veja o motivo da queda no `painel.log` |
-| Terminais não abrem | Falha na dependência nativa | Rode `npm ci` com a versão de Node do `.nvmrc` |
+| Terminais não abrem | Falha na dependência nativa | Pare a tarefa e rode `npm ci` com a versão de Node do `.nvmrc` |
+| `npm ci` falha com `EPERM` em `conpty.node` e o `node_modules` ficou incompleto | O painel estava rodando e mantém o arquivo travado | Pare a tarefa (`Stop-ScheduledTask`), rode `npm ci` de novo e inicie a tarefa |
+| Aba Monitor mostra a GPU como "Indisponível" | Windows anterior ao 10 1709, sem contadores de GPU, e sem `nvidia-smi` | Atualize o Windows; com uma NVIDIA, instale o driver (traz o `nvidia-smi`) |
+| A primeira leitura do Monitor leva cerca de 2 segundos | O PowerShell auxiliar é iniciado sob demanda e precisa de uma leitura de aquecimento | Normal; as leituras seguintes levam dezenas de milissegundos |
+| Terminal "sem admin" demora a abrir | Cada abertura prepara o token restrito (alguns segundos) | Normal ([ADR 0014](../arquitetura/adr/0014-terminal-sem-administrador-por-token-restrito.md)) |
 | Aba de uma ferramenta não aparece | Ferramenta não instalada ou fora do `PATH` do processo | Instale e use "Detectar novamente" em Provedores. Na tarefa (S4U) só vale o `PATH` do sistema, não o do usuário |
 | A aba do pm2 não aparece, mas o pm2 está instalado | O pm2 foi instalado em uma pasta fora do `PATH` do sistema (na tarefa agendada vale só o `PATH` do sistema) | Informe o caminho de `node_modules\pm2\bin\pm2` em `pm2Entry` no `config.json`, reinicie a tarefa e use "Detectar novamente" |
 | A aba do pm2 diz que o daemon não está em execução | Nenhum processo foi iniciado com o pm2 nesta conta | Inicie algo com `pm2 start`; o painel não inicia o daemon sozinho |

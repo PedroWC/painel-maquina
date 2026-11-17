@@ -8,11 +8,11 @@ Painel web para gerenciar uma máquina Windows em um só lugar, com privilégios
 
 > ⚠️ **Aviso de segurança.** Este software dá controle administrativo completo da máquina a quem se autenticar nele. Use apenas em máquinas suas, mantenha o servidor em `127.0.0.1` e acesse remotamente por túnel SSH. Leia [SECURITY.md](SECURITY.md) e [segurança](docs/arquitetura/seguranca.md).
 
-## Funcionalidades previstas
+## Funcionalidades
 
 | Área | O que faz |
 |---|---|
-| Terminais | Abre PowerShell, cmd, Git Bash e WSL como administrador no navegador; as sessões continuam vivas ao fechar a aba |
+| Terminais | Abre PowerShell, cmd, Git Bash e WSL no navegador, com ou sem administrador; as sessões continuam vivas ao fechar a aba |
 | Tarefas agendadas | Lista, executa, para, ativa, desativa, cria, edita e exclui tarefas |
 | Serviços | Lista, inicia, para, reinicia, muda o tipo de inicialização, cria, edita e exclui serviços |
 | Docker | Containers (ciclo de vida e logs) e imagens |
@@ -29,20 +29,91 @@ Um servidor Node.js roda na própria máquina (tarefa agendada elevada) e expõe
 
 - Windows 10 ou 11 (x64)
 - Node.js 24 (veja `.nvmrc`)
-- Opcionais: Docker, pm2, kubectl, Podman, WSL
+- Opcionais: Docker (e Compose), pm2, kubectl, Podman, WSL e, para a temperatura da GPU, `nvidia-smi`
 
 ## Instalação e uso
 
-Guia completo em [docs/operacao/instalacao.md](docs/operacao/instalacao.md). Resumo previsto:
+Passo a passo na seção [Como executar](#como-executar-how-to-run) logo abaixo. Guia completo, com problemas comuns, em [docs/operacao/instalacao.md](docs/operacao/instalacao.md).
+
+## Como executar (how to run)
+
+### 1. Primeira vez
 
 ```powershell
 git clone https://github.com/PedroWC/painel-maquina.git painel-maquina
 cd painel-maquina
 npm ci
-npm run gerar-token      # mostra o token uma única vez
-npm start                # teste manual (use PowerShell como administrador)
-.\scripts\instalar-tarefa.ps1 -IniciarAgora   # execução contínua e elevada (PowerShell como administrador)
+npm run gerar-token      # cria o config.json e mostra o token UMA vez: guarde-o em um gerenciador de senhas
 ```
+
+### 2. Rodar
+
+| Modo | Comando | Quando usar |
+|---|---|---|
+| **Contínuo e elevado** (recomendado) | `.\scripts\instalar-tarefa.ps1 -IniciarAgora` em um PowerShell **como administrador** | Uso diário: inicia com o Windows, como administrador, sem janela, e volta sozinho se cair |
+| **Manual** (teste) | `npm start` em um PowerShell como administrador; pare com `Ctrl+C` | Experimentar ou desenvolver |
+| **Segunda instância** (ao lado da contínua) | `$env:PAINEL_PORT = 8791; npm start` | Testar sem mexer na instância em uso; usa o mesmo `config.json` e o mesmo token |
+
+Depois, abra **http://127.0.0.1:8780** e entre com o token. O selo **administrador** no topo confirma que o painel está elevado. Sem privilégio de administrador o painel abre, mas as ações que exigem elevação falham e os terminais abrem sem administrador.
+
+### 3. Acessar de outro computador
+
+O painel só escuta em `127.0.0.1`. Use um túnel SSH e abra `http://127.0.0.1:8780` no computador local ([acesso remoto](docs/operacao/acesso-remoto.md)):
+
+```bash
+ssh -L 8780:127.0.0.1:8780 usuario@endereco-da-maquina
+```
+
+### 4. Parar, iniciar e reiniciar (modo contínuo)
+
+```powershell
+Stop-ScheduledTask  -TaskName PainelMaquina
+Start-ScheduledTask -TaskName PainelMaquina
+Get-ScheduledTask -TaskName PainelMaquina | Get-ScheduledTaskInfo   # estado e último resultado
+Get-Content .\painel.log -Tail 20                                   # o que o painel registrou
+```
+
+> Reiniciar o painel **encerra os terminais abertos** (as sessões ficam só em memória).
+
+### 5. Atualizar para uma nova versão
+
+**Pare a tarefa antes de reinstalar as dependências.** Com o painel rodando, o Windows trava o arquivo nativo do `node-pty` e o `npm ci` falha no meio, deixando o `node_modules` incompleto.
+
+```powershell
+Stop-ScheduledTask -TaskName PainelMaquina
+git pull
+npm ci          # só é necessário se o package-lock.json mudou
+Start-ScheduledTask -TaskName PainelMaquina
+```
+
+Leia o [CHANGELOG](CHANGELOG.md) antes de atualizar. Se uma versão alterar a tarefa, rode `.\scripts\instalar-tarefa.ps1` de novo.
+
+### 6. Configurar
+
+Arquivo `config.json` (não versionado; modelo em `config.example.json`). Reinicie a tarefa depois de editar.
+
+| Campo | Padrão | Para que serve |
+|---|---|---|
+| `port` | `8780` | Porta do painel |
+| `host` | `127.0.0.1` | Endereço de escuta (não mude sem ler [acesso remoto](docs/operacao/acesso-remoto.md)) |
+| `allowedHosts` | `[]` | Nomes extras aceitos no cabeçalho `Host` |
+| `sessionHours` | `12` | Duração do login |
+| `maxTerminals` | `20` | Limite de terminais abertos |
+| `pm2Entry` | `""` | Caminho do `bin/pm2`, se o provedor pm2 não o achar sozinho |
+
+Variáveis de ambiente: `PAINEL_HOST` e `PAINEL_PORT` (têm precedência sobre o arquivo), `PAINEL_LOG=0` (desliga o `painel.log`) e `PAINEL_PM2_ENTRY`. Para **trocar o token**, rode `npm run gerar-token` de novo e reinicie.
+
+### 7. Testar e verificar
+
+```powershell
+npm run lint        # ESLint
+npm test            # testes (simulados; não alteram a máquina)
+npm run test:cov    # com cobertura (mínimo de 80% em src/)
+```
+
+Antes de confiar numa versão, execute o roteiro manual [`tests/e2e/smoke.md`](tests/e2e/smoke.md). Não rode `npm ci` na pasta com o painel em execução (veja a seção 5).
+
+Problemas comuns e a lista completa de comandos: [instalação e operação](docs/operacao/instalacao.md).
 
 ## Documentação
 

@@ -6,6 +6,13 @@ O formato segue [Keep a Changelog](https://keepachangelog.com/pt-BR/1.1.0/) e o 
 
 ## [Não lançado]
 
+### Adicionado
+- Seção "Como executar" no README: primeira instalação, modos de execução, acesso remoto, parar e reiniciar, atualização, configuração e testes.
+
+### Corrigido
+- Documentação da atualização: a tarefa precisa ser **parada antes** do `npm ci`; com o painel rodando, o arquivo nativo do `node-pty` fica travado e o `npm ci` deixava o `node_modules` incompleto.
+- Índice de ADRs sem o ADR 0015, README com "previstas", terminais descritos só como administrador, workflow sem os PRs empilhados e estrutura de testes desatualizada.
+
 ## [0.2.0] - 2026-11-16
 
 Terminal com ou sem administrador e o novo monitor de recursos (CPU, RAM e GPU), com uma proteção a mais contra encerrar processos críticos do Windows.
